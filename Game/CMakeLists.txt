@@ -6,6 +6,8 @@ file(GLOB_RECURSE HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
 
 add_executable(${PROJECT_NAME} ${CPP_FILES} ${HEADER_FILES} )
 
+file(COPY assets DESTINATION ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
+
 # if (WIN32)
 #     #keepin it as console for now otherwise we loose logging
 #     set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "/SUBSYSTEM:CONSOLE")

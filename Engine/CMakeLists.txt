@@ -13,6 +13,7 @@ add_library(${PROJECT_NAME} SHARED ${CPP_FILES} ${HEADER_FILES})
 
 #find third-party packages
 find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
 find_package(sol2 REQUIRED)
 find_package(glm REQUIRED)
 
@@ -38,6 +39,7 @@ target_link_directories(${PROJECT_NAME} PUBLIC
 target_link_libraries(${PROJECT_NAME} PUBLIC 
     ${CONAN_LIBS}
     SDL2::SDL2main
+    SDL2_image::SDL2_image
     sol2::sol2
     glm::glm
 )
