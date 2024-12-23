@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "includePath": ["${workspaceFolder}/CedarVaultEngine/**", "~/.conan2/**"],
+      "configurationProvider": "ms-vscode.cmake-tools",
+      "defines": [""],
+      "intelliSenseMode": "${default}",
+      "cppStandard": "c++17",
+      "cStandard": "c17",
+      "name": "cpp-dev"
+    }
+  ],
+  "version": 4
+}

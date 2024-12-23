@@ -1,0 +1,56 @@
+exe/
+conan/
+temp.txt
+
+# Common build directories
+/build*/
+
+# CI jobs that run in symlinked trees produce these artifacts.
+/real_work/
+/work
+
+# MacOS Finder files.
+.DS_Store
+
+# Python compile output.
+*.pyc
+
+# See Utilities/Sphinx/tutorial_archive.cmake
+/Help/_generated
+
+# CLion work directory
+/.idea/
+# CLion build directories
+/cmake-build-*/
+
+# QtCreator files.
+/CMakeLists.txt.user*
+
+# Visual Studio Code
+/.cache/
+
+# Visual Studio build directory
+/out/
+
+# clang-tidy output
+/clang-tidy-fixes.patch
+
+# Windows
+.vs/
+Build/
+Target/
+Targets/
+
+# Files
+dna.txt
+/*.sql
+*.doc
+.gittoken
+settings.json
+*.log
+*.tex
+*.user
+**.sln
+**.vcxproj
+**.vcxproj.user
+**.vcxproj.filters

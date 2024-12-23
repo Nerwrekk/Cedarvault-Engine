@@ -1,0 +1,59 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "Build-Debug",
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "windows": {
+        "command": "powershell.exe",
+        "args": [
+          "./windows_setup.bat",
+          "Debug"
+        ]
+      },
+      "linux": {
+        "sudo": true,
+        "args": [
+          "Debug"
+        ],
+        "command": "${workspaceFolder}/linux_setup.sh"
+      }
+    },
+    {
+      "type": "shell",
+      "label": "Build-Release",
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": {
+        "kind": "build"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "windows": {
+        "args": [
+          "Release"
+        ],
+        "command": "./windows_setup.bat"
+      },
+      "linux": {
+        "sudo": true,
+        "args": [
+          "Release"
+        ],
+        "command": "${workspaceFolder}/linux_setup.sh"
+      }
+    }
+  ]
+}
