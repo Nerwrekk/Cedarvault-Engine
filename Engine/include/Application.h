@@ -22,7 +22,7 @@ namespace cedar
 	private:
 		SDL_Window* m_window;
 		SDL_Renderer* m_renderer;
-		bool IsRunning;
+		bool m_isRunning = false;
 	};
 
 } // namespace cedar

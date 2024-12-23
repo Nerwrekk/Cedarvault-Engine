@@ -42,11 +42,13 @@ namespace cedar
 		{
 			std::cerr << "Error creating SDL renderer" << std::endl;
 		}
+
+		m_isRunning = true;
 	}
 
 	void Application::Run()
 	{
-		while (true)
+		while (m_isRunning)
 		{
 			ProccessInput();
 			Update();
@@ -69,6 +71,15 @@ namespace cedar
 		{
 			switch (sdlEvent.type)
 			{
+			case SDL_QUIT:
+				m_isRunning = false;
+				break;
+			case SDL_KEYDOWN:
+				if (sdlEvent.key.keysym.sym == SDLK_ESCAPE)
+				{
+					m_isRunning = false;
+				}
+				break;
 			}
 		}
 	}
@@ -79,6 +90,10 @@ namespace cedar
 
 	void Application::Render()
 	{
+		SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, 255);
+		SDL_RenderClear(m_renderer);
+
+		SDL_RenderPresent(m_renderer);
 	}
 
 } // namespace cedar
