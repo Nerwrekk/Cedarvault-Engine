@@ -26,8 +26,8 @@ namespace cedar
 
 		SDL_DisplayMode displayMode;
 		SDL_GetCurrentDisplayMode(0, &displayMode);
-		windowInit.WindowWidth = displayMode.w;
-		windowInit.WindowHeight = displayMode.h;
+		windowInit.WindowWidth = 800;
+		windowInit.WindowHeight = 600;
 
 		m_window = SDL_CreateWindow(
 		    "Game",
@@ -39,14 +39,18 @@ namespace cedar
 
 		m_renderer = SDL_CreateRenderer(
 		    m_window,
-		    -1, //Get default one
-		    0   //no flags
+		    -1,                                                  //Get default one
+		    SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC //no flags
 		);
 
 		if (!m_renderer)
 		{
 			std::cerr << "Error creating SDL renderer" << std::endl;
+
+			return;
 		}
+
+		SDL_SetWindowFullscreen(m_window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 
 		m_isRunning = true;
 	}
