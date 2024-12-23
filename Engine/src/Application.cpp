@@ -99,8 +99,12 @@ namespace cedar
 
 	void Application::Render()
 	{
-		SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, 255);
+		SDL_SetRenderDrawColor(m_renderer, 21, 21, 21, 255);
 		SDL_RenderClear(m_renderer);
+
+		SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
+		SDL_Rect player = { 10, 10, 20, 20 };
+		SDL_RenderFillRect(m_renderer, &player);
 
 		SDL_RenderPresent(m_renderer);
 	}
