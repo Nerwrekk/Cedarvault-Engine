@@ -24,12 +24,17 @@ namespace cedar
 			return;
 		}
 
+		SDL_DisplayMode displayMode;
+		SDL_GetCurrentDisplayMode(0, &displayMode);
+		windowInit.WindowWidth = displayMode.w;
+		windowInit.WindowHeight = displayMode.h;
+
 		m_window = SDL_CreateWindow(
 		    "Game",
 		    SDL_WINDOWPOS_CENTERED,
 		    SDL_WINDOWPOS_CENTERED,
-		    800,
-		    600,
+		    windowInit.WindowWidth,
+		    windowInit.WindowHeight,
 		    SDL_WINDOW_BORDERLESS);
 
 		m_renderer = SDL_CreateRenderer(

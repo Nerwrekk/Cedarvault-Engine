@@ -5,6 +5,12 @@ class SDL_Renderer;
 
 namespace cedar
 {
+	struct WindowInit
+	{
+		int WindowWidth;
+		int WindowHeight;
+	};
+
 	class Application
 	{
 	public:
@@ -23,6 +29,7 @@ namespace cedar
 		SDL_Window* m_window;
 		SDL_Renderer* m_renderer;
 		bool m_isRunning = false;
+		WindowInit windowInit;
 	};
 
 } // namespace cedar
