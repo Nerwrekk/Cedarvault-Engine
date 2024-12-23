@@ -1,5 +1,8 @@
 #pragma once
 
+class SDL_Window;
+class SDL_Renderer;
+
 namespace cedar
 {
 	class Application
@@ -15,6 +18,11 @@ namespace cedar
 		void ProccessInput();
 		void Update();
 		void Render();
+
+	private:
+		SDL_Window* m_window;
+		SDL_Renderer* m_renderer;
+		bool IsRunning;
 	};
 
 } // namespace cedar

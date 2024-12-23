@@ -76,7 +76,17 @@
     "xtr1common": "cpp",
     "xtree": "cpp",
     "cstdarg": "cpp",
-    "typeindex": "cpp"
+    "typeindex": "cpp",
+    "any": "cpp",
+    "complex": "cpp",
+    "coroutine": "cpp",
+    "future": "cpp",
+    "numeric": "cpp",
+    "regex": "cpp",
+    "set": "cpp",
+    "source_location": "cpp",
+    "stack": "cpp",
+    "variant": "cpp"
   },
   "[cpp]": {
     "editor.defaultFormatter": "ms-vscode.cpptools"
