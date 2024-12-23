@@ -2,7 +2,11 @@
 
 #include <iostream>
 
-int main() {
+int main()
+{
 	std::cout << "Hello World!" << std::endl;
 	std::cout << cedar::MESSAGE << std::endl;
+
+	cedar::Application app;
+	app.Run();
 }

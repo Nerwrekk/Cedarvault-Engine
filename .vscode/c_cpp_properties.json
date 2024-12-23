@@ -1,7 +1,11 @@
 {
   "configurations": [
     {
-      "includePath": ["${workspaceFolder}/CedarVaultEngine/**", "~/.conan2/**"],
+      "includePath": [
+        "${workspaceFolder}/Engine/**",
+        "${workspaceFolder}/Game/**",
+        "~/.conan2/**"
+      ],
       "configurationProvider": "ms-vscode.cmake-tools",
       "defines": [""],
       "intelliSenseMode": "${default}",
