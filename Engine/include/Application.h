@@ -31,6 +31,7 @@ namespace cedar
 		SDL_Renderer* m_renderer;
 		bool m_isRunning = false;
 		WindowInit windowInit;
+		int previousMilliFrame;
 	};
 
 } // namespace cedar

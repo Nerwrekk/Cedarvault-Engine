@@ -7,6 +7,9 @@
 
 namespace cedar
 {
+	const int FPS = 60;
+	const int MILLISECS_PER_FRAME = 1000 / FPS;
+
 	Application::Application()
 	{
 		Initialize();
@@ -107,6 +110,11 @@ namespace cedar
 	//Update game objects
 	void Application::Update()
 	{
+		//Locks execution until we meet out milliseconds criteria
+		while (!SDL_TICKS_PASSED(SDL_GetTicks(), (previousMilliFrame + MILLISECS_PER_FRAME)));
+
+		previousMilliFrame = SDL_GetTicks();
+
 		playerPos.x += playerVelocity.x;
 		playerPos.y += playerVelocity.y;
 	}
@@ -121,7 +129,7 @@ namespace cedar
 		SDL_FreeSurface(surface);
 
 		//Destination rectangle that we want to place our texture.
-		SDL_Rect dstRect = { playerPos.x, playerPos.y, 32, 32 };
+		SDL_Rect dstRect = { static_cast<int>(playerPos.x), static_cast<int>(playerPos.y), 32, 32 };
 		SDL_RenderCopy(m_renderer, texture, nullptr, &dstRect);
 
 		SDL_DestroyTexture(texture);
