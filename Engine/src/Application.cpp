@@ -2,6 +2,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <glm/glm.hpp>
 #include <iostream>
 
 namespace cedar
@@ -58,6 +59,7 @@ namespace cedar
 
 	void Application::Run()
 	{
+		Setup();
 		while (m_isRunning)
 		{
 			ProccessInput();
@@ -93,9 +95,20 @@ namespace cedar
 			}
 		}
 	}
+	glm::vec2 playerPos {};
+	glm::vec2 playerVelocity {};
+	//Initialize game object
+	void Application::Setup()
+	{
+		playerPos = { 10, 20 };
+		playerVelocity = { 1.0, 0 };
+	}
 
+	//Update game objects
 	void Application::Update()
 	{
+		playerPos.x += playerVelocity.x;
+		playerPos.y += playerVelocity.y;
 	}
 
 	void Application::Render()
@@ -108,7 +121,7 @@ namespace cedar
 		SDL_FreeSurface(surface);
 
 		//Destination rectangle that we want to place our texture.
-		SDL_Rect dstRect = { 10, 10, 32, 32 };
+		SDL_Rect dstRect = { playerPos.x, playerPos.y, 32, 32 };
 		SDL_RenderCopy(m_renderer, texture, nullptr, &dstRect);
 
 		SDL_DestroyTexture(texture);

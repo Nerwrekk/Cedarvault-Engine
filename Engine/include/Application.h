@@ -22,6 +22,7 @@ namespace cedar
 
 	private:
 		void ProccessInput();
+		void Setup();
 		void Update();
 		void Render();
 
