@@ -111,7 +111,11 @@ namespace cedar
 	void Application::Update()
 	{
 		//Locks execution until we meet out milliseconds criteria
-		while (!SDL_TICKS_PASSED(SDL_GetTicks(), (previousMilliFrame + MILLISECS_PER_FRAME)));
+		int timeToWait = MILLISECS_PER_FRAME - (SDL_GetTicks() - previousMilliFrame);
+		if (timeToWait > 0 && timeToWait <= MILLISECS_PER_FRAME)
+		{
+			SDL_Delay(timeToWait);
+		}
 
 		previousMilliFrame = SDL_GetTicks();
 
