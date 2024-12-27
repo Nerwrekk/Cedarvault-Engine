@@ -4,8 +4,7 @@
 
 int main()
 {
-	std::cout << "Hello World!" << std::endl;
-	std::cout << cedar::MESSAGE << std::endl;
+	CEDAR_INFO("Hello World!");
 
 	cedar::Application app;
 	app.Run();

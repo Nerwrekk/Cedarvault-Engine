@@ -21,5 +21,5 @@ add_subdirectory(Game)
 target_compile_definitions(Engine PUBLIC
     #this is called a generator expression and here we check if the current config is currently Debug
     #and if it is it applies the define.
-    "$<$<CONFIG:Debug>:PROJECT_DEFINE>"
+    "$<$<CONFIG:Debug>:CEDAR_ENABLE_LOG>"
     )

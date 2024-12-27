@@ -9,13 +9,14 @@ file(GLOB_RECURSE HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
 add_library(${PROJECT_NAME} SHARED ${CPP_FILES} ${HEADER_FILES})
 
 #export engine sympols
-# target_compile_definitions(${PROJECT_NAME} PUBLIC DEFINITION) 
+target_compile_definitions(${PROJECT_NAME} PUBLIC CEDAR_EXPORT) 
 
 #find third-party packages
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(sol2 REQUIRED)
 find_package(glm REQUIRED)
+find_package(spdlog REQUIRED)
 
 # includes directories
 target_include_directories(${PROJECT_NAME} PUBLIC
@@ -38,6 +39,7 @@ target_link_directories(${PROJECT_NAME} PUBLIC
 # link libraries 
 target_link_libraries(${PROJECT_NAME} PUBLIC 
     ${CONAN_LIBS}
+    spdlog::spdlog
     SDL2::SDL2main
     SDL2_image::SDL2_image
     sol2::sol2

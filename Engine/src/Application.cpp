@@ -4,12 +4,11 @@
 #include <SDL2/SDL_image.h>
 #include <glm/glm.hpp>
 #include <iostream>
+#include <Constants.h>
+#include <Common/Logger.h>
 
 namespace cedar
 {
-	const int FPS = 60;
-	const int MILLISECS_PER_FRAME = 1000 / FPS;
-
 	Application::Application()
 	{
 		Initialize();
@@ -24,7 +23,7 @@ namespace cedar
 	{
 		if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 		{
-			std::cerr << "Error init SDL" << std::endl;
+			CEDAR_FATAL("Error init SDL");
 
 			return;
 		}
@@ -50,7 +49,7 @@ namespace cedar
 
 		if (!m_renderer)
 		{
-			std::cerr << "Error creating SDL renderer" << std::endl;
+			CEDAR_FATAL("Error creating SDL renderer");
 
 			return;
 		}
