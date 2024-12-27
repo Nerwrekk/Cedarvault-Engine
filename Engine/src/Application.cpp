@@ -104,7 +104,7 @@ namespace cedar
 	void Application::Setup()
 	{
 		playerPos = { 10, 20 };
-		playerVelocity = { 1.0, 0 };
+		playerVelocity = { 20, 0 };
 	}
 
 	//Update game objects
@@ -117,10 +117,13 @@ namespace cedar
 			SDL_Delay(timeToWait);
 		}
 
+		//difference in ticks from last frame, converted to seconds
+		double deltaTime = (SDL_GetTicks() - previousMilliFrame) / 1000.f;
+
 		previousMilliFrame = SDL_GetTicks();
 
-		playerPos.x += playerVelocity.x;
-		playerPos.y += playerVelocity.y;
+		playerPos.x += playerVelocity.x * deltaTime;
+		playerPos.y += playerVelocity.y * deltaTime;
 	}
 
 	void Application::Render()

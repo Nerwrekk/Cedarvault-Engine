@@ -29,9 +29,10 @@ namespace cedar
 	private:
 		SDL_Window* m_window;
 		SDL_Renderer* m_renderer;
-		bool m_isRunning = false;
 		WindowInit windowInit;
-		int previousMilliFrame;
+		bool m_isRunning = false;
+		//Note to self to remember to always pre-initialize fields in a class!
+		int previousMilliFrame = 0;
 	};
 
 } // namespace cedar
