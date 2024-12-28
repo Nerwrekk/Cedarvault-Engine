@@ -18,10 +18,22 @@ namespace cedar
 		uint32_t m_id;
 	};
 
-	class BaseComponent
+	struct IComponent
 	{
-	private:
-		uint32_t m_id;
+	protected:
+		static uint32_t s_nextId;
+	};
+
+	template <typename T>
+	class Component : public IComponent
+	{
+	public:
+		static uint32_t GetId()
+		{
+			static auto id = s_nextId++;
+
+			return id;
+		}
 	};
 
 	const uint32_t MAX_COMPONENTS = 32;
@@ -34,9 +46,16 @@ namespace cedar
 		~BaseSystem() = default;
 
 		void AddEntityToSystem(Entity* entity);
-		void RemoveEntityToSystem(Entity* entity);
-		std::vector<Entity*> GetSystemEntities() const;
-		Signature& GetComponentSignature() const;
+		void RemoveEntityFromSystem(Entity* entity);
+		std::vector<Entity*>& GetSystemEntities();
+		const Signature& GetComponentSignature();
+
+		template <typename T>
+		void RequireComponent()
+		{
+			const auto componentId = Component<T>::GetId();
+			m_ComponentSignature.set(componentId);
+		}
 
 	protected:
 		virtual void Update() {};

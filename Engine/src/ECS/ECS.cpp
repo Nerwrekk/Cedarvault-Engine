@@ -42,3 +42,26 @@ namespace cedar
 	}
 
 } // namespace cedar
+
+namespace cedar
+{
+	void BaseSystem::AddEntityToSystem(Entity* entity)
+	{
+		m_entities.push_back(entity);
+	}
+
+	void BaseSystem::RemoveEntityFromSystem(Entity* entity)
+	{
+		m_entities.erase(std::find(m_entities.begin(), m_entities.end(), entity));
+	}
+
+	std::vector<Entity*>& BaseSystem::GetSystemEntities()
+	{
+		return m_entities;
+	}
+
+	const Signature& BaseSystem::GetComponentSignature()
+	{
+		return m_ComponentSignature;
+	}
+} // namespace cedar
