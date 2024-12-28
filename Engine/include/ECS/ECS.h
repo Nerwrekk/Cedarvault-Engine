@@ -1,11 +1,14 @@
 #pragma once
 
+#include "ECS/Pool.h"
+
 #include <vector>
 #include <cstdint>
 #include <bitset>
 
 namespace cedar
 {
+	//Entity is just a simple container with an ID
 	class Entity
 	{
 	public:
@@ -45,9 +48,9 @@ namespace cedar
 		BaseSystem() = default;
 		~BaseSystem() = default;
 
-		void AddEntityToSystem(Entity* entity);
-		void RemoveEntityFromSystem(Entity* entity);
-		std::vector<Entity*>& GetSystemEntities();
+		void AddEntityToSystem(Entity entity);
+		void RemoveEntityFromSystem(Entity entity);
+		const std::vector<Entity>& GetSystemEntities();
 		const Signature& GetComponentSignature();
 
 		template <typename T>
@@ -62,20 +65,27 @@ namespace cedar
 
 	protected:
 		Signature m_ComponentSignature;
-		std::vector<Entity*> m_entities;
+		std::vector<Entity> m_entities;
 	};
 
 	class EntityManager
 	{
 	public:
 		void Initialize();
-		Entity* CreateEntity();
+		Entity CreateEntity();
 		static EntityManager* Instance();
 
 	private:
 		EntityManager();
 
-		std::vector<Entity*> m_entities;
+		uint32_t m_totalNumOfEntities = 0;
+
+		std::vector<Entitiy> m_entities;
+
+		//Vector of component pools
+		//Vector index = component type id
+		//Pool index = entity id
+		std::vector<IPool*> m_ComponentPools;
 
 		static EntityManager* s_EntityManager;
 	};

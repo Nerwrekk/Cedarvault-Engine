@@ -20,9 +20,9 @@ namespace cedar
 	}
 
 	static uint32_t s_currentIdIndex = 0;
-	Entity* EntityManager::CreateEntity()
+	Entity EntityManager::CreateEntity()
 	{
-		Entity* entity = new Entity(s_currentIdIndex);
+		Entity entity(s_currentIdIndex);
 
 		s_currentIdIndex++;
 		m_entities.push_back(entity);
@@ -45,17 +45,21 @@ namespace cedar
 
 namespace cedar
 {
-	void BaseSystem::AddEntityToSystem(Entity* entity)
+	void BaseSystem::AddEntityToSystem(Entity entity)
 	{
 		m_entities.push_back(entity);
 	}
 
-	void BaseSystem::RemoveEntityFromSystem(Entity* entity)
+	void BaseSystem::RemoveEntityFromSystem(Entity entity)
 	{
-		m_entities.erase(std::find(m_entities.begin(), m_entities.end(), entity));
+		m_entities.erase(std::remove_if(m_entities.begin(), m_entities.end(), [&entity](Entity otherEntity)
+		{
+			return entity.GetId() == otherEntity.GetId();
+		}),
+		    m_entities.end());
 	}
 
-	std::vector<Entity*>& BaseSystem::GetSystemEntities()
+	const std::vector<Entity>& BaseSystem::GetSystemEntities()
 	{
 		return m_entities;
 	}
