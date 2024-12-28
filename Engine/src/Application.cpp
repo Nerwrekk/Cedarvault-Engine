@@ -1,11 +1,13 @@
 #include "Application.h"
 
+#include "ECS/ECS.h"
+#include "Common/Logger.h"
+#include "Common/Constants.h"
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <glm/glm.hpp>
 #include <iostream>
-#include <Constants.h>
-#include <Common/Logger.h>
 
 namespace cedar
 {
@@ -59,6 +61,12 @@ namespace cedar
 		m_isRunning = true;
 	}
 
+	//Initialize game object
+	void Application::Setup()
+	{
+		EntityManager::Instance()->Initialize();
+	}
+
 	void Application::Run()
 	{
 		Setup();
@@ -97,14 +105,6 @@ namespace cedar
 			}
 		}
 	}
-	glm::vec2 playerPos {};
-	glm::vec2 playerVelocity {};
-	//Initialize game object
-	void Application::Setup()
-	{
-		playerPos = { 10, 20 };
-		playerVelocity = { 20, 0 };
-	}
 
 	//Update game objects
 	void Application::Update()
@@ -121,8 +121,8 @@ namespace cedar
 
 		previousMilliFrame = SDL_GetTicks();
 
-		playerPos.x += playerVelocity.x * deltaTime;
-		playerPos.y += playerVelocity.y * deltaTime;
+		// playerPos.x += playerVelocity.x * deltaTime;
+		// playerPos.y += playerVelocity.y * deltaTime;
 	}
 
 	void Application::Render()
@@ -130,15 +130,15 @@ namespace cedar
 		SDL_SetRenderDrawColor(m_renderer, 21, 21, 21, 255);
 		SDL_RenderClear(m_renderer);
 
-		SDL_Surface* surface = IMG_Load("../Game/assets/images/tank-tiger-right.png");
-		SDL_Texture* texture = SDL_CreateTextureFromSurface(m_renderer, surface);
-		SDL_FreeSurface(surface);
+		// SDL_Surface* surface = IMG_Load("../Game/assets/images/tank-tiger-right.png");
+		// SDL_Texture* texture = SDL_CreateTextureFromSurface(m_renderer, surface);
+		// SDL_FreeSurface(surface);
 
-		//Destination rectangle that we want to place our texture.
-		SDL_Rect dstRect = { static_cast<int>(playerPos.x), static_cast<int>(playerPos.y), 32, 32 };
-		SDL_RenderCopy(m_renderer, texture, nullptr, &dstRect);
+		// //Destination rectangle that we want to place our texture.
+		// SDL_Rect dstRect = { static_cast<int>(playerPos.x), static_cast<int>(playerPos.y), 32, 32 };
+		// SDL_RenderCopy(m_renderer, texture, nullptr, &dstRect);
 
-		SDL_DestroyTexture(texture);
+		// SDL_DestroyTexture(texture);
 
 		SDL_RenderPresent(m_renderer);
 	}

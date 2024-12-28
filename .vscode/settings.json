@@ -99,5 +99,6 @@
   },
   "C_Cpp.clang_format_style": "file",
   "C_Cpp.autocomplete": "default", // Make sure autocompletion is enabled
-  "C_Cpp.hover": "default" // Enable hover for showing type information
+  "C_Cpp.hover": "default",
+  "C_Cpp.errorSquiggles": "disabled" // Enable hover for showing type information
 }
