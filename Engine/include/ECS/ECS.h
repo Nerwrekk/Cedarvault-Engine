@@ -141,6 +141,10 @@ namespace cedar
 		template <typename TComponent>
 		bool HasComponent(Entity entity) const
 		{
+			const auto componentId = Component<TComponent>::GetId();
+			const auto entityId = entity.GetId();
+
+			return m_entityComponentSignatures[entityId].test(componentId);
 		}
 
 		template <typename TComponent>
