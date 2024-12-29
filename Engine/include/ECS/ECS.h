@@ -51,6 +51,8 @@ namespace cedar
 	public:
 		static uint32_t GetId()
 		{
+			//Static variable inside a function will keep its original value
+			//this is why the GetId method works when using multiple components.
 			static uint32_t id = s_nextId++;
 
 			return id;
@@ -130,6 +132,10 @@ namespace cedar
 		template <typename TComponent>
 		void RemoveComponent(Entity entity)
 		{
+			const auto componentId = Component<TComponent>::GetId();
+			const auto entityId = entity.GetId();
+
+			m_entityComponentSignatures[entityId].set(componentId, false);
 		}
 
 		template <typename TComponent>
