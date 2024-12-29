@@ -42,7 +42,7 @@ namespace cedar
 	struct IComponent
 	{
 	protected:
-		static uint32_t s_nextId;
+		inline static uint32_t s_nextId = 0;
 	};
 
 	template <typename T>
@@ -51,7 +51,7 @@ namespace cedar
 	public:
 		static uint32_t GetId()
 		{
-			static auto id = s_nextId++;
+			static uint32_t id = s_nextId++;
 
 			return id;
 		}
@@ -97,9 +97,48 @@ namespace cedar
 		Entity CreateEntity();
 		void KillEntity(Entity entity);
 
-		void AddComponent(Entity entity);
-		void RemoveComponent(Entity entity);
-		void HasComponent(Entity entity);
+		template <typename TComponent, typename... Args>
+		void AddComponent(Entity entity, Args&&... args)
+		{
+			const auto componentId = Component<TComponent>::GetId();
+			const auto entityId = entity.GetId();
+
+			if (componentId >= m_ComponentPools.size())
+			{
+				m_ComponentPools.resize(componentId + 10, nullptr);
+			}
+
+			//If we don't have a pool yet for this component type
+			if (!m_ComponentPools[componentId])
+			{
+				Pool<TComponent>* newComponentPool = new Pool<TComponent>();
+				m_ComponentPools[componentId] = newComponentPool;
+			}
+
+			Pool<TComponent>* componentPool = reinterpret_cast<Pool<TComponent>*>(m_ComponentPools[componentId]);
+			if (m_totalNumOfEntities >= componentPool->Size())
+			{
+				componentPool->Resize(m_totalNumOfEntities);
+			}
+
+			TComponent component = TComponent(std::forward<Args>(args)...);
+			componentPool->Set(entityId, component);
+
+			m_entityComponentSignatures[entityId].set(componentId);
+		}
+
+		template <typename TComponent>
+		void RemoveComponent(Entity entity)
+		{
+		}
+
+		template <typename TComponent>
+		bool HasComponent(Entity entity) const
+		{
+		}
+
+		template <typename TComponent>
+		TComponent& GetComponent(Entity entity);
 
 		void AddSystem();
 		void RemoveSystem();

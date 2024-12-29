@@ -8,16 +8,16 @@ namespace cedar
 	class IPool
 	{
 	public:
-		virtual ~IPool();
+		virtual ~IPool() = default;
 	};
 
 	template <typename T>
-	class Pool : IPool
+	class Pool : public IPool
 	{
 	public:
 		Pool(int size = 100)
 		{
-			Resize(size);
+			m_data.reserve(size);
 		}
 
 		virtual ~Pool() = default;
@@ -41,7 +41,7 @@ namespace cedar
 		{
 			m_data.clear();
 		};
-		void Add(T object)
+		void Add(T* object)
 		{
 			m_data.push_back(object);
 		};
@@ -58,10 +58,11 @@ namespace cedar
 
 		T& operator[](uint32_t index)
 		{
-			return m_data.at(index);
+			return m_data.[index];
 		};
 
 	private:
+		//index == entity id
 		std::vector<T> m_data;
 	};
 } // namespace cedar

@@ -16,8 +16,8 @@ namespace cedar
 
 	void EntityManager::Initialize()
 	{
-		// m_ComponentPools.reserve(200);
-		// m_entityComponentSignatures.reserve(200);
+		m_ComponentPools.reserve(32);
+		m_entityComponentSignatures.reserve(32);
 	}
 
 	void EntityManager::Update()
@@ -52,18 +52,6 @@ namespace cedar
 		}
 
 		return s_EntityManager;
-	}
-
-	void cedar::EntityManager::AddComponent(Entity entity)
-	{
-	}
-
-	void EntityManager::RemoveComponent(Entity entity)
-	{
-	}
-
-	void EntityManager::HasComponent(Entity entity)
-	{
 	}
 
 	void EntityManager::AddSystem()
