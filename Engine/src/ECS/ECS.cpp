@@ -16,18 +16,31 @@ namespace cedar
 
 	void EntityManager::Initialize()
 	{
-		m_entities.reserve(200);
+		// m_ComponentPools.reserve(200);
+		// m_entityComponentSignatures.reserve(200);
 	}
 
-	static uint32_t s_currentIdIndex = 0;
+	void EntityManager::Update()
+	{
+	}
+
 	Entity EntityManager::CreateEntity()
 	{
-		Entity entity(s_currentIdIndex);
+		int entityId = m_totalNumOfEntities++;
+		if (entityId >= m_entityComponentSignatures.size())
+		{
+			m_entityComponentSignatures.resize(entityId + 1);
+		}
 
-		s_currentIdIndex++;
-		m_entities.push_back(entity);
+		Entity entity(entityId);
+		m_entitiesToBeAdded.insert(entity);
 
+		CEDAR_INFO("Entity created with id: {}", entityId);
 		return entity;
+	}
+
+	void EntityManager::KillEntity(Entity entity)
+	{
 	}
 
 	EntityManager* EntityManager::s_EntityManager = nullptr;
@@ -39,6 +52,34 @@ namespace cedar
 		}
 
 		return s_EntityManager;
+	}
+
+	void cedar::EntityManager::AddComponent(Entity entity)
+	{
+	}
+
+	void EntityManager::RemoveComponent(Entity entity)
+	{
+	}
+
+	void EntityManager::HasComponent(Entity entity)
+	{
+	}
+
+	void EntityManager::AddSystem()
+	{
+	}
+
+	void EntityManager::RemoveSystem()
+	{
+	}
+
+	void EntityManager::HasSystem()
+	{
+	}
+
+	void EntityManager::GetSystem()
+	{
 	}
 
 } // namespace cedar

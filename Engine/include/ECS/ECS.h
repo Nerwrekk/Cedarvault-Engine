@@ -5,6 +5,9 @@
 #include <vector>
 #include <cstdint>
 #include <bitset>
+#include <typeindex>
+#include <unordered_map>
+#include <set>
 
 namespace cedar
 {
@@ -16,6 +19,21 @@ namespace cedar
 		    : m_id(id) {};
 
 		uint32_t GetId() const;
+
+		bool operator==(const Entity& other) const
+		{
+			return m_id == other.m_id;
+		}
+
+		bool operator<(const Entity& other) const
+		{
+			return m_id < other.m_id;
+		}
+
+		bool operator>(const Entity& other) const
+		{
+			return m_id > other.m_id;
+		}
 
 	private:
 		uint32_t m_id;
@@ -71,21 +89,40 @@ namespace cedar
 	class EntityManager
 	{
 	public:
-		void Initialize();
-		Entity CreateEntity();
 		static EntityManager* Instance();
+
+		void Initialize();
+		void Update();
+
+		Entity CreateEntity();
+		void KillEntity(Entity entity);
+
+		void AddComponent(Entity entity);
+		void RemoveComponent(Entity entity);
+		void HasComponent(Entity entity);
+
+		void AddSystem();
+		void RemoveSystem();
+		void HasSystem();
+		void GetSystem();
 
 	private:
 		EntityManager();
+		std::set<Entity> m_entitiesToBeAdded;
+		std::set<Entity> m_entitiesToBeRemoved;
 
 		uint32_t m_totalNumOfEntities = 0;
 
-		std::vector<Entitiy> m_entities;
-
 		//Vector of component pools
-		//Vector index = component type id
-		//Pool index = entity id
+		//Vector index == component type id
+		//Pool index == entity id
 		std::vector<IPool*> m_ComponentPools;
+
+		//Vector of component signatures per entity, saying which component is turned of for that entity
+		//Vector index == entity id
+		std::vector<Signature> m_entityComponentSignatures;
+
+		std::unordered_map<std::type_index, BaseSystem*> m_Systems;
 
 		static EntityManager* s_EntityManager;
 	};
