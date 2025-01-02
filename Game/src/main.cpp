@@ -14,6 +14,11 @@ int main()
 	cedar::EntityManager::Instance()->RemoveComponent<cedar::TransformComponent>(entity);
 	cedar::EntityManager::Instance()->AddSystem<cedar::MovementSystem>();
 	cedar::EntityManager::Instance()->AddSystem<cedar::MovementSystem>();
+	auto T = cedar::EntityManager::Instance()->GetSystem<cedar::MovementSystem>();
+	if (T)
+	{
+		CEDAR_INFO("T is not null");
+	}
 	cedar::Application app;
 	app.Run();
 }

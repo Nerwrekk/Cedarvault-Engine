@@ -99,6 +99,8 @@ namespace cedar
 
 		Entity CreateEntity();
 		void KillEntity(Entity entity);
+		void AddEntityToSystem(Entity entity);
+
 
 		template <typename TComponent, typename... Args>
 		void AddComponent(Entity entity, Args&&... args)
@@ -154,8 +156,8 @@ namespace cedar
 		template <typename TSystem, typename... TArgs>
 		void AddSystem(TArgs&&... args)
 		{
-			auto system = m_Systems.find(typeid(TSystem));
-			if (system != m_Systems.end())
+			auto system = m_systems.find(std::type_index(typeid(TSystem)));
+			if (system != m_systems.end())
 			{
 				//System already added so we can return
 				//TODO: make assert here, we should not have multiple of the same system
@@ -163,15 +165,38 @@ namespace cedar
 			}
 			else
 			{
-				m_Systems.insert(std::make_pair(std::type_index(typeid(TSystem)), new TSystem(std::forward<TArgs>(args)...)));
+				m_systems.insert(std::make_pair(std::type_index(typeid(TSystem)), new TSystem(std::forward<TArgs>(args)...)));
 			}
 		}
+
 		template <typename TSystem>
-		void RemoveSystem();
+		void RemoveSystem()
+		{
+			auto system = m_systems.find(std::type_index(typeid(TSystem)));
+			if (system != m_systems.end())
+			{
+				m_systems.erase(system);
+			}
+		}
+
 		template <typename TSystem>
-		void HasSystem();
+		void HasSystem() const
+		{
+			auto system = m_systems.find(std::type_index(typeid(TSystem)));
+			system != m_systems.end() ? return true : return false;
+		}
+
 		template <typename TSystem>
-		void GetSystem();
+		TSystem* GetSystem() const
+		{
+			auto system = m_systems.find(std::type_index(typeid(TSystem)));
+			if (system != m_systems.end())
+			{
+				return static_cast<TSystem*>(system->second);
+			}
+
+			return nullptr;
+		}
 
 	private:
 		EntityManager();
@@ -189,7 +214,7 @@ namespace cedar
 		//Vector index == entity id
 		std::vector<Signature> m_entityComponentSignatures;
 
-		std::unordered_map<std::type_index, BaseSystem*> m_Systems;
+		std::unordered_map<std::type_index, BaseSystem*> m_systems;
 
 		static EntityManager* s_EntityManager;
 	};

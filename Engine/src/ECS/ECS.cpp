@@ -43,6 +43,13 @@ namespace cedar
 	{
 	}
 
+	void EntityManager::AddEntityToSystem(Entity entity)
+	{
+		for (auto [key, system] : m_systems)
+		{
+		}
+	}
+
 	EntityManager* EntityManager::s_EntityManager = nullptr;
 	EntityManager* EntityManager::Instance()
 	{
