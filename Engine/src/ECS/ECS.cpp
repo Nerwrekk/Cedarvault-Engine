@@ -54,22 +54,6 @@ namespace cedar
 		return s_EntityManager;
 	}
 
-	void EntityManager::AddSystem()
-	{
-	}
-
-	void EntityManager::RemoveSystem()
-	{
-	}
-
-	void EntityManager::HasSystem()
-	{
-	}
-
-	void EntityManager::GetSystem()
-	{
-	}
-
 } // namespace cedar
 
 namespace cedar

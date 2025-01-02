@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <bitset>
 #include <typeindex>
+#include <typeinfo>
 #include <unordered_map>
 #include <set>
 
@@ -150,9 +151,26 @@ namespace cedar
 		template <typename TComponent>
 		TComponent& GetComponent(Entity entity);
 
-		void AddSystem();
+		template <typename TSystem, typename... TArgs>
+		void AddSystem(TArgs&&... args)
+		{
+			auto system = m_Systems.find(typeid(TSystem));
+			if (system != m_Systems.end())
+			{
+				//System already added so we can return
+				//TODO: make assert here, we should not have multiple of the same system
+				return;
+			}
+			else
+			{
+				m_Systems.insert(std::make_pair(std::type_index(typeid(TSystem)), new TSystem(std::forward<TArgs>(args)...)));
+			}
+		}
+		template <typename TSystem>
 		void RemoveSystem();
+		template <typename TSystem>
 		void HasSystem();
+		template <typename TSystem>
 		void GetSystem();
 
 	private:

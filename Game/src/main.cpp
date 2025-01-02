@@ -12,6 +12,8 @@ int main()
 		CEDAR_DEBUG("Entity with id: {} has TransformComponent", entity.GetId());
 	}
 	cedar::EntityManager::Instance()->RemoveComponent<cedar::TransformComponent>(entity);
+	cedar::EntityManager::Instance()->AddSystem<cedar::MovementSystem>();
+	cedar::EntityManager::Instance()->AddSystem<cedar::MovementSystem>();
 	cedar::Application app;
 	app.Run();
 }
