@@ -1,5 +1,10 @@
 #pragma once
 
+#include "ECS/ECS.h"
+
+#include <functional>
+#include <memory>
+
 class SDL_Window;
 class SDL_Renderer;
 
@@ -17,16 +22,28 @@ namespace cedar
 		Application();
 		~Application();
 		void Initialize();
+		//Use setup to initialize entities before the game runs
+		template <typename Callable>
+		void Setup(Callable func)
+		{
+			m_entityManager->AddSystem<MovementSystem>();
+			func();
+		}
 		void Run();
 		void Destroy();
 
+		EntityManager& Manager()
+		{
+			return *m_entityManager.get();
+		}
+
 	private:
 		void ProccessInput();
-		void Setup();
 		void Update();
 		void Render();
 
 	private:
+		std::unique_ptr<EntityManager> m_entityManager;
 		SDL_Window* m_window;
 		SDL_Renderer* m_renderer;
 		WindowInit windowInit;

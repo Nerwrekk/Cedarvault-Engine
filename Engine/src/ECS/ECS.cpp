@@ -1,6 +1,7 @@
 #include "ECS/ECS.h"
 
 #include "Common/Logger.h"
+#include "ECS/Components/TransformComponent.h"
 
 namespace cedar
 {
@@ -9,15 +10,14 @@ namespace cedar
 		return m_id;
 	}
 
-	//EntityManager
+	EntityManager* EntityManager::s_EntityManager = nullptr;
 	EntityManager::EntityManager()
-	{
-	}
-
-	void EntityManager::Initialize()
 	{
 		m_ComponentPools.reserve(32);
 		m_entityComponentSignatures.reserve(32);
+
+		//TODO: add assert here!
+		s_EntityManager = this;
 	}
 
 	void EntityManager::Update()
@@ -29,11 +29,14 @@ namespace cedar
 		int entityId = m_totalNumOfEntities++;
 		if (entityId >= m_entityComponentSignatures.size())
 		{
-			m_entityComponentSignatures.resize(entityId + 1);
+			m_entityComponentSignatures.resize(entityId + 10);
 		}
 
 		Entity entity(entityId);
 		m_entitiesToBeAdded.insert(entity);
+		//All entities shall have transform components
+		AddComponent<TransformComponent>(entity);
+		AddEntityToSystem(entity);
 
 		CEDAR_INFO("Entity created with id: {}", entityId);
 		return entity;
@@ -56,13 +59,9 @@ namespace cedar
 		}
 	}
 
-	EntityManager* EntityManager::s_EntityManager = nullptr;
 	EntityManager* EntityManager::Instance()
 	{
-		if (s_EntityManager == nullptr)
-		{
-			s_EntityManager = new EntityManager();
-		}
+		//TODO: Add assert here
 
 		return s_EntityManager;
 	}

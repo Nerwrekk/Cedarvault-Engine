@@ -1,6 +1,7 @@
 #include "Application.h"
 
 #include "ECS/ECS.h"
+#include "ECS/Systems/MovementSystem.h"
 #include "Common/Logger.h"
 #include "Common/Constants.h"
 
@@ -13,6 +14,7 @@ namespace cedar
 {
 	Application::Application()
 	{
+		m_entityManager = std::make_unique<EntityManager>();
 		Initialize();
 	}
 
@@ -61,15 +63,8 @@ namespace cedar
 		m_isRunning = true;
 	}
 
-	//Initialize game object
-	void Application::Setup()
-	{
-		EntityManager::Instance()->Initialize();
-	}
-
 	void Application::Run()
 	{
-		Setup();
 		while (m_isRunning)
 		{
 			ProccessInput();

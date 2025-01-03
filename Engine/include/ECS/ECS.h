@@ -94,13 +94,12 @@ namespace cedar
 	public:
 		static EntityManager* Instance();
 
-		void Initialize();
+		EntityManager();
 		void Update();
 
 		Entity CreateEntity();
 		void KillEntity(Entity entity);
 		void AddEntityToSystem(Entity entity);
-
 
 		template <typename TComponent, typename... Args>
 		void AddComponent(Entity entity, Args&&... args)
@@ -199,7 +198,6 @@ namespace cedar
 		}
 
 	private:
-		EntityManager();
 		std::set<Entity> m_entitiesToBeAdded;
 		std::set<Entity> m_entitiesToBeRemoved;
 
