@@ -45,8 +45,14 @@ namespace cedar
 
 	void EntityManager::AddEntityToSystem(Entity entity)
 	{
+		const auto& entitySignature = m_entityComponentSignatures[entity.GetId()];
 		for (auto [key, system] : m_systems)
 		{
+			auto systemComponentSignature = system->GetComponentSignature();
+			if ((systemComponentSignature & entitySignature) == systemComponentSignature)
+			{
+				system->AddEntityToSystem(entity);
+			}
 		}
 	}
 
