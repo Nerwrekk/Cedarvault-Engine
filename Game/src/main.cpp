@@ -8,6 +8,7 @@ int main()
 	app.Setup([&]()
 	{
 		auto entity = app.Manager().CreateEntity();
+		auto tank = app.Manager().CreateEntity();
 
 		auto T = cedar::EntityManager::Instance()->GetSystem<cedar::MovementSystem>();
 		if (T)

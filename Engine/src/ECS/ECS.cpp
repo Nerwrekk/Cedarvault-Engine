@@ -22,6 +22,13 @@ namespace cedar
 
 	void EntityManager::Update()
 	{
+		//Add new entities
+		for (auto& entity : m_entitiesToBeAdded)
+		{
+			AddEntityToSystem(entity);
+		}
+
+		m_entitiesToBeAdded.clear();
 	}
 
 	Entity EntityManager::CreateEntity()
@@ -33,10 +40,10 @@ namespace cedar
 		}
 
 		Entity entity(entityId);
-		m_entitiesToBeAdded.insert(entity);
 		//All entities shall have transform components
 		AddComponent<TransformComponent>(entity);
-		AddEntityToSystem(entity);
+
+		m_entitiesToBeAdded.insert(entity);
 
 		CEDAR_INFO("Entity created with id: {}", entityId);
 		return entity;
