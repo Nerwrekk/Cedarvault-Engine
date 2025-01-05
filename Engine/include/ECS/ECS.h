@@ -5,6 +5,7 @@
 #include <vector>
 #include <cstdint>
 #include <bitset>
+#include <memory>
 #include <typeindex>
 #include <typeinfo>
 #include <unordered_map>
@@ -115,11 +116,11 @@ namespace cedar
 			//If we don't have a pool yet for this component type
 			if (!m_ComponentPools[componentId])
 			{
-				Pool<TComponent>* newComponentPool = new Pool<TComponent>();
+				auto newComponentPool = std::make_shared<Pool<TComponent>>();
 				m_ComponentPools[componentId] = newComponentPool;
 			}
 
-			Pool<TComponent>* componentPool = reinterpret_cast<Pool<TComponent>*>(m_ComponentPools[componentId]);
+			auto componentPool = std::static_pointer_cast<Pool<TComponent>>(m_ComponentPools[componentId]);
 			if (m_totalNumOfEntities >= componentPool->Size())
 			{
 				componentPool->Resize(m_totalNumOfEntities);
@@ -164,7 +165,8 @@ namespace cedar
 			}
 			else
 			{
-				m_systems.insert(std::make_pair(std::type_index(typeid(TSystem)), new TSystem(std::forward<TArgs>(args)...)));
+				auto newSystem = std::make_shared<TSystem>(std::forward<TArgs>(args)...);
+				m_systems.insert(std::make_pair(std::type_index(typeid(TSystem)), newSystem));
 			}
 		}
 
@@ -186,12 +188,12 @@ namespace cedar
 		}
 
 		template <typename TSystem>
-		TSystem* GetSystem() const
+		std::shared_ptr<TSystem> GetSystem() const
 		{
 			auto system = m_systems.find(std::type_index(typeid(TSystem)));
 			if (system != m_systems.end())
 			{
-				return static_cast<TSystem*>(system->second);
+				return std::static_pointer_cast<TSystem>(system->second);
 			}
 
 			return nullptr;
@@ -206,13 +208,13 @@ namespace cedar
 		//Vector of component pools
 		//Vector index == component type id
 		//Pool index == entity id
-		std::vector<IPool*> m_ComponentPools;
+		std::vector<std::shared_ptr<IPool>> m_ComponentPools;
 
 		//Vector of component signatures per entity, saying which component is turned of for that entity
 		//Vector index == entity id
 		std::vector<Signature> m_entityComponentSignatures;
 
-		std::unordered_map<std::type_index, BaseSystem*> m_systems;
+		std::unordered_map<std::type_index, std::shared_ptr<BaseSystem>> m_systems;
 
 		static EntityManager* s_EntityManager;
 	};
