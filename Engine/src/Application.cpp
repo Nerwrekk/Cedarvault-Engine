@@ -1,7 +1,5 @@
 #include "Application.h"
 
-#include "ECS/ECS.h"
-#include "ECS/Systems/MovementSystem.h"
 #include "Common/Logger.h"
 #include "Common/Constants.h"
 

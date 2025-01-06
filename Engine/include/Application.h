@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Common/Core.h"
 #include "ECS/ECS.h"
 
 #include <functional>
@@ -16,7 +17,7 @@ namespace cedar
 		int WindowHeight;
 	};
 
-	class Application
+	class CEDAR_API Application
 	{
 	public:
 		Application();
@@ -32,9 +33,9 @@ namespace cedar
 		void Run();
 		void Destroy();
 
-		EntityManager& Manager()
+		EntityManager* Manager()
 		{
-			return *m_entityManager.get();
+			return m_entityManager.get();
 		}
 
 	private:

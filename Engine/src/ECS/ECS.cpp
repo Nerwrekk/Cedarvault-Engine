@@ -40,12 +40,12 @@ namespace cedar
 		}
 
 		Entity entity(entityId);
+		CEDAR_INFO("Entity created with id: {}", entityId);
 		//All entities shall have transform components
 		AddComponent<TransformComponent>(entity);
 
 		m_entitiesToBeAdded.insert(entity);
 
-		CEDAR_INFO("Entity created with id: {}", entityId);
 		return entity;
 	}
 

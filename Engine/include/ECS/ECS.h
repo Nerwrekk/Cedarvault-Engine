@@ -1,6 +1,9 @@
 #pragma once
 
+#include "Common/Core.h"
+#include "ECS/Components/Component.h"
 #include "ECS/Pool.h"
+#include "Common/Logger.h"
 
 #include <vector>
 #include <cstdint>
@@ -14,7 +17,7 @@
 namespace cedar
 {
 	//Entity is just a simple container with an ID
-	class Entity
+	class CEDAR_API Entity
 	{
 	public:
 		Entity(uint32_t id)
@@ -39,26 +42,6 @@ namespace cedar
 
 	private:
 		uint32_t m_id;
-	};
-
-	struct IComponent
-	{
-	protected:
-		inline static uint32_t s_nextId = 0;
-	};
-
-	template <typename T>
-	class Component : public IComponent
-	{
-	public:
-		static uint32_t GetId()
-		{
-			//Static variable inside a function will keep its original value
-			//this is why the GetId method works when using multiple components.
-			static uint32_t id = s_nextId++;
-
-			return id;
-		}
 	};
 
 	const uint32_t MAX_COMPONENTS = 32;
@@ -90,7 +73,7 @@ namespace cedar
 		std::vector<Entity> m_entities;
 	};
 
-	class EntityManager
+	class CEDAR_API EntityManager
 	{
 	public:
 		static EntityManager* Instance();
@@ -103,34 +86,7 @@ namespace cedar
 		void AddEntityToSystem(Entity entity);
 
 		template <typename TComponent, typename... Args>
-		void AddComponent(Entity entity, Args&&... args)
-		{
-			const auto componentId = Component<TComponent>::GetId();
-			const auto entityId = entity.GetId();
-
-			if (componentId >= m_ComponentPools.size())
-			{
-				m_ComponentPools.resize(componentId + 10, nullptr);
-			}
-
-			//If we don't have a pool yet for this component type
-			if (!m_ComponentPools[componentId])
-			{
-				auto newComponentPool = std::make_shared<Pool<TComponent>>();
-				m_ComponentPools[componentId] = newComponentPool;
-			}
-
-			auto componentPool = std::static_pointer_cast<Pool<TComponent>>(m_ComponentPools[componentId]);
-			if (m_totalNumOfEntities >= componentPool->Size())
-			{
-				componentPool->Resize(m_totalNumOfEntities);
-			}
-
-			TComponent component = TComponent(std::forward<Args>(args)...);
-			componentPool->Set(entityId, component);
-
-			m_entityComponentSignatures[entityId].set(componentId);
-		}
+		void AddComponent(Entity entity, Args&&... args);
 
 		template <typename TComponent>
 		void RemoveComponent(Entity entity)
@@ -218,4 +174,36 @@ namespace cedar
 
 		static EntityManager* s_EntityManager;
 	};
+
+	template <typename TComponent, typename... Args>
+	void EntityManager::AddComponent(Entity entity, Args&&... args)
+	{
+		auto componentId = Component<TComponent>::GetId();
+		const auto entityId = entity.GetId();
+
+		if (componentId >= m_ComponentPools.size())
+		{
+			m_ComponentPools.resize(componentId + 10, nullptr);
+		}
+
+		//If we don't have a pool yet for this component type
+		if (!m_ComponentPools[componentId])
+		{
+			auto newComponentPool = std::make_shared<Pool<TComponent>>();
+			m_ComponentPools[componentId] = newComponentPool;
+		}
+
+		auto componentPool = std::static_pointer_cast<Pool<TComponent>>(m_ComponentPools[componentId]);
+		if (m_totalNumOfEntities >= componentPool->Size())
+		{
+			componentPool->Resize(m_totalNumOfEntities);
+		}
+
+		TComponent component = TComponent(std::forward<Args>(args)...);
+		componentPool->Set(entityId, component);
+
+		m_entityComponentSignatures[entityId].set(componentId);
+
+		CEDAR_INFO("Component with id: {} was added to entity with id: {}", componentId, entityId);
+	}
 } // namespace cedar

@@ -4,7 +4,7 @@
 
 namespace cedar
 {
-	struct TransformComponent
+	struct CEDAR_API TransformComponent
 	{
 		glm::vec2 Position;
 		glm::vec2 Scale;
