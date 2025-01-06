@@ -40,8 +40,51 @@ namespace cedar
 			return m_id > other.m_id;
 		}
 
+		template <typename TComponent, typename... Args>
+		void AddComponent(Args&&... args)
+		{
+			if (m_manager)
+			{
+				m_manager->AddComponent<TComponent>(*this, args...);
+			}
+		}
+
+		template <typename TComponent>
+		TComponent* GetComponent()
+		{
+			if (m_manager)
+			{
+				return m_manager->GetComponent<TComponent>(*this);
+			}
+
+			return nullptr;
+		}
+
+		template <typename TComponent>
+		void RemoveComponent()
+		{
+			if (m_manager)
+			{
+				m_manager->RemoveComponent<TComponent>(*this);
+			}
+		}
+
+		template <typename TComponent>
+		bool HasComponent() const
+		{
+			if (m_manager)
+			{
+				return m_manager->HasComponent<TComponent>(*this);
+			}
+
+			return false;
+		}
+
 	private:
+		friend class EntityManager;
+
 		uint32_t m_id;
+		EntityManager* m_manager;
 	};
 
 	const uint32_t MAX_COMPONENTS = 32;
@@ -107,7 +150,19 @@ namespace cedar
 		}
 
 		template <typename TComponent>
-		TComponent& GetComponent(Entity entity);
+		TComponent* GetComponent(Entity entity)
+		{
+			const auto componentId = Component<TComponent>::GetId();
+			const auto entityId = entity.GetId();
+			if (HasComponent<TComponent>(entity))
+			{
+				auto component = std::static_pointer_cast<Pool<TComponent>>(m_ComponentPools[componentId]);
+
+				return &component->Get(entityId);
+			}
+
+			return nullptr;
+		}
 
 		template <typename TSystem, typename... TArgs>
 		void AddSystem(TArgs&&... args)

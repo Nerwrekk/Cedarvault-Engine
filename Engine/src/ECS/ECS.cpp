@@ -40,6 +40,7 @@ namespace cedar
 		}
 
 		Entity entity(entityId);
+		entity.m_manager = this;
 		CEDAR_INFO("Entity created with id: {}", entityId);
 		//All entities shall have transform components
 		AddComponent<TransformComponent>(entity);

@@ -18,10 +18,13 @@ int main()
 	app.Setup([&]()
 	{
 		auto entity = app.Manager()->CreateEntity();
+		auto tank = app.Manager()->CreateEntity();
+		tank.AddComponent<cedar::RigidBodyComponent>(glm::vec2(50.f, 0.f));
+		tank.AddComponent<TestComponent>();
+
+		auto comp = app.Manager()->GetComponent<cedar::RigidBodyComponent>(tank);
+		CEDAR_INFO("finished");
 	});
-	auto tank = app.Manager()->CreateEntity();
-	app.Manager()->AddComponent<cedar::RigidBodyComponent>(tank, glm::vec2(50.f, 0.f));
-	app.Manager()->AddComponent<TestComponent>(tank);
 
 	app.Run();
 
