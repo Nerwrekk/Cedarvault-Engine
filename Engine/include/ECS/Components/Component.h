@@ -15,14 +15,14 @@ namespace cedar
 
 	//NOTE when exporting this class using CEDAR_API, all sorts of linker errors showed up!
 	template <typename T>
-	class Component : public IComponent
+	class CEDAR_API Component : public IComponent
 	{
 	public:
-		constexpr static uint32_t GetId()
+		static uint32_t GetId()
 		{
 			//Static variable inside a function will keep its original value
 			//this is why the GetId method works when using multiple components.
-			static auto id = IComponent::s_nextId++;
+			static auto id = s_nextId++;
 
 			return id;
 		}

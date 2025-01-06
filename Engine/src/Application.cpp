@@ -114,8 +114,9 @@ namespace cedar
 
 		previousMilliFrame = SDL_GetTicks();
 
-		// playerPos.x += playerVelocity.x * deltaTime;
-		// playerPos.y += playerVelocity.y * deltaTime;
+		m_entityManager->UpdateAllSystems(deltaTime);
+
+		m_entityManager->Update();
 	}
 
 	void Application::Render()

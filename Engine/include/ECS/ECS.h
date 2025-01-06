@@ -45,7 +45,7 @@ namespace cedar
 		{
 			if (m_manager)
 			{
-				m_manager->AddComponent<TComponent>(*this, args...);
+				m_manager->AddComponent<TComponent>(*this, std::forward<Args>(args)...);
 			}
 		}
 
@@ -93,8 +93,11 @@ namespace cedar
 	class BaseSystem
 	{
 	public:
-		BaseSystem() = default;
-		~BaseSystem() = default;
+		BaseSystem()
+		{
+			m_entities.reserve(100);
+		}
+		virtual ~BaseSystem() = default;
 
 		void AddEntityToSystem(Entity entity);
 		void RemoveEntityFromSystem(Entity entity);
@@ -108,8 +111,7 @@ namespace cedar
 			m_ComponentSignature.set(componentId);
 		}
 
-	protected:
-		virtual void Update() {};
+		virtual void Update(double deltaTime) {};
 
 	protected:
 		Signature m_ComponentSignature;
@@ -127,6 +129,8 @@ namespace cedar
 		Entity CreateEntity();
 		void KillEntity(Entity entity);
 		void AddEntityToSystem(Entity entity);
+
+		void RegisterComponents();
 
 		template <typename TComponent, typename... Args>
 		void AddComponent(Entity entity, Args&&... args);
@@ -208,6 +212,14 @@ namespace cedar
 			}
 
 			return nullptr;
+		}
+
+		void UpdateAllSystems(double deltaTime)
+		{
+			for (auto& [key, system] : m_systems)
+			{
+				system->Update(deltaTime);
+			}
 		}
 
 	private:

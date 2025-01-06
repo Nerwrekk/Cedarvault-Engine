@@ -1,7 +1,7 @@
 #include "ECS/ECS.h"
 
 #include "Common/Logger.h"
-#include "ECS/Components/TransformComponent.h"
+#include "ECS/Components/Components.h"
 
 namespace cedar
 {
@@ -18,6 +18,8 @@ namespace cedar
 
 		//TODO: add assert here!
 		s_EntityManager = this;
+
+		RegisterComponents();
 	}
 
 	void EntityManager::Update()
@@ -43,7 +45,7 @@ namespace cedar
 		entity.m_manager = this;
 		CEDAR_INFO("Entity created with id: {}", entityId);
 		//All entities shall have transform components
-		AddComponent<TransformComponent>(entity);
+		entity.AddComponent<TransformComponent>();
 
 		m_entitiesToBeAdded.insert(entity);
 
@@ -60,11 +62,19 @@ namespace cedar
 		for (auto [key, system] : m_systems)
 		{
 			auto systemComponentSignature = system->GetComponentSignature();
-			if ((systemComponentSignature & entitySignature) == systemComponentSignature)
+			if ((entitySignature & systemComponentSignature) == systemComponentSignature)
 			{
 				system->AddEntityToSystem(entity);
 			}
 		}
+	}
+
+	//NOTE! we need to pre register all compoents in the engine otherwise the game project
+	//will get an error LNK2019: unresolved external symbol error
+	void EntityManager::RegisterComponents()
+	{
+		Component<TransformComponent>::GetId();
+		Component<RigidBodyComponent>::GetId();
 	}
 
 	EntityManager* EntityManager::Instance()
