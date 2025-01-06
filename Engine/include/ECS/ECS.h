@@ -50,7 +50,7 @@ namespace cedar
 		}
 
 		template <typename TComponent>
-		TComponent* GetComponent()
+		TComponent* GetComponent() const
 		{
 			if (m_manager)
 			{
@@ -150,7 +150,7 @@ namespace cedar
 		}
 
 		template <typename TComponent>
-		TComponent* GetComponent(Entity entity)
+		TComponent* GetComponent(Entity entity) const
 		{
 			const auto componentId = Component<TComponent>::GetId();
 			const auto entityId = entity.GetId();
