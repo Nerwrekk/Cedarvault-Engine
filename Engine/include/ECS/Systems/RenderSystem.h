@@ -34,7 +34,12 @@ namespace cedar
 				SDL_FreeSurface(surface);
 
 				//Destination rectangle that we want to place our texture.
-				SDL_Rect dstRect = { static_cast<int>(transform->Position.x), static_cast<int>(transform->Position.y), 32, 32 };
+				SDL_Rect dstRect = {
+					static_cast<int>(transform->Position.x),
+					static_cast<int>(transform->Position.y),
+					spriteComponent->Width,
+					spriteComponent->Height
+				};
 				SDL_RenderCopy(renderer, texture, nullptr, &dstRect);
 
 				SDL_DestroyTexture(texture);

@@ -8,13 +8,14 @@ namespace cedar
 	struct SpriteComponent
 	{
 		std::string SpritePath;
-		uint32_t Size;
-		glm::vec2 Sise;
+		int Width;
+		int Height;
 
-		SpriteComponent(std::string spritePath = "", uint32_t size = 0)
+		SpriteComponent(std::string spritePath = "", int width = 0, int height = 0)
 		{
 			this->SpritePath = spritePath;
-			this->Size = size;
+			this->Width = width;
+			this->Height = height;
 		}
 	};
 } // namespace cedar
