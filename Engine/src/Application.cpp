@@ -2,6 +2,7 @@
 
 #include "Common/Logger.h"
 #include "Common/Constants.h"
+#include "ECS/Systems/MovementSystem.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -59,6 +60,11 @@ namespace cedar
 		SDL_SetWindowFullscreen(m_window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 
 		m_isRunning = true;
+
+		m_entityManager->AddSystem<MovementSystem>();
+		m_entityManager->AddSystem<RenderSystem>();
+		auto t = m_entityManager->GetSystem<RenderSystem>().get();
+		m_renderSystem.reset(t);
 	}
 
 	void Application::Run()
@@ -124,15 +130,7 @@ namespace cedar
 		SDL_SetRenderDrawColor(m_renderer, 21, 21, 21, 255);
 		SDL_RenderClear(m_renderer);
 
-		// SDL_Surface* surface = IMG_Load("../Game/assets/images/tank-tiger-right.png");
-		// SDL_Texture* texture = SDL_CreateTextureFromSurface(m_renderer, surface);
-		// SDL_FreeSurface(surface);
-
-		// //Destination rectangle that we want to place our texture.
-		// SDL_Rect dstRect = { static_cast<int>(playerPos.x), static_cast<int>(playerPos.y), 32, 32 };
-		// SDL_RenderCopy(m_renderer, texture, nullptr, &dstRect);
-
-		// SDL_DestroyTexture(texture);
+		m_renderSystem->RenderEntites(m_renderer);
 
 		SDL_RenderPresent(m_renderer);
 	}
