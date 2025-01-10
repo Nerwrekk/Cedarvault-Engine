@@ -2,9 +2,7 @@
 
 #include "ECS/Components/Components.h"
 
-#define SDL_MAIN_HANDLED
-#include "SDL2/SDL.h"
-#include <SDL2/SDL_image.h>
+#include "Common/SDL_Wrapper.h"
 
 namespace cedar
 {
@@ -29,10 +27,6 @@ namespace cedar
 				auto transform = entity.GetComponent<TransformComponent>();
 				auto spriteComponent = entity.GetComponent<SpriteComponent>();
 
-				SDL_Surface* surface = IMG_Load(spriteComponent->SpritePath.c_str());
-				SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-				SDL_FreeSurface(surface);
-
 				//Destination rectangle that we want to place our texture.
 				SDL_Rect dstRect = {
 					static_cast<int>(transform->Position.x),
@@ -40,9 +34,9 @@ namespace cedar
 					spriteComponent->Width,
 					spriteComponent->Height
 				};
-				SDL_RenderCopy(renderer, texture, nullptr, &dstRect);
+				SDL_RenderCopy(renderer, spriteComponent->Texture, nullptr, &dstRect);
 
-				SDL_DestroyTexture(texture);
+				// SDL_DestroyTexture(spriteComponent->Texture);
 			}
 		}
 	};

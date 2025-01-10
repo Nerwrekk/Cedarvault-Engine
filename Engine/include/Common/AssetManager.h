@@ -1,0 +1,24 @@
+#pragma once
+
+#include <map>
+#include <filesystem>
+#include <string>
+#include "SDL2/SDL_image.h"
+
+namespace cedar
+{
+	class AssetManager
+	{
+	public:
+		AssetManager(SDL_Renderer* renderer);
+
+		void ClearAssets();
+		void LoadAssets(const std::string& assetPath);
+
+		SDL_Texture* GetTexture(const std::string& assetId);
+
+	private:
+		SDL_Renderer* m_renderer;
+		std::map<std::string, SDL_Texture*> m_textures;
+	};
+} // namespace cedar

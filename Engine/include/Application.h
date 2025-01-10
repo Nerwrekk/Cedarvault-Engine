@@ -38,6 +38,11 @@ namespace cedar
 			return m_entityManager.get();
 		}
 
+		SDL_Renderer* GetRenderer() const
+		{
+			return m_renderer;
+		}
+
 	private:
 		void ProccessInput();
 		void Update();
