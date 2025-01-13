@@ -2,6 +2,7 @@
 #include "Common/Logger.h"
 
 #include <iostream>
+#include "AssetManager.h"
 
 namespace fs = std::filesystem;
 
@@ -17,6 +18,11 @@ namespace cedar
 		s_assetManager = this;
 	}
 
+	AssetManager::~AssetManager()
+	{
+		ClearAssets();
+	}
+
 	AssetManager* AssetManager::Inst()
 	{
 		return s_assetManager;
@@ -24,6 +30,11 @@ namespace cedar
 
 	void AssetManager::ClearAssets()
 	{
+		for (auto& [key, texture] : m_textures)
+		{
+			SDL_DestroyTexture(texture);
+		}
+
 		m_textures.clear();
 	}
 
@@ -60,7 +71,7 @@ namespace cedar
 		}
 	}
 
-	SDL_Texture* AssetManager::GetTexture(const std::string& assetId)
+	SDL_Texture* AssetManager::GetTexture(const std::string& assetId) const
 	{
 		return m_textures.at(assetId);
 	}
