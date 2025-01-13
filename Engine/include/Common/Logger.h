@@ -49,7 +49,11 @@ namespace cedar
 	#define CEDAR_INFO(...) cedar::Logger::Ref()->info(__VA_ARGS__)
 	#define CEDAR_WARN(...) cedar::Logger::Ref()->warn(__VA_ARGS__)
 	#define CEDAR_ERROR(...) cedar::Logger::Ref()->error(__VA_ARGS__)
-	#define CEDAR_FATAL(...) cedar::Logger::Ref()->critical(__VA_ARGS__)
+	#define CEDAR_FATAL(...)                                                                    \
+		cedar::Logger::Ref()->critical(__VA_ARGS__);                                            \
+		cedar::Logger::Ref()->critical("in function: {}, at Line: {}", __FUNCTION__, __LINE__); \
+		exit(EXIT_FAILURE)
+
 #else
 	#define CEDAR_TRACE
 	#define CEDAR_DEBUG
