@@ -7,7 +7,7 @@ int main()
 	cedar::Application app;
 
 	cedar::AssetManager assetManager(app.GetRenderer());
-	assetManager.LoadAssets("./assets/imagess");
+	assetManager.LoadAssets("./assets/images");
 
 	app.Setup([&]()
 	{
