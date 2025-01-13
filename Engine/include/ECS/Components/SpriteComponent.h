@@ -1,19 +1,19 @@
 #pragma once
 
-#include "Common/SDL_Wrapper.h"
+#include <string>
 #include <glm/glm.hpp>
 
 namespace cedar
 {
 	struct SpriteComponent
 	{
-		SDL_Texture* Texture;
+		std::string TextureId;
 		int Width;
 		int Height;
 
-		SpriteComponent(SDL_Texture* texture = nullptr, int width = 0, int height = 0)
+		SpriteComponent(std::string textureId = "", int width = 0, int height = 0)
 		{
-			this->Texture = texture;
+			this->TextureId = textureId;
 			this->Width = width;
 			this->Height = height;
 		}

@@ -7,9 +7,19 @@ namespace fs = std::filesystem;
 
 namespace cedar
 {
+	AssetManager* AssetManager::s_assetManager = nullptr;
+
 	AssetManager::AssetManager(SDL_Renderer* renderer)
 	{
 		m_renderer = renderer;
+
+		//TODO: Assert this so we make sure we only create one asset manager
+		s_assetManager = this;
+	}
+
+	AssetManager* AssetManager::Inst()
+	{
+		return s_assetManager;
 	}
 
 	void AssetManager::ClearAssets()

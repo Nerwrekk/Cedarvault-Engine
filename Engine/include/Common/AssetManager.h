@@ -12,12 +12,15 @@ namespace cedar
 	public:
 		AssetManager(SDL_Renderer* renderer);
 
+		static AssetManager* Inst();
+		
 		void ClearAssets();
 		void LoadAssets(const std::string& assetPath);
 
 		SDL_Texture* GetTexture(const std::string& assetId);
-
 	private:
+		static AssetManager* s_assetManager;
+		
 		SDL_Renderer* m_renderer;
 		std::map<std::string, SDL_Texture*> m_textures;
 	};

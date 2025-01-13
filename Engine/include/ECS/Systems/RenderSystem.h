@@ -1,8 +1,8 @@
 #pragma once
 
 #include "ECS/Components/Components.h"
-
 #include "Common/SDL_Wrapper.h"
+#include "Common/AssetManager.h"
 
 namespace cedar
 {
@@ -27,6 +27,8 @@ namespace cedar
 				auto transform = entity.GetComponent<TransformComponent>();
 				auto spriteComponent = entity.GetComponent<SpriteComponent>();
 
+				SDL_Texture* texture = AssetManager::Inst()->GetTexture(spriteComponent->TextureId);
+
 				//Destination rectangle that we want to place our texture.
 				SDL_Rect dstRect = {
 					static_cast<int>(transform->Position.x),
@@ -34,7 +36,7 @@ namespace cedar
 					spriteComponent->Width,
 					spriteComponent->Height
 				};
-				SDL_RenderCopy(renderer, spriteComponent->Texture, nullptr, &dstRect);
+				SDL_RenderCopy(renderer, texture, nullptr, &dstRect);
 
 				// SDL_DestroyTexture(spriteComponent->Texture);
 			}
