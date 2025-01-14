@@ -2,7 +2,6 @@
 #include "Common/Logger.h"
 
 #include <iostream>
-#include "AssetManager.h"
 
 namespace fs = std::filesystem;
 

@@ -29,16 +29,17 @@ namespace cedar
 
 				SDL_Texture* texture = AssetManager::Inst()->GetTexture(spriteComponent->TextureId);
 
+				SDL_Rect srcRect = spriteComponent->SrcRect;
+
 				//Destination rectangle that we want to place our texture.
 				SDL_Rect dstRect = {
 					static_cast<int>(transform->Position.x),
 					static_cast<int>(transform->Position.y),
-					spriteComponent->Width,
-					spriteComponent->Height
+					static_cast<int>(spriteComponent->Width * transform->Scale.x),
+					static_cast<int>(spriteComponent->Height * transform->Scale.y)
 				};
-				SDL_RenderCopy(renderer, texture, nullptr, &dstRect);
 
-				// SDL_DestroyTexture(spriteComponent->Texture);
+				SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRect, transform->Rotation, nullptr, SDL_FLIP_NONE);
 			}
 		}
 	};
