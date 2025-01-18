@@ -7,6 +7,15 @@
 
 namespace cedar
 {
+	struct TileLevelMap
+	{
+		int TileSize;
+		double TileScale;
+		int Width;
+		int Height;
+		SDL_Texture* tilemap;
+	};
+
 	using MapLayout = std::vector<std::vector<int>>;
 	class AssetManager
 	{
