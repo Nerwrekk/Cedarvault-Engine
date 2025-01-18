@@ -57,7 +57,7 @@ namespace cedar
 			return;
 		}
 
-		SDL_SetWindowFullscreen(m_window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+		// SDL_SetWindowFullscreen(m_window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 
 		m_isRunning = true;
 
@@ -129,6 +129,8 @@ namespace cedar
 	{
 		SDL_SetRenderDrawColor(m_renderer, 21, 21, 21, 255);
 		SDL_RenderClear(m_renderer);
+
+		AssetManager::Inst()->LoadLevel("jungle", "jungle");
 
 		m_renderSystem->RenderEntites(m_renderer);
 

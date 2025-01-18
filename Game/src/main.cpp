@@ -8,6 +8,9 @@ int main()
 
 	cedar::AssetManager assetManager(app.GetRenderer());
 	assetManager.LoadAssets("./assets/images");
+	assetManager.LoadTilemaps("./assets/tilemaps");
+
+	// assetManager.LoadLevel("jungle", "jungle");
 
 	app.Setup([&]()
 	{
