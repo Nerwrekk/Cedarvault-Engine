@@ -4,6 +4,18 @@
 
 int main()
 {
+	json_node jungleTileMapNode;
+	json_reader::read("./assets/configurations/jungleConfig.json", &jungleTileMapNode);
+
+	CEDAR_INFO("{}", jungleTileMapNode["name"].get_string());
+	CEDAR_INFO("{}", jungleTileMapNode["tileSize"].get_int());
+	CEDAR_INFO("{}", jungleTileMapNode["tileScale"].get_int());
+	auto map = jungleTileMapNode["map"].get_array();
+	for (auto& t : map)
+	{
+		CEDAR_INFO("{}", t->get_int());
+	}
+
 	cedar::Application app;
 
 	cedar::AssetManager assetManager(app.GetRenderer());

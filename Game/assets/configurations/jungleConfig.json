@@ -1,0 +1,9 @@
+{
+  "name": "JungleLevel1",
+  "tileSize": 32,
+  "tileScale": 1,
+  "textureId": "jungle",
+  "map": [
+    21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21
+  ]
+}

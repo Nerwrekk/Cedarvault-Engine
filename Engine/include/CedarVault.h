@@ -6,6 +6,8 @@
 #include "ECS/Components/Components.h"
 #include "ECS/Systems/MovementSystem.h"
 #include "Common/AssetManager.h"
+#include "Common/Mindi/json_node.h"
+#include "Common/Mindi/json_reader.h"
 
 #include <glm/glm.hpp>
 
