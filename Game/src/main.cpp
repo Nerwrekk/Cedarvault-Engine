@@ -4,8 +4,8 @@
 
 int main()
 {
-	json_node jungleTileMapNode;
-	json_reader::read("./assets/configurations/jungleConfig.json", &jungleTileMapNode);
+	Mindi::json_node jungleTileMapNode;
+	Mindi::json_reader::read("./assets/configurations/jungleConfig.json", &jungleTileMapNode);
 
 	CEDAR_INFO("{}", jungleTileMapNode["name"].get_string());
 	CEDAR_INFO("{}", jungleTileMapNode["tileSize"].get_int());
