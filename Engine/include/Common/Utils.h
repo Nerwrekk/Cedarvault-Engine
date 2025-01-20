@@ -5,9 +5,14 @@
 
 namespace utils
 {
-	[[nodiscard]] std::vector<std::string> split_string(const std::string& words, char delimiter);
+	namespace string
+	{
+		[[nodiscard]] std::vector<std::string> split(const std::string& words, char delimiter);
+		void trim(std::string& line);
+		void replace(std::string& line, char replace_from, char replace_to);
+		void replace(std::string& line, std::string& replace_from, std::string& replace_to);
 
-	void trim_string(std::string& line);
+	} // namespace string
 
 	template <typename T>
 	std::string to_string(T val)

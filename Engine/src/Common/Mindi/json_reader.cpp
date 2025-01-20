@@ -93,7 +93,7 @@ bool json_reader::read(const std::string& file_name, json_node* out_node)
 			}
 
 			//Add value to node
-			utils::trim_string(token);
+			utils::string::trim(token);
 			if (!token.empty())
 			{
 				const auto type = get_json_type(token);
@@ -168,7 +168,7 @@ void json_reader::clean_json_prop(std::string& prop)
 
 	//replaces one char with another
 	/*std::ranges::replace(prop, '"', '\0');*/
-	utils::trim_string(prop);
+	utils::string::trim(prop);
 }
 
 void json_reader::clean_json_value(std::string& value)
@@ -232,14 +232,14 @@ json_type json_reader::get_json_type(const std::string& value)
 
 std::pair<std::string, std::string> json_reader::get_prop_and_value(const std::string& line)
 {
-	const auto vec = utils::split_string(line, ':');
+	const auto vec = utils::string::split(line, ':');
 	std::string prop = vec.at(0);
 	std::string value = vec.at(1);
 
 	clean_json_prop(prop);
 
-	utils::trim_string(prop);
-	utils::trim_string(value);
+	utils::string::trim(prop);
+	utils::string::trim(value);
 
 	return std::make_pair(prop, value);
 }

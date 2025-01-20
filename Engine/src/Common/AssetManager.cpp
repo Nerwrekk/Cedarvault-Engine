@@ -104,7 +104,7 @@ namespace cedar
 						{
 							std::string line;
 							std::getline(file, line);
-							auto row = utils::split_string(line, ',');
+							auto row = utils::string::split(line, ',');
 							std::vector<int> temp;
 							for (auto& item : row)
 							{
