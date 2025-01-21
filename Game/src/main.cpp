@@ -5,7 +5,7 @@
 int main()
 {
 	Mindi::json_node jungleTileMapNode;
-	Mindi::json_reader::read("./assets/configurations/jungleConfig.json", &jungleTileMapNode);
+	Mindi::json_reader::read("../assets/configurations/jungleConfig.json", &jungleTileMapNode);
 
 	CEDAR_INFO("{}", jungleTileMapNode["name"].get_string());
 	CEDAR_INFO("{}", jungleTileMapNode["tileSize"].get_int());
@@ -14,6 +14,12 @@ int main()
 	for (auto& t : map)
 	{
 		CEDAR_INFO("{}", t->get_int());
+		*t = 5;
+	}
+
+	if (Mindi::json_writer::write(jungleTileMapNode, "../assets/configurations/jungleConfig.json"))
+	{
+		CEDAR_INFO("success!");
 	}
 
 	cedar::Application app;

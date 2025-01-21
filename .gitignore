@@ -40,6 +40,8 @@ temp.txt
 Build/
 Target/
 Targets/
+Debug/
+Release/
 
 # Files
 dna.txt

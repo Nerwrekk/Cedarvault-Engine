@@ -23,3 +23,13 @@ target_compile_definitions(Engine PUBLIC
     #and if it is it applies the define.
     "$<$<CONFIG:Debug>:CEDAR_ENABLE_LOG>"
     )
+
+#Keeping here for learning
+# Set the output directory for runtime files (EXE and DLL)
+# set_target_properties(Game PROPERTIES
+#     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/Game"
+# )
+
+# set_target_properties(Engine PROPERTIES
+#     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/Game"
+# )
