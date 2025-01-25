@@ -1,7 +1,7 @@
 {
   "name": "JungleLevel",
   "tileSize": 32,
-  "tileScale": 1.0,
+  "tileScale": 2.0,
   "textureId": "jungle",
   "levelMaps": ["jungleLvl1"]
 }

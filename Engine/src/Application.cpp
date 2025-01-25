@@ -149,8 +149,8 @@ namespace cedar
 				//Destination rectangle that we want to place our texture.
 				//in order to scale the tilemap both the position and size must be multiplied by the scale
 				SDL_Rect dstRect = {
-					tileLevelMap->TileSize * x,
-					tileLevelMap->TileSize * y,
+					(tileLevelMap->TileSize * static_cast<int>(tileLevelMap->TileScale)) * x,
+					(tileLevelMap->TileSize * static_cast<int>(tileLevelMap->TileScale)) * y,
 					tileLevelMap->TileSize * static_cast<int>(tileLevelMap->TileScale),
 					tileLevelMap->TileSize * static_cast<int>(tileLevelMap->TileScale)
 
