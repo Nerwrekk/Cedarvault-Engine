@@ -1,6 +1,7 @@
 #include "Common/AssetManager.h"
 #include "Common/Logger.h"
 #include "Common/Utils.h"
+#include "Common/Mindi/Mindi.h"
 
 #include <iostream>
 #include <fstream>
@@ -127,6 +128,54 @@ namespace cedar
 
 						m_tileMaps.emplace(fileName, texture);
 					}
+				}
+			}
+		}
+		catch (const std::exception& e)
+		{
+			CEDAR_FATAL("{}", e.what());
+		}
+	}
+
+	void AssetManager::LoadConfigurations(const std::string& configPath)
+	{
+		try
+		{
+			if (!fs::exists(configPath) && !fs::is_directory(configPath))
+			{
+				CEDAR_FATAL("Path: \"{}\" Does not exist", configPath);
+			}
+
+			CEDAR_INFO("Path: {} exists!", configPath);
+
+			for (const auto& dirEntry : fs::directory_iterator(configPath))
+			{
+				if (fs::is_regular_file(dirEntry.status()))
+				{
+					// Print the file name
+					const auto fileName = dirEntry.path().stem().string();
+					CEDAR_WARN("File: {}", fileName);
+
+					Mindi::json_node currentConfigNode {};
+					if (!Mindi::json_reader::read(dirEntry.path().string(), &currentConfigNode))
+					{
+						CEDAR_FATAL("Failed to load in config gile: {}", fileName);
+					}
+					//Config section
+					auto tileLevelMap = new TileLevelMap();
+					tileLevelMap->TileSize = currentConfigNode["tileSize"].get_int();
+					tileLevelMap->TileScale = currentConfigNode["tileScale"].get_float();
+					tileLevelMap->tilemap = GetTileMap(currentConfigNode["textureId"].get_string());
+					//load in width and height of the tilemap
+					SDL_QueryTexture(tileLevelMap->tilemap, nullptr, nullptr, &tileLevelMap->Width, &tileLevelMap->Height);
+					auto& levels = currentConfigNode["levelMaps"].get_array();
+					for (Mindi::json_node* levelId : levels)
+					{
+						tileLevelMap->levelMapIds.push_back(levelId->get_string());
+					}
+					//Add new TileLevelMap
+					m_allLevels.emplace(currentConfigNode["name"].get_string(), tileLevelMap);
+					//delete json_node
 				}
 			}
 		}

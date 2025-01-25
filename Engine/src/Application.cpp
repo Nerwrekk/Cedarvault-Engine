@@ -125,11 +125,45 @@ namespace cedar
 		m_entityManager->Update();
 	}
 
+	void Application::RenderCurrentLevel(const std::string& tilemapId, const std::string& levelMapId)
+	{
+		SDL_Texture* texture = AssetManager::Inst()->GetTileMap(tilemapId);
+		int width, height;
+		SDL_QueryTexture(texture, nullptr, nullptr, &width, &height);
+
+		const auto& map = AssetManager::Inst()->GetLevelMap(levelMapId);
+		int mapNumRows = map.size();
+		for (int y = 0; y < mapNumRows; y++)
+		{
+			auto& colums = map.at(y);
+			for (int x = 0; x < colums.size(); x++)
+			{
+				int positionXY = colums.at(x);
+				int yPos = positionXY / 10;
+				int xPos = positionXY % 10;
+				SDL_Rect srcRect = { 32 * xPos, 32 * yPos, 32, 32 };
+
+				//Destination rectangle that we want to place our texture.
+				//in order to scale the tilemap both the position and size must be multiplied by the scale
+				SDL_Rect dstRect = {
+					(32) * x,
+					(32) * y,
+					32 * 2,
+					32 * 2
+
+				};
+
+				SDL_RenderCopy(m_renderer, texture, &srcRect, &dstRect);
+			}
+		}
+	}
+
 	void Application::Render()
 	{
 		SDL_SetRenderDrawColor(m_renderer, 21, 21, 21, 255);
 		SDL_RenderClear(m_renderer);
 
+		RenderCurrentLevel("jungle", "jungle");
 		AssetManager::Inst()->LoadLevel("jungle", "jungle");
 
 		m_renderSystem->RenderEntites(m_renderer);

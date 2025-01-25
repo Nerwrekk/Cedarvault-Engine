@@ -46,6 +46,7 @@ namespace cedar
 	private:
 		void ProccessInput();
 		void Update();
+		void RenderCurrentLevel(const std::string& tilemapId, const std::string& levelMapId);
 		void Render();
 
 	private:

@@ -4,29 +4,12 @@
 
 int main()
 {
-	Mindi::json_node jungleTileMapNode;
-	Mindi::json_reader::read("./assets/configurations/jungleConfig.json", &jungleTileMapNode);
-
-	CEDAR_INFO("{}", jungleTileMapNode["name"].get_string());
-	CEDAR_INFO("{}", jungleTileMapNode["tileSize"].get_int());
-	CEDAR_INFO("{}", jungleTileMapNode["tileScale"].get_int());
-	auto map = jungleTileMapNode["map"].get_array();
-	for (auto& t : map)
-	{
-		CEDAR_INFO("{}", t->get_int());
-		*t = 5;
-	}
-
-	if (Mindi::json_writer::write(jungleTileMapNode, "./assets/configurations/jungleConfig.json"))
-	{
-		CEDAR_INFO("success!");
-	}
-
 	cedar::Application app;
 
 	cedar::AssetManager assetManager(app.GetRenderer());
 	assetManager.LoadAssets("./assets/images");
 	assetManager.LoadTilemaps("./assets/tilemaps");
+	assetManager.LoadConfigurations("./assets/configurations");
 
 	// assetManager.LoadLevel("jungle", "jungle");
 

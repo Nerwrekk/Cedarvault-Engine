@@ -14,6 +14,7 @@ namespace cedar
 		int Width;
 		int Height;
 		SDL_Texture* tilemap;
+		std::vector<std::string> levelMapIds;
 	};
 
 	using MapLayout = std::vector<std::vector<int>>;
@@ -28,6 +29,7 @@ namespace cedar
 		void ClearAssets();
 		void LoadAssets(const std::string& assetPath);
 		void LoadTilemaps(const std::string& tilemapPath);
+		void LoadConfigurations(const std::string& configPath);
 
 		void LoadLevel(const std::string& tilemapId, const std::string& levelMapId);
 
@@ -40,6 +42,7 @@ namespace cedar
 
 		SDL_Renderer* m_renderer;
 		std::map<std::string, SDL_Texture*> m_textures;
+		std::map<std::string, TileLevelMap*> m_allLevels;
 		std::map<std::string, SDL_Texture*> m_tileMaps;
 		std::map<std::string, MapLayout> m_levelMaps;
 	};
