@@ -84,12 +84,12 @@ namespace Mindi
 		type = json_type::String;
 
 		//this is for resizing the vector for reason??
-		m_content = new std::string(str);
+		m_content = std::string(str);
 	}
 
 	std::string json_node::get_string(const size_t item_index) const
 	{
-		return *std::get<std::string*>(m_content);
+		return std::get<std::string>(m_content);
 	}
 
 	void json_node::set_float(const double num, const size_t item_index)

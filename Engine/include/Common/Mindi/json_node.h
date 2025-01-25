@@ -52,7 +52,7 @@ namespace Mindi
 		friend class json_reader;
 
 		std::variant<
-		    std::string*,
+		    std::string,
 		    bool*,
 		    int*,
 		    double*,
