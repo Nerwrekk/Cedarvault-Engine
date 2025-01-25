@@ -75,7 +75,26 @@ namespace Mindi
 
 	json_node::~json_node()
 	{
-		//TODO: free up all memory!
+		for (auto& [key, node] : m_json_nodes)
+		{
+			if (node->get_type() == json_type::Array)
+			{
+				for (json_node* arrNode : node->get_array())
+				{
+					if (arrNode)
+					{
+						delete arrNode;
+						arrNode = nullptr;
+					}
+				}
+			}
+
+			if (node)
+			{
+				delete node;
+				node = nullptr;
+			}
+		}
 	}
 
 	void json_node::set_string(const std::string& str, const size_t item_index)

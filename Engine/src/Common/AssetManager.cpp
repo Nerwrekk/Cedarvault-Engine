@@ -175,7 +175,6 @@ namespace cedar
 					}
 					//Add new TileLevelMap
 					m_allLevels.emplace(currentConfigNode["name"].get_string(), tileLevelMap);
-					//delete json_node
 				}
 			}
 		}
