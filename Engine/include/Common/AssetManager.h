@@ -36,6 +36,7 @@ namespace cedar
 		SDL_Texture* GetTexture(const std::string& assetId) const;
 		SDL_Texture* GetTileMap(const std::string& tilemapId) const;
 		const MapLayout& GetLevelMap(const std::string& levelMapId) const;
+		TileLevelMap* GetTileLevelMap(const std::string& tileLevelMapId) const;
 
 	private:
 		static AssetManager* s_assetManager;

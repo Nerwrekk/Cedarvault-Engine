@@ -125,13 +125,11 @@ namespace cedar
 		m_entityManager->Update();
 	}
 
-	void Application::RenderCurrentLevel(const std::string& tilemapId, const std::string& levelMapId)
+	void Application::RenderCurrentLevel(const std::string& tileLevelMapId, int levelIndex)
 	{
-		SDL_Texture* texture = AssetManager::Inst()->GetTileMap(tilemapId);
-		int width, height;
-		SDL_QueryTexture(texture, nullptr, nullptr, &width, &height);
+		TileLevelMap* tileLevelMap = AssetManager::Inst()->GetTileLevelMap(tileLevelMapId);
 
-		const auto& map = AssetManager::Inst()->GetLevelMap(levelMapId);
+		const auto& map = AssetManager::Inst()->GetLevelMap(tileLevelMap->levelMapIds.at(levelIndex));
 		int mapNumRows = map.size();
 		for (int y = 0; y < mapNumRows; y++)
 		{
@@ -141,19 +139,24 @@ namespace cedar
 				int positionXY = colums.at(x);
 				int yPos = positionXY / 10;
 				int xPos = positionXY % 10;
-				SDL_Rect srcRect = { 32 * xPos, 32 * yPos, 32, 32 };
+				SDL_Rect srcRect = {
+					tileLevelMap->TileSize * xPos,
+					tileLevelMap->TileSize * yPos,
+					tileLevelMap->TileSize,
+					tileLevelMap->TileSize
+				};
 
 				//Destination rectangle that we want to place our texture.
 				//in order to scale the tilemap both the position and size must be multiplied by the scale
 				SDL_Rect dstRect = {
-					(32) * x,
-					(32) * y,
-					32 * 2,
-					32 * 2
+					tileLevelMap->TileSize * x,
+					tileLevelMap->TileSize * y,
+					tileLevelMap->TileSize * static_cast<int>(tileLevelMap->TileScale),
+					tileLevelMap->TileSize * static_cast<int>(tileLevelMap->TileScale)
 
 				};
 
-				SDL_RenderCopy(m_renderer, texture, &srcRect, &dstRect);
+				SDL_RenderCopy(m_renderer, tileLevelMap->tilemap, &srcRect, &dstRect);
 			}
 		}
 	}
@@ -163,8 +166,7 @@ namespace cedar
 		SDL_SetRenderDrawColor(m_renderer, 21, 21, 21, 255);
 		SDL_RenderClear(m_renderer);
 
-		RenderCurrentLevel("jungle", "jungle");
-		AssetManager::Inst()->LoadLevel("jungle", "jungle");
+		RenderCurrentLevel("JungleLevel", 0); //hardcoded for now;
 
 		m_renderSystem->RenderEntites(m_renderer);
 

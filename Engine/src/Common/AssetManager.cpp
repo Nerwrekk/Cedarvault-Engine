@@ -231,5 +231,10 @@ namespace cedar
 	{
 		return m_levelMaps.at(levelMapId);
 	}
+
+	TileLevelMap* AssetManager::GetTileLevelMap(const std::string& tileLevelMapId) const
+	{
+		return m_allLevels.at(tileLevelMapId);
+	}
 }
 // namespace cedar
