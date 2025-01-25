@@ -95,34 +95,34 @@ namespace Mindi
 	void json_node::set_float(const double num, const size_t item_index)
 	{
 		type = json_type::Float;
-		m_content = new double(num);
+		m_content = num;
 	}
 
 	double json_node::get_float(const size_t item_index) const
 	{
-		return *std::get<double*>(m_content);
+		return std::get<double>(m_content);
 	}
 
 	void json_node::set_int(const int num, const size_t item_index)
 	{
 		type = json_type::Int;
-		m_content = new int(num);
+		m_content = num;
 	}
 
 	int json_node::get_int(const size_t item_index) const
 	{
-		return *std::get<int*>(m_content);
+		return std::get<int>(m_content);
 	}
 
 	void json_node::set_bool(const bool value, const size_t item_index)
 	{
-		m_content = new bool(value);
+		m_content = value;
 		type = json_type::Boolean;
 	}
 
 	bool json_node::get_bool(const size_t item_index) const
 	{
-		return *std::get<bool*>(m_content);
+		return std::get<bool>(m_content);
 	}
 
 	void json_node::set_obj(json_object& value, const size_t item_index)

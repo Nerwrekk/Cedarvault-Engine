@@ -53,9 +53,9 @@ namespace Mindi
 
 		std::variant<
 		    std::string,
-		    bool*,
-		    int*,
-		    double*,
+		    bool,
+		    int,
+		    double,
 		    json_object*,
 		    json_array*>
 		    m_content;
