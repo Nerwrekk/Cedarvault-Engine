@@ -3,6 +3,7 @@
 #include "Common/Logger.h"
 #include "Common/Constants.h"
 #include "ECS/Systems/MovementSystem.h"
+#include "ECS/Systems/AnimationSystem.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -63,8 +64,9 @@ namespace cedar
 
 		m_entityManager->AddSystem<MovementSystem>();
 		m_entityManager->AddSystem<RenderSystem>();
-		auto t = m_entityManager->GetSystem<RenderSystem>().get();
-		m_renderSystem.reset(t);
+		m_entityManager->AddSystem<AnimationSystem>();
+		auto renderSystem = m_entityManager->GetSystem<RenderSystem>().get();
+		m_renderSystem.reset(renderSystem);
 	}
 
 	void Application::Run()

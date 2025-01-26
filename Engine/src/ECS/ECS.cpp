@@ -76,6 +76,7 @@ namespace cedar
 		Component<TransformComponent>::GetId();
 		Component<RigidBodyComponent>::GetId();
 		Component<SpriteComponent>::GetId();
+		Component<AnimationComponent>::GetId();
 	}
 
 	EntityManager* EntityManager::Instance()
