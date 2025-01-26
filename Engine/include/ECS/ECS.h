@@ -101,7 +101,7 @@ namespace cedar
 
 		void AddEntityToSystem(Entity entity);
 		void RemoveEntityFromSystem(Entity entity);
-		const std::vector<Entity>& GetSystemEntities();
+		std::vector<Entity>& GetSystemEntities();
 		const Signature& GetComponentSignature();
 
 		template <typename T>

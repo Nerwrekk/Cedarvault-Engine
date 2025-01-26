@@ -103,7 +103,7 @@ namespace cedar
 		    m_entities.end());
 	}
 
-	const std::vector<Entity>& BaseSystem::GetSystemEntities()
+	std::vector<Entity>& BaseSystem::GetSystemEntities()
 	{
 		return m_entities;
 	}

@@ -4,7 +4,7 @@ from conan import ConanFile
 from conan.tools.cmake import cmake_layout
 from conan.tools.files import copy
 
-class MeanPixelRecipe(ConanFile):
+class CederVaultRecipe(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     generators = "CMakeDeps", "CMakeToolchain"
 

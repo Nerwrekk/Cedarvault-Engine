@@ -16,13 +16,13 @@ int main()
 	app.Setup([&]()
 	{
 		auto tank = app.Manager()->CreateEntity();
-		tank.AddComponent<cedar::RigidBodyComponent>(glm::vec2(50.f, 0.f));
-		tank.AddComponent<cedar::SpriteComponent>("tank-panther-right", 32, 32);
+		tank.AddComponent<cedar::RigidBodyComponent>(glm::vec2(0.f, 1.f));
+		tank.AddComponent<cedar::SpriteComponent>("tank-panther-right", 32, 32, 0);
 
 		auto truck = app.Manager()->CreateEntity();
-		truck.AddComponent<cedar::RigidBodyComponent>(glm::vec2(30.f, -10.f));
-		truck.AddComponent<cedar::SpriteComponent>("truck-ford-right", 32, 32);
-		truck.GetComponent<cedar::TransformComponent>()->Position = { 400, 500 };
+		truck.AddComponent<cedar::RigidBodyComponent>(glm::vec2(0.f, 0.f));
+		truck.AddComponent<cedar::SpriteComponent>("truck-ford-right", 32, 32, 0);
+		truck.GetComponent<cedar::TransformComponent>()->Position = { 0, 10 };
 	});
 
 	app.Run();

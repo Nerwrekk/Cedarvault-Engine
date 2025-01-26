@@ -4,6 +4,8 @@
 #include "Common/SDL_Wrapper.h"
 #include "Common/AssetManager.h"
 
+#include <algorithm>
+
 namespace cedar
 {
 	class RenderSystem : public BaseSystem
@@ -22,7 +24,29 @@ namespace cedar
 
 		void RenderEntites(SDL_Renderer* renderer)
 		{
-			for (auto& entity : GetSystemEntities())
+			//Note to self, cant sort a const vector! ;)
+			auto& entities = GetSystemEntities();
+			//Sort all entities based on ZIndex and Y transformPosition
+			std::sort(entities.begin(), entities.end(), [](const Entity& first, const Entity& second)
+			{
+				auto firstEntityTransform = first.GetComponent<TransformComponent>();
+				auto firstEntitySpriteComponent = first.GetComponent<SpriteComponent>();
+
+				auto secondEntityTransform = second.GetComponent<TransformComponent>();
+				auto secondEntitySpriteComponent = second.GetComponent<SpriteComponent>();
+
+				//first check if they have the same Zindex
+				if (firstEntitySpriteComponent->ZIndex == secondEntitySpriteComponent->ZIndex)
+				{
+					//Zindex match so we sort by Y transform position
+					return firstEntityTransform->Position.y < secondEntityTransform->Position.y;
+				}
+
+				//if they dont have the same Zindex we sort by Zindex
+				return firstEntitySpriteComponent->ZIndex < secondEntitySpriteComponent->ZIndex;
+			});
+
+			for (auto& entity : entities)
 			{
 				auto transform = entity.GetComponent<TransformComponent>();
 				auto spriteComponent = entity.GetComponent<SpriteComponent>();
