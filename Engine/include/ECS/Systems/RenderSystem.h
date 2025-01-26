@@ -22,10 +22,9 @@ namespace cedar
 			//RenderSystem is a bit special and do not need this
 		}
 
-		void RenderEntites(SDL_Renderer* renderer)
+	private:
+		void SortEntities(std::vector<Entity>& entities)
 		{
-			//Note to self, cant sort a const vector! ;)
-			auto& entities = GetSystemEntities();
 			//Sort all entities based on ZIndex and Y transformPosition
 			std::sort(entities.begin(), entities.end(), [](const Entity& first, const Entity& second)
 			{
@@ -45,8 +44,15 @@ namespace cedar
 				//if they dont have the same Zindex we sort by Zindex
 				return firstEntitySpriteComponent->ZIndex < secondEntitySpriteComponent->ZIndex;
 			});
+		}
 
-			for (auto& entity : entities)
+	public:
+		void RenderEntites(SDL_Renderer* renderer)
+		{
+			//Note to self, cant sort a const vector! ;)
+			SortEntities(GetSystemEntities());
+
+			for (auto& entity : GetSystemEntities())
 			{
 				auto transform = entity.GetComponent<TransformComponent>();
 				auto spriteComponent = entity.GetComponent<SpriteComponent>();

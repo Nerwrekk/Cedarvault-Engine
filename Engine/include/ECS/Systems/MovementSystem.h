@@ -23,7 +23,7 @@ namespace cedar
 				transform->Position.x += rigidBody->Velocity.x * deltaTime;
 				transform->Position.y += rigidBody->Velocity.y * deltaTime;
 
-				CEDAR_INFO("entity with id: {} transform positions: x: {}, y: {}", entity.GetId(), transform->Position.x, transform->Position.y);
+				// CEDAR_INFO("entity with id: {} transform positions: x: {}, y: {}", entity.GetId(), transform->Position.x, transform->Position.y);
 			}
 		}
 	};
