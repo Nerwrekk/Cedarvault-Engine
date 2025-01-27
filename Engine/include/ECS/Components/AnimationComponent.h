@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Common/SDL_Wrapper.h"
+
 namespace cedar
 {
 	struct AnimationComponent
@@ -8,6 +10,7 @@ namespace cedar
 		int CurrentFrame;
 		int FrameRateSpeed;
 		bool ShouldLoop;
+		int StartTime;
 
 		AnimationComponent(int numOfFrames = 1, int frameRateSpeed = 1, bool shouldLoop = false)
 		{
@@ -15,6 +18,7 @@ namespace cedar
 			this->CurrentFrame = 1;
 			this->FrameRateSpeed = frameRateSpeed;
 			this->ShouldLoop = shouldLoop;
+			this->StartTime = SDL_GetTicks();
 		}
 	};
 } // namespace cedar

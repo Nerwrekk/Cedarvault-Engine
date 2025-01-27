@@ -15,6 +15,12 @@ int main()
 
 	app.Setup([&]()
 	{
+		auto chopper = app.Manager()->CreateEntity();
+		chopper.AddComponent<cedar::RigidBodyComponent>(glm::vec2(0.f, 1.f));
+		chopper.AddComponent<cedar::SpriteComponent>("chopper", 32, 32, 1);
+		chopper.AddComponent<cedar::AnimationComponent>(2, 10, true);
+		chopper.GetComponent<cedar::TransformComponent>()->Position = { 10, 200 };
+
 		auto tank = app.Manager()->CreateEntity();
 		tank.AddComponent<cedar::RigidBodyComponent>(glm::vec2(0.f, 1.f));
 		tank.AddComponent<cedar::SpriteComponent>("tank-panther-right", 32, 32, 0);
