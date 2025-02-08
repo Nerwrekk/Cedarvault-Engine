@@ -4,6 +4,7 @@
 #include "Common/Constants.h"
 #include "ECS/Systems/MovementSystem.h"
 #include "ECS/Systems/AnimationSystem.h"
+#include "ECS/Systems/CollisionSystem.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -43,7 +44,7 @@ namespace cedar
 		    SDL_WINDOWPOS_CENTERED,
 		    windowInit.WindowWidth,
 		    windowInit.WindowHeight,
-		    SDL_WINDOW_BORDERLESS);
+		    0);
 
 		m_renderer = SDL_CreateRenderer(
 		    m_window,
@@ -65,6 +66,7 @@ namespace cedar
 		m_entityManager->AddSystem<MovementSystem>();
 		m_entityManager->AddSystem<RenderSystem>();
 		m_entityManager->AddSystem<AnimationSystem>();
+		m_entityManager->AddSystem<CollisionSystem>();
 		auto renderSystem = m_entityManager->GetSystem<RenderSystem>().get();
 		m_renderSystem.reset(renderSystem);
 	}

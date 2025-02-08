@@ -70,6 +70,24 @@ namespace cedar
 				};
 
 				SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRect, transform->Rotation, nullptr, SDL_FLIP_NONE);
+
+				auto boxCollider = entity.GetComponent<BoxColliderComponent>();
+				if (boxCollider)
+				{
+					float xPos = transform->Position.x;
+					float yPos = transform->Position.y;
+					xPos += boxCollider->Offset.x;
+					yPos += boxCollider->Offset.y;
+					SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255); // White color
+					// Top line
+					SDL_RenderDrawLine(renderer, xPos, yPos, xPos + boxCollider->Width, yPos);
+					// Bottom line
+					SDL_RenderDrawLine(renderer, xPos, yPos + boxCollider->Height, xPos + boxCollider->Width, yPos + boxCollider->Height);
+					// Left line
+					SDL_RenderDrawLine(renderer, xPos, yPos, xPos, yPos + boxCollider->Height);
+					// Right line
+					SDL_RenderDrawLine(renderer, xPos + boxCollider->Width, yPos, xPos + boxCollider->Width, yPos + boxCollider->Height);
+				}
 			}
 		}
 	};

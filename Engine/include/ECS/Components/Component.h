@@ -15,7 +15,7 @@ namespace cedar
 		static uint32_t GetId(std::type_index type);
 
 	private:
-		static std::unordered_map<std::type_index, unsigned int> s_typeToId;
+		static std::unordered_map<std::type_index, uint32_t> s_typeToId;
 		static uint32_t s_nextId;
 	};
 
