@@ -1,5 +1,11 @@
 #include "ECS/Components/Component.h"
 
+/*
+DLLs are like little islands of compiled code that executables can call into, 
+but each has its own static/global variables unless you explicitly share them (like we did with the ComponentRegistry). 
+This concept also applies to things like heap allocations—if a DLL allocates memory, 
+the EXE shouldn’t free it (and vice versa) unless they share the same runtime heap.
+*/
 namespace cedar
 {
 	// Define static members.
