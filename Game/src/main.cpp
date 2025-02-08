@@ -11,6 +11,7 @@ int main()
 	assetManager.LoadTilemaps("./assets/tilemaps");
 	assetManager.LoadConfigurations("./assets/configurations");
 
+	//TODO: Make it so Application loads in the correct level!
 	// assetManager.LoadLevel("jungle", "jungle");
 
 	app.Setup([&]()

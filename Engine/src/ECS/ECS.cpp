@@ -18,8 +18,6 @@ namespace cedar
 
 		//TODO: add assert here!
 		s_EntityManager = this;
-
-		RegisterComponents();
 	}
 
 	void EntityManager::Update()
@@ -67,16 +65,6 @@ namespace cedar
 				system->AddEntityToSystem(entity);
 			}
 		}
-	}
-
-	//NOTE! we need to pre register all compoents in the engine otherwise the game project
-	//will get an error LNK2019: unresolved external symbol error
-	void EntityManager::RegisterComponents()
-	{
-		Component<TransformComponent>::GetId();
-		Component<RigidBodyComponent>::GetId();
-		Component<SpriteComponent>::GetId();
-		Component<AnimationComponent>::GetId();
 	}
 
 	EntityManager* EntityManager::Instance()

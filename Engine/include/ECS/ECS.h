@@ -130,8 +130,6 @@ namespace cedar
 		void KillEntity(Entity entity);
 		void AddEntityToSystem(Entity entity);
 
-		void RegisterComponents();
-
 		template <typename TComponent, typename... Args>
 		void AddComponent(Entity entity, Args&&... args);
 
