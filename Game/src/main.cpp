@@ -25,6 +25,7 @@ int main()
 		auto tank = app.Manager()->CreateEntity();
 		tank.AddComponent<cedar::RigidBodyComponent>(glm::vec2(0.f, 1.f));
 		tank.AddComponent<cedar::SpriteComponent>("tank-panther-right", 32, 32, 0);
+		tank.AddComponent<cedar::BoxColliderComponent>(32, 32);
 
 		auto truck = app.Manager()->CreateEntity();
 		truck.AddComponent<cedar::RigidBodyComponent>(glm::vec2(0.f, 0.f));
