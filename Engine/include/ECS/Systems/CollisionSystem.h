@@ -16,19 +16,17 @@ namespace cedar
 
 		virtual void Update(double deltaTime) override
 		{
-			for (auto& entity1 : GetSystemEntities())
+			auto entities = GetSystemEntities();
+			for (auto it = entities.begin(); it != entities.end(); it++)
 			{
+				auto entity1 = *it;
 				auto transComp1 = entity1.GetComponent<TransformComponent>();
 				auto boxCollComp1 = entity1.GetComponent<BoxColliderComponent>();
-
-				for (auto& entity2 : GetSystemEntities())
+				for (auto jt = (it + 1); jt != entities.end(); jt++)
 				{
+					auto entity2 = *jt;
 					auto transComp2 = entity2.GetComponent<TransformComponent>();
 					auto boxCollComp2 = entity2.GetComponent<BoxColliderComponent>();
-					if (entity1 == entity2)
-					{
-						continue;
-					}
 
 					auto entity1PosX = transComp1->Position.x + boxCollComp1->Offset.x;
 					auto entity1PosY = transComp1->Position.y + boxCollComp1->Offset.y;
