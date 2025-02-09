@@ -27,7 +27,7 @@ int main()
 		tank.AddComponent<cedar::RigidBodyComponent>(glm::vec2(0.f, -10.f));
 		tank.AddComponent<cedar::SpriteComponent>("tank-panther-right", 32, 32, 0);
 		tank.AddComponent<cedar::BoxColliderComponent>(20, 18, glm::vec2(4, 8));
-		tank.GetComponent<cedar::TransformComponent>()->Position = { 10, 300 };
+		tank.GetComponent<cedar::TransformComponent>()->Position = { 100, 400 };
 
 		auto truck = app.Manager()->CreateEntity();
 		truck.AddComponent<cedar::RigidBodyComponent>(glm::vec2(0.f, 0.f));
@@ -40,7 +40,7 @@ int main()
 			auto tree = app.Manager()->CreateEntity();
 			tree.AddComponent<cedar::RigidBodyComponent>(glm::vec2(0.f, 0.f));
 			tree.AddComponent<cedar::SpriteComponent>("tree", 32, 32, 0);
-			tree.GetComponent<cedar::TransformComponent>()->Position = { 100 + 1 * i, 50 + 1 * i };
+			tree.GetComponent<cedar::TransformComponent>()->Position = { 100, 60 * (1 + i) };
 			tree.AddComponent<cedar::BoxColliderComponent>(32, 32, glm::vec2(0, 0));
 		}
 	});
