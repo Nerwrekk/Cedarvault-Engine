@@ -16,15 +16,8 @@ int main()
 
 	app.Setup([&]()
 	{
-		auto chopper = app.Manager()->CreateEntity();
-		chopper.AddComponent<cedar::RigidBodyComponent>(glm::vec2(0.f, 1.f));
-		chopper.AddComponent<cedar::SpriteComponent>("chopper", 32, 32, 1);
-		chopper.AddComponent<cedar::AnimationComponent>(2, 10, true);
-		chopper.AddComponent<cedar::BoxColliderComponent>(20, 18, glm::vec2(4, 8));
-		chopper.GetComponent<cedar::TransformComponent>()->Position = { 10, 200 };
-
 		auto tank = app.Manager()->CreateEntity();
-		tank.AddComponent<cedar::RigidBodyComponent>(glm::vec2(0.f, -10.f));
+		tank.AddComponent<cedar::RigidBodyComponent>(glm::vec2(0.f, -5.f));
 		tank.AddComponent<cedar::SpriteComponent>("tank-panther-right", 32, 32, 0);
 		tank.AddComponent<cedar::BoxColliderComponent>(20, 18, glm::vec2(4, 8));
 		tank.GetComponent<cedar::TransformComponent>()->Position = { 100, 400 };
@@ -43,6 +36,13 @@ int main()
 			tree.GetComponent<cedar::TransformComponent>()->Position = { 100, 60 * (1 + i) };
 			tree.AddComponent<cedar::BoxColliderComponent>(32, 32, glm::vec2(0, 0));
 		}
+
+		auto chopper = app.Manager()->CreateEntity();
+		chopper.AddComponent<cedar::RigidBodyComponent>(glm::vec2(0.f, -10.f));
+		chopper.AddComponent<cedar::SpriteComponent>("chopper", 32, 32, 1);
+		chopper.AddComponent<cedar::AnimationComponent>(2, 10, true);
+		chopper.AddComponent<cedar::BoxColliderComponent>(20, 18, glm::vec2(4, 8));
+		chopper.GetComponent<cedar::TransformComponent>()->Position = { 100, 440 };
 	});
 
 	app.Run();

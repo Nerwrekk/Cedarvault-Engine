@@ -78,15 +78,15 @@ namespace cedar
 					float yPos = transform->Position.y;
 					xPos += boxCollider->Offset.x;
 					yPos += boxCollider->Offset.y;
-					SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255); // White color
-					// Top line
-					SDL_RenderDrawLine(renderer, xPos, yPos, xPos + boxCollider->Width, yPos);
-					// Bottom line
-					SDL_RenderDrawLine(renderer, xPos, yPos + boxCollider->Height, xPos + boxCollider->Width, yPos + boxCollider->Height);
-					// Left line
-					SDL_RenderDrawLine(renderer, xPos, yPos, xPos, yPos + boxCollider->Height);
-					// Right line
-					SDL_RenderDrawLine(renderer, xPos + boxCollider->Width, yPos, xPos + boxCollider->Width, yPos + boxCollider->Height);
+
+					SDL_Rect colliderRect = {
+						static_cast<int>(xPos),
+						static_cast<int>(yPos),
+						static_cast<int>(boxCollider->Width),
+						static_cast<int>(boxCollider->Height),
+					};
+					SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255); // green color
+					SDL_RenderDrawRect(renderer, &colliderRect);
 				}
 			}
 		}
