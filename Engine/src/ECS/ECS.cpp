@@ -10,6 +10,14 @@ namespace cedar
 		return m_id;
 	}
 
+	void Entity::Kill()
+	{
+		if (m_manager)
+		{
+			m_manager->KillEntity(*this);
+		}
+	}
+
 	EntityManager* EntityManager::s_EntityManager = nullptr;
 	EntityManager::EntityManager()
 	{
@@ -29,14 +37,42 @@ namespace cedar
 		}
 
 		m_entitiesToBeAdded.clear();
+
+		for (auto& entity : m_entitiesToBeRemoved)
+		{
+			RemoveEntityFromSystem(entity);
+
+			//TODO: remove all components for said entity?
+			// for (auto& component : m_ComponentPools)
+			// {
+			// 	auto t = component->[entity.GetId()];
+			// }
+
+			//reset component signatures for that entity
+			m_entityComponentSignatures[entity.GetId()].reset();
+
+			//add entity id to m_freeIds
+			m_freeIds.push_back(entity.GetId());
+		}
+
+		m_entitiesToBeRemoved.clear();
 	}
 
 	Entity EntityManager::CreateEntity()
 	{
-		int entityId = m_totalNumOfEntities++;
-		if (entityId >= m_entityComponentSignatures.size())
+		int entityId {};
+		if (m_freeIds.empty())
 		{
-			m_entityComponentSignatures.resize(entityId + 10);
+			entityId = m_totalNumOfEntities++;
+			if (entityId >= m_entityComponentSignatures.size())
+			{
+				m_entityComponentSignatures.resize(entityId + 10);
+			}
+		}
+		else
+		{
+			entityId = m_freeIds.front();
+			m_freeIds.pop_front();
 		}
 
 		Entity entity(entityId);
@@ -52,6 +88,7 @@ namespace cedar
 
 	void EntityManager::KillEntity(Entity entity)
 	{
+		m_entitiesToBeRemoved.emplace(entity);
 	}
 
 	void EntityManager::AddEntityToSystem(Entity entity)
@@ -64,6 +101,15 @@ namespace cedar
 			{
 				system->AddEntityToSystem(entity);
 			}
+		}
+	}
+
+	void EntityManager::RemoveEntityFromSystem(Entity entity)
+	{
+		const auto& entitySignature = m_entityComponentSignatures[entity.GetId()];
+		for (auto [key, system] : m_systems)
+		{
+			system->RemoveEntityFromSystem(entity);
 		}
 	}
 

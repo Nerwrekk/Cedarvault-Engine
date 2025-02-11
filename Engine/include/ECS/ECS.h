@@ -13,6 +13,7 @@
 #include <typeinfo>
 #include <unordered_map>
 #include <set>
+#include <deque>
 
 namespace cedar
 {
@@ -39,6 +40,8 @@ namespace cedar
 		{
 			return m_id > other.m_id;
 		}
+
+		void Kill();
 
 		template <typename TComponent, typename... Args>
 		void AddComponent(Args&&... args)
@@ -220,9 +223,12 @@ namespace cedar
 			}
 		}
 
+		void RemoveEntityFromSystem(Entity entity);
+
 	private:
 		std::set<Entity> m_entitiesToBeAdded;
 		std::set<Entity> m_entitiesToBeRemoved;
+		std::deque<int> m_freeIds;
 
 		uint32_t m_totalNumOfEntities = 0;
 

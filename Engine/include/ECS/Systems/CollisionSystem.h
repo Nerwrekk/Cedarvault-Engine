@@ -39,6 +39,7 @@ namespace cedar
 					    entity1PosY < entity2PosY + boxCollComp2->Height &&
 					    entity1PosY + boxCollComp1->Height > entity2PosY)
 					{
+						entity2.Kill();
 						CEDAR_INFO("Collision Detected, entity id: {} with entity id {}", entity1.GetId(), entity2.GetId());
 					}
 				}
