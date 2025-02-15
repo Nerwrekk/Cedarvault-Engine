@@ -11,6 +11,6 @@ namespace cedar
 		Entity Second;
 
 		CollisionEvent(Entity first, Entity second)
-		    : First(First), Second(second) {};
+		    : First(first), Second(second) {};
 	};
 } // namespace cedar

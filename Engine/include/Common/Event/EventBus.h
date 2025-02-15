@@ -4,7 +4,7 @@
 
 #include <typeindex>
 #include <vector>
-#include <map>
+#include <unordered_map>
 
 namespace cedar
 {
@@ -14,24 +14,30 @@ namespace cedar
 		EventBus();
 		~EventBus();
 
-		template <typename T>
-		void SubscribeToEvent(void (*funcPtr)(IEvent*));
+		template <typename TEvent>
+		void SubscribeToEvent(void (*callback)(TEvent*));
 
-		template <typename T>
-		void EmitEvent();
+		template <typename TEvent>
+		void EmitEvent(TEvent* event);
 
 	private:
-		std::map<std::type_index, std::vector<void (*)(IEvent*)>> m_subscibedCallbacks;
+		std::unordered_map<std::type_index, std::vector<void*>> m_subscibedCallbacks;
 	};
 
-	template <typename T>
-	void EventBus::SubscribeToEvent(void (*funcPtr)(IEvent*))
+	template <typename TEvent>
+	void EventBus::SubscribeToEvent(void (*callback)(TEvent*))
 	{
-		m_subscibedCallbacks[std::type_index(typeid(T))].emplace(funcPtr);
+		m_subscibedCallbacks[std::type_index(typeid(TEvent))].push_back(reinterpret_cast<void*>(callback));
 	}
 
-	template <typename T>
-	void EventBus::EmitEvent()
+	template <typename TEvent>
+	void EventBus::EmitEvent(TEvent* event)
 	{
+		auto eventCallbacks = m_subscibedCallbacks[std::type_index(typeid(TEvent))];
+		for (auto& eventCallback : eventCallbacks)
+		{
+			auto callback = reinterpret_cast<void (*)(TEvent*)>(eventCallback);
+			callback(event);
+		}
 	}
 } // namespace cedar

@@ -4,6 +4,7 @@
 
 void test(cedar::CollisionEvent* collevent)
 {
+	CEDAR_WARN("TEST: entity: {} collided with entity: {}", collevent->First.GetId(), collevent->Second.GetId());
 }
 
 int main()
@@ -32,6 +33,8 @@ int main()
 		truck.AddComponent<cedar::SpriteComponent>("tank-panther-right", 32, 32, 0);
 		truck.GetComponent<cedar::TransformComponent>()->Position = { 0, 10 };
 		truck.AddComponent<cedar::BoxColliderComponent>(32, 32, glm::vec2(0, 0));
+
+		eventbus.EmitEvent<cedar::CollisionEvent>(&cedar::CollisionEvent(tank, truck));
 
 		for (int i = 0; i < 5; i++)
 		{
