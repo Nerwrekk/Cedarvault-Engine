@@ -25,8 +25,8 @@ namespace cedar
 		~Application();
 		void Initialize();
 		//Use setup to initialize entities before the game runs
-		template <typename Callable>
-		void Setup(Callable func)
+		template <typename TCallable>
+		void Setup(TCallable func)
 		{
 			func();
 		}

@@ -43,12 +43,12 @@ namespace cedar
 
 		void Kill();
 
-		template <typename TComponent, typename... Args>
-		void AddComponent(Args&&... args)
+		template <typename TComponent, typename... TArgs>
+		void AddComponent(TArgs&&... args)
 		{
 			if (m_manager)
 			{
-				m_manager->AddComponent<TComponent>(*this, std::forward<Args>(args)...);
+				m_manager->AddComponent<TComponent>(*this, std::forward<TArgs>(args)...);
 			}
 		}
 
@@ -133,8 +133,8 @@ namespace cedar
 		void KillEntity(Entity entity);
 		void AddEntityToSystem(Entity entity);
 
-		template <typename TComponent, typename... Args>
-		void AddComponent(Entity entity, Args&&... args);
+		template <typename TComponent, typename... TArgs>
+		void AddComponent(Entity entity, TArgs&&... args);
 
 		template <typename TComponent>
 		void RemoveComponent(Entity entity)
@@ -246,8 +246,8 @@ namespace cedar
 		static EntityManager* s_EntityManager;
 	};
 
-	template <typename TComponent, typename... Args>
-	void EntityManager::AddComponent(Entity entity, Args&&... args)
+	template <typename TComponent, typename... TArgs>
+	void EntityManager::AddComponent(Entity entity, TArgs&&... args)
 	{
 		auto componentId = Component<TComponent>::GetId();
 		const auto entityId = entity.GetId();
@@ -270,7 +270,7 @@ namespace cedar
 			componentPool->Resize(m_totalNumOfEntities);
 		}
 
-		TComponent component = TComponent(std::forward<Args>(args)...);
+		TComponent component = TComponent(std::forward<TArgs>(args)...);
 		componentPool->Set(entityId, component);
 
 		m_entityComponentSignatures[entityId].set(componentId);

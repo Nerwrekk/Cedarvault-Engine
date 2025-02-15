@@ -2,6 +2,8 @@
 
 #include "Common/SDL_Wrapper.h"
 #include "ECS/Components/Components.h"
+#include "Common/Event/Events/Events.h"
+#include "Common/Event/EventBus.h"
 
 namespace cedar
 {
@@ -12,6 +14,13 @@ namespace cedar
 		{
 			RequireComponent<TransformComponent>();
 			RequireComponent<BoxColliderComponent>();
+
+			EventBus::Inst()->Subscribe<CollisionEvent>(&CollisionSystem::OnCollisionEvent, this);
+		}
+
+		void OnCollisionEvent(CollisionEvent* e)
+		{
+			CEDAR_INFO("Collision Detected, entity id: {} with entity id {}", e->First.GetId(), e->Second.GetId());
 		}
 
 		virtual void Update(double deltaTime) override
@@ -39,8 +48,8 @@ namespace cedar
 					    entity1PosY < entity2PosY + boxCollComp2->Height &&
 					    entity1PosY + boxCollComp1->Height > entity2PosY)
 					{
-						entity2.Kill();
-						CEDAR_INFO("Collision Detected, entity id: {} with entity id {}", entity1.GetId(), entity2.GetId());
+						// entity2.Kill();
+						EventBus::Inst()->EmitEvent<CollisionEvent>(&CollisionEvent(entity1, entity2));
 					}
 				}
 			}
