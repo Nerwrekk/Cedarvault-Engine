@@ -7,6 +7,8 @@
 #include "ECS/Systems/MovementSystem.h"
 #include "Common/AssetManager.h"
 #include "Common/Mindi/Mindi.h"
+#include "Common/Event/Events/Events.h"
+#include "Common/Event/EventBus.h"
 
 #include <glm/glm.hpp>
 

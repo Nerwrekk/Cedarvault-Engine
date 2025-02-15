@@ -2,6 +2,10 @@
 
 #include <iostream>
 
+void test(cedar::CollisionEvent* collevent)
+{
+}
+
 int main()
 {
 	cedar::Application app;
@@ -13,7 +17,8 @@ int main()
 
 	//TODO: Make it so Application loads in the correct level!
 	// assetManager.LoadLevel("jungle", "jungle");
-
+	cedar::EventBus eventbus;
+	eventbus.SubscribeToEvent<cedar::CollisionEvent>(&::test);
 	app.Setup([&]()
 	{
 		auto tank = app.Manager()->CreateEntity();
