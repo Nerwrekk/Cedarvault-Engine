@@ -1,0 +1,30 @@
+# Detect platform and set compiler options
+# Function to set compiler flags per target
+function(setup_compile_options target)
+    if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+        message(STATUS "Using MSVC for ${target}")
+        target_compile_options(${target} PRIVATE /W4 /permissive- /diagnostics:column)
+
+        if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+            message(STATUS "Adding Debug options for MSVC")
+            target_compile_options(${target} PRIVATE /Od /Zi)
+            target_link_options(${target} PRIVATE /DEBUG)
+        elseif (CMAKE_BUILD_TYPE STREQUAL "Release")
+            message(STATUS "Adding Release options for MSVC")
+            target_compile_options(${target} PRIVATE /O2 /DNDEBUG)
+        endif()
+
+    elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        message(STATUS "Using GCC or Clang for ${target}")
+        target_compile_options(${target} PRIVATE -Wall -Wextra -Wpedantic -Wshadow -Wconversion -fdiagnostics-color=always)
+
+        if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+            message(STATUS "Adding Debug options for GCC/Clang")
+            target_compile_options(${target} PRIVATE -g3 -O0 -fsanitize=address,undefined)
+            target_link_options(${target} PRIVATE -fsanitize=address,undefined)
+        elseif (CMAKE_BUILD_TYPE STREQUAL "Release")
+            message(STATUS "Adding Release options for GCC/Clang")
+            target_compile_options(${target} PRIVATE -O2 -DNDEBUG)
+        endif()
+    endif()
+endfunction()

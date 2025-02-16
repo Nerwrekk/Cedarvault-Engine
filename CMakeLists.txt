@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.22.1 FATAL_ERROR)
 project(CedarVaultEngine)
 
+# Include custom compiler options
+include(cmake/CompilerOptions.cmake)
+
 # Set the C++ standard
 set(CMAKE_CONFIGURATION_TYPES Debug Release) 
 set(CMAKE_CXX_STANDARD 17)

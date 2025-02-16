@@ -7,6 +7,8 @@ file(GLOB_RECURSE CPP_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 file(GLOB_RECURSE HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
 
 add_library(${PROJECT_NAME} SHARED ${CPP_FILES} ${HEADER_FILES})
+# Apply compiler options to targets
+setup_compile_options(${PROJECT_NAME})
 
 #export engine sympols
 #target_compile_definitions Scopes:
