@@ -58,7 +58,7 @@ namespace cedar
 
 		T& operator[](uint32_t index)
 		{
-			return m_data.[index];
+			return m_data[index];
 		};
 
 	private:

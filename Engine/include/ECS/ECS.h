@@ -21,8 +21,7 @@ namespace cedar
 	class CEDAR_API Entity
 	{
 	public:
-		Entity(uint32_t id)
-		    : m_id(id) {};
+		Entity(uint32_t id);
 
 		uint32_t GetId() const;
 
@@ -44,44 +43,16 @@ namespace cedar
 		void Kill();
 
 		template <typename TComponent, typename... TArgs>
-		void AddComponent(TArgs&&... args)
-		{
-			if (m_manager)
-			{
-				m_manager->AddComponent<TComponent>(*this, std::forward<TArgs>(args)...);
-			}
-		}
+		void AddComponent(TArgs&&... args);
 
 		template <typename TComponent>
-		TComponent* GetComponent() const
-		{
-			if (m_manager)
-			{
-				return m_manager->GetComponent<TComponent>(*this);
-			}
-
-			return nullptr;
-		}
+		TComponent* GetComponent() const;
 
 		template <typename TComponent>
-		void RemoveComponent()
-		{
-			if (m_manager)
-			{
-				m_manager->RemoveComponent<TComponent>(*this);
-			}
-		}
+		void RemoveComponent();
 
 		template <typename TComponent>
-		bool HasComponent() const
-		{
-			if (m_manager)
-			{
-				return m_manager->HasComponent<TComponent>(*this);
-			}
-
-			return false;
-		}
+		bool HasComponent() const;
 
 	private:
 		friend class EntityManager;
@@ -200,7 +171,7 @@ namespace cedar
 		void HasSystem() const
 		{
 			auto system = m_systems.find(std::type_index(typeid(TSystem)));
-			system != m_systems.end() ? return true : return false;
+			return (system != m_systems.end());
 		}
 
 		template <typename TSystem>
@@ -276,5 +247,45 @@ namespace cedar
 		m_entityComponentSignatures[entityId].set(componentId);
 
 		CEDAR_INFO("Component with id: {} was added to entity with id: {}", componentId, entityId);
+	}
+
+	template <typename TComponent, typename... TArgs>
+	void Entity::AddComponent(TArgs&&... args)
+	{
+		if (m_manager)
+		{
+			m_manager->AddComponent<TComponent>(*this, std::forward<TArgs>(args)...);
+		}
+	}
+
+	template <typename TComponent>
+	TComponent* Entity::GetComponent() const
+	{
+		if (m_manager)
+		{
+			return m_manager->GetComponent<TComponent>(*this);
+		}
+
+		return nullptr;
+	}
+
+	template <typename TComponent>
+	void Entity::RemoveComponent()
+	{
+		if (m_manager)
+		{
+			m_manager->RemoveComponent<TComponent>(*this);
+		}
+	}
+
+	template <typename TComponent>
+	bool Entity::HasComponent() const
+	{
+		if (m_manager)
+		{
+			return m_manager->HasComponent<TComponent>(*this);
+		}
+
+		return false;
 	}
 } // namespace cedar

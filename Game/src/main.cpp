@@ -4,6 +4,8 @@
 
 void test(cedar::CollisionEvent* collevent)
 {
+	static int timesCalled = 0;
+	CEDAR_WARN("Times called: {}", ++timesCalled);
 	CEDAR_WARN("TEST: entity: {} collided with entity: {}", collevent->First.GetId(), collevent->Second.GetId());
 }
 

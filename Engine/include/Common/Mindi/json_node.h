@@ -104,7 +104,7 @@ namespace Mindi
 
 			json_node nested_node(this);
 			nested_node.type = json_type::Array;
-			nested_node.m_content = new<json_array>();
+			nested_node.m_content = new json_array();
 			for (T& element : arr)
 			{
 				json_node node {};

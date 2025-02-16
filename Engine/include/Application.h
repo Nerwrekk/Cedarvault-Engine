@@ -7,8 +7,8 @@
 #include <functional>
 #include <memory>
 
-class SDL_Window;
-class SDL_Renderer;
+struct SDL_Window;
+struct SDL_Renderer;
 
 namespace cedar
 {

@@ -20,6 +20,8 @@ namespace cedar
 
 		void OnCollisionEvent(CollisionEvent* e)
 		{
+			static int timesCalled = 0;
+			CEDAR_INFO("Times called: {}", ++timesCalled);
 			CEDAR_INFO("Collision Detected, entity id: {} with entity id {}", e->First.GetId(), e->Second.GetId());
 		}
 
@@ -49,7 +51,8 @@ namespace cedar
 					    entity1PosY + boxCollComp1->Height > entity2PosY)
 					{
 						// entity2.Kill();
-						EventBus::Inst()->EmitEvent<CollisionEvent>(&CollisionEvent(entity1, entity2));
+						CollisionEvent e(entity1, entity2);
+						EventBus::Inst()->EmitEvent<CollisionEvent>(&e);
 					}
 				}
 			}
