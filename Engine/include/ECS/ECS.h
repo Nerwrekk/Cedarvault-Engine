@@ -235,7 +235,7 @@ namespace cedar
 			m_ComponentPools[componentId] = newComponentPool;
 		}
 
-		auto componentPool = std::static_pointer_cast<Pool<TComponent>>(m_ComponentPools[componentId]);
+		std::shared_ptr<Pool<TComponent>> componentPool = std::static_pointer_cast<Pool<TComponent>>(m_ComponentPools[componentId]);
 		if (m_totalNumOfEntities >= componentPool->Size())
 		{
 			componentPool->Resize(m_totalNumOfEntities);

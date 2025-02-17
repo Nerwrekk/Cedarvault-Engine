@@ -109,7 +109,6 @@ namespace cedar
 
 	void EntityManager::RemoveEntityFromSystem(Entity entity)
 	{
-		const auto& entitySignature = m_entityComponentSignatures[entity.GetId()];
 		for (auto [key, system] : m_systems)
 		{
 			system->RemoveEntityFromSystem(entity);

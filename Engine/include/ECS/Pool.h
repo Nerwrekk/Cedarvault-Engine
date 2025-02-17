@@ -27,7 +27,7 @@ namespace cedar
 			return m_data.empty();
 		};
 
-		int Size()
+		size_t Size()
 		{
 			return m_data.size();
 		}
