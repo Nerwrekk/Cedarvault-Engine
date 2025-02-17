@@ -27,7 +27,7 @@ namespace cedar
 			return logger.m_SPD;
 		}
 
-		CEDAR_API Logger()
+		Logger()
 		{
 			m_SPD = spdlog::stdout_color_mt("stdout");
 			spdlog::set_default_logger(m_SPD);
