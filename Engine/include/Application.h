@@ -18,11 +18,11 @@ namespace cedar
 		int WindowHeight;
 	};
 
-	class CEDAR_API Application
+	class Application
 	{
 	public:
-		Application();
-		~Application();
+		CEDAR_API Application();
+		CEDAR_API ~Application();
 		void Initialize();
 		//Use setup to initialize entities before the game runs
 		template <typename TCallable>

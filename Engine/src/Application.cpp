@@ -134,7 +134,7 @@ namespace cedar
 		TileLevelMap* tileLevelMap = AssetManager::Inst()->GetTileLevelMap(tileLevelMapId);
 
 		const auto& map = AssetManager::Inst()->GetLevelMap(tileLevelMap->levelMapIds.at(levelIndex));
-		int mapNumRows = map.size();
+		auto mapNumRows = map.size();
 		for (int y = 0; y < mapNumRows; y++)
 		{
 			auto& colums = map.at(y);

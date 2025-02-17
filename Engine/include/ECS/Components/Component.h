@@ -7,9 +7,9 @@
 
 namespace cedar
 {
-	struct CEDAR_API ComponentRegistry
+	struct ComponentRegistry
 	{
-		ComponentRegistry() = default;
+		CEDAR_API ComponentRegistry() = default;
 
 	protected:
 		static uint32_t GetId(std::type_index type);

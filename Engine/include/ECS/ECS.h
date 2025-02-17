@@ -92,12 +92,12 @@ namespace cedar
 		std::vector<Entity> m_entities;
 	};
 
-	class CEDAR_API EntityManager
+	class EntityManager
 	{
 	public:
 		static EntityManager* Instance();
 
-		EntityManager();
+		CEDAR_API EntityManager();
 		void Update();
 
 		Entity CreateEntity();

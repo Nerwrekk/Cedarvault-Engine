@@ -15,7 +15,7 @@
 // #include <spdlog/fmt/ostr.h>
 namespace cedar
 {
-	class CEDAR_API Logger
+	class Logger
 	{
 	public:
 		using SPDLog = std::shared_ptr<spdlog::logger>;
@@ -27,7 +27,7 @@ namespace cedar
 			return logger.m_SPD;
 		}
 
-		Logger()
+		CEDAR_API Logger()
 		{
 			m_SPD = spdlog::stdout_color_mt("stdout");
 			spdlog::set_default_logger(m_SPD);

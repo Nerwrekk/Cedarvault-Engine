@@ -191,7 +191,7 @@ namespace cedar
 		SDL_QueryTexture(texture, nullptr, nullptr, &width, &height);
 
 		const auto& map = m_levelMaps.at(levelMapId);
-		int mapNumRows = map.size();
+		auto mapNumRows = map.size();
 		for (int y = 0; y < mapNumRows; y++)
 		{
 			auto& colums = map.at(y);
