@@ -9,35 +9,56 @@ namespace cedar
 	public:
 		virtual ~IEventCallback() = default;
 
-		void Exectue(Event& e)
+		void Exectue(IEvent& e)
 		{
 			Call(e);
 		}
 
 	private:
-		virtual void Call(Event&) = 0;
+		virtual void Call(IEvent& e) = 0;
 	};
 
 	template <typename TOwner, typename TEvent>
 	class EventCallBack : public IEventCallback
 	{
 	public:
-		EventCallBack(TOwner* owner, CallbackFunction callbackFunction)
+		typedef void (*FreeCallbackFunction)(TEvent&);
+		typedef void (TOwner::*MemberCallbackFunction)(TEvent&);
+
+		EventCallBack(TOwner* owner, MemberCallbackFunction callbackFunction)
 		{
 			this->m_ownerInst = owner;
-			this->m_callbackfunction = callbackFunction;
+			this->m_memberCallbackfunction = callbackFunction;
+
+			this->m_freeCallbackFunction = nullptr;
+		}
+
+		EventCallBack(FreeCallbackFunction freeCallbackFunction)
+		{
+			this->m_freeCallbackFunction = freeCallbackFunction;
+
+			this->m_ownerInst = nullptr;
+			this->m_memberCallbackfunction = nullptr;
 		}
 
 		virtual ~EventCallBack() override = default;
 
 	private:
-		typedef void (TOwner::*CallbackFunction)(TEvent&);
 		TOwner* m_ownerInst;
-		CallbackFunction m_callbackfunction;
+		MemberCallbackFunction m_memberCallbackfunction;
 
-		virtual void Call(Event&) override
+		FreeCallbackFunction m_freeCallbackFunction;
+
+		virtual void Call(IEvent& e) override
 		{
-			std::invoke(m_callbackfunction, m_ownerInst, static_cast<TEvent&>(e));
+			if (m_memberCallbackfunction)
+			{
+				std::invoke(m_memberCallbackfunction, m_ownerInst, static_cast<TEvent&>(e));
+			}
+			else if (m_freeCallbackFunction)
+			{
+				std::invoke(m_freeCallbackFunction, static_cast<TEvent&>(e));
+			}
 		}
 	};
 } // namespace cedar

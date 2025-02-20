@@ -15,14 +15,14 @@ namespace cedar
 			RequireComponent<TransformComponent>();
 			RequireComponent<BoxColliderComponent>();
 
-			EventBus::Inst()->Subscribe<CollisionEvent>(&CollisionSystem::OnCollisionEvent, this);
+			EventBus::Inst()->Subscribe<CollisionEvent>(this, &CollisionSystem::OnCollisionEvent);
 		}
 
-		void OnCollisionEvent(CollisionEvent* e)
+		void OnCollisionEvent(CollisionEvent& e)
 		{
 			static int timesCalled = 0;
 			CEDAR_INFO("Times called: {}", ++timesCalled);
-			CEDAR_INFO("Collision Detected, entity id: {} with entity id {}", e->First.GetId(), e->Second.GetId());
+			CEDAR_INFO("Collision Detected, entity id: {} with entity id {}", e.First.GetId(), e.Second.GetId());
 		}
 
 		virtual void Update(double deltaTime) override
@@ -52,7 +52,7 @@ namespace cedar
 					{
 						// entity2.Kill();
 						CollisionEvent e(entity1, entity2);
-						EventBus::Inst()->EmitEvent<CollisionEvent>(&e);
+						EventBus::Inst()->EmitEvent<CollisionEvent>(e);
 					}
 				}
 			}

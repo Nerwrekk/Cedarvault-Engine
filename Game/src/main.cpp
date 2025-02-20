@@ -2,11 +2,11 @@
 
 #include <iostream>
 
-void test(cedar::CollisionEvent* collevent)
+void test(cedar::CollisionEvent& collevent)
 {
 	static int timesCalled = 0;
 	CEDAR_WARN("Times called: {}", ++timesCalled);
-	CEDAR_WARN("TEST: entity: {} collided with entity: {}", collevent->First.GetId(), collevent->Second.GetId());
+	CEDAR_WARN("TEST: entity: {} collided with entity: {}", collevent.First.GetId(), collevent.Second.GetId());
 }
 
 int main()
