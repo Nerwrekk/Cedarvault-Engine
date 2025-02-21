@@ -52,6 +52,10 @@ namespace cedar
 					{
 						// entity2.Kill();
 						CollisionEvent e(entity1, entity2);
+						if (entity1.GetId() == 5 || entity2.GetId() == 5)
+						{
+							EventBus::Inst()->Unsubscribe(this, &CollisionSystem::OnCollisionEvent);
+						}
 						EventBus::Inst()->EmitEvent<CollisionEvent>(e);
 					}
 				}

@@ -22,6 +22,7 @@ int main()
 	//TODO: Make it so Application loads in the correct level!
 	// assetManager.LoadLevel("jungle", "jungle");
 	eventbus.Subscribe<cedar::CollisionEvent>(&::test);
+	eventbus.Unsubscribe<cedar::CollisionEvent>(&::test);
 	app.Setup([&]()
 	{
 		auto tank = app.Manager()->CreateEntity();

@@ -43,6 +43,16 @@ namespace cedar
 
 		virtual ~EventCallBack() override = default;
 
+		MemberCallbackFunction GetMemberFunc()
+		{
+			return m_memberCallbackfunction;
+		}
+
+		FreeCallbackFunction GetFreeFunc()
+		{
+			return m_freeCallbackFunction;
+		}
+
 	private:
 		TOwner* m_ownerInst;
 		MemberCallbackFunction m_memberCallbackfunction;
