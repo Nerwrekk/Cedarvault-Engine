@@ -35,6 +35,9 @@ namespace cedar
 		template <typename TEvent>
 		void EmitEvent(TEvent& event);
 
+		template <typename TEvent>
+		void EmitEvent(TEvent&& event);
+
 	private:
 		// std::unordered_map<std::type_index, std::list<std::function<void(IEvent*)>>> m_subscibedCallbacks;
 		std::unordered_map<std::type_index, std::list<std::unique_ptr<IEventCallback>>> m_subscibedCallbacks;
@@ -92,6 +95,17 @@ namespace cedar
 
 	template <typename TEvent>
 	void EventBus::EmitEvent(TEvent& event)
+	{
+		auto& eventCallbacks = m_subscibedCallbacks[typeid(TEvent)];
+		for (auto it = eventCallbacks.begin(); it != eventCallbacks.end(); it++)
+		{
+			auto handler = it->get();
+			handler->Exectue(event);
+		}
+	}
+
+	template <typename TEvent>
+	void EventBus::EmitEvent(TEvent&& event)
 	{
 		auto& eventCallbacks = m_subscibedCallbacks[typeid(TEvent)];
 		for (auto it = eventCallbacks.begin(); it != eventCallbacks.end(); it++)

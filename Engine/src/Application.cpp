@@ -103,24 +103,16 @@ namespace cedar
 				break;
 			//===== KEYBOARD EVENTS =====
 			case SDL_KEYDOWN: // A key was pressed.
-				if (sdlEvent.key.repeat)
-				{
-					KeyRepeatEvent e(sdlEvent.key.keysym.sym);
-					m_eventBus->EmitEvent<KeyRepeatEvent>(e);
-				}
-				else
-				{
-					KeyPressEvent e(sdlEvent.key.keysym.sym);
-					m_eventBus->EmitEvent<KeyPressEvent>(e);
-				}
+				sdlEvent.key.repeat ? m_eventBus->EmitEvent<KeyRepeatEvent>(KeyRepeatEvent(sdlEvent.key.keysym.sym)) :
+				                      m_eventBus->EmitEvent<KeyPressEvent>(KeyPressEvent(sdlEvent.key.keysym.sym));
+
 				if (sdlEvent.key.keysym.sym == SDLK_ESCAPE)
 				{
 					m_isRunning = false;
 				}
 				break;
 			case SDL_KEYUP: // A key was released.
-				KeyReleaseEvent e(sdlEvent.key.keysym.sym);
-				m_eventBus->EmitEvent<KeyReleaseEvent>(e);
+				m_eventBus->EmitEvent<KeyReleaseEvent>(KeyReleaseEvent(sdlEvent.key.keysym.sym));
 				break;
 			}
 		}
