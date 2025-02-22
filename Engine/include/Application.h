@@ -3,6 +3,7 @@
 #include "Common/Core.h"
 #include "ECS/ECS.h"
 #include "ECS/Systems/RenderSystem.h"
+#include "Common/Event/EventBus.h"
 
 #include <functional>
 #include <memory>
@@ -51,6 +52,7 @@ namespace cedar
 
 	private:
 		std::unique_ptr<EntityManager> m_entityManager;
+		std::unique_ptr<EventBus> m_eventBus;
 		std::shared_ptr<RenderSystem> m_renderSystem;
 		SDL_Window* m_window;
 		SDL_Renderer* m_renderer;

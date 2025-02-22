@@ -16,6 +16,8 @@ namespace cedar
 	Application::Application()
 	{
 		m_entityManager = std::make_unique<EntityManager>();
+		m_eventBus = std::make_unique<EventBus>();
+
 		Initialize();
 	}
 
@@ -99,11 +101,26 @@ namespace cedar
 			case SDL_QUIT:
 				m_isRunning = false;
 				break;
-			case SDL_KEYDOWN:
+			//===== KEYBOARD EVENTS =====
+			case SDL_KEYDOWN: // A key was pressed.
+				if (sdlEvent.key.repeat)
+				{
+					KeyRepeatEvent e(sdlEvent.key.keysym.sym);
+					m_eventBus->EmitEvent<KeyRepeatEvent>(e);
+				}
+				else
+				{
+					KeyPressEvent e(sdlEvent.key.keysym.sym);
+					m_eventBus->EmitEvent<KeyPressEvent>(e);
+				}
 				if (sdlEvent.key.keysym.sym == SDLK_ESCAPE)
 				{
 					m_isRunning = false;
 				}
+				break;
+			case SDL_KEYUP: // A key was released.
+				KeyReleaseEvent e(sdlEvent.key.keysym.sym);
+				m_eventBus->EmitEvent<KeyReleaseEvent>(e);
 				break;
 			}
 		}
