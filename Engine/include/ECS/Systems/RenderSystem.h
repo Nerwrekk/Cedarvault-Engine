@@ -17,7 +17,7 @@ namespace cedar
 			RequireComponent<SpriteComponent>();
 		}
 
-		virtual void Update(double deltaTime) override
+		virtual void Update() override
 		{
 			//RenderSystem is a bit special and do not need this
 		}

@@ -25,7 +25,7 @@ namespace cedar
 			CEDAR_INFO("Collision Detected, entity id: {} with entity id {}", e.First.GetId(), e.Second.GetId());
 		}
 
-		virtual void Update(double deltaTime) override
+		virtual void Update() override
 		{
 			auto entities = GetSystemEntities();
 			for (auto it = entities.begin(); it != entities.end(); it++)

@@ -2,6 +2,7 @@
 
 #include "ECS/Components/Components.h"
 #include "Common/Input.h"
+#include "Common/Time.h"
 namespace cedar
 {
 	class MovementSystem : public BaseSystem
@@ -13,7 +14,7 @@ namespace cedar
 			RequireComponent<RigidBodyComponent>();
 		}
 
-		virtual void Update(double deltaTime) override
+		virtual void Update() override
 		{
 			if (Input::IsKeyPressed(Key::A))
 			{
@@ -35,8 +36,8 @@ namespace cedar
 				auto transform = entity.GetComponent<TransformComponent>();
 				auto rigidBody = entity.GetComponent<RigidBodyComponent>();
 
-				transform->Position.x += rigidBody->Velocity.x * static_cast<float>(deltaTime);
-				transform->Position.y += rigidBody->Velocity.y * static_cast<float>(deltaTime);
+				transform->Position.x += rigidBody->Velocity.x * static_cast<float>(Time::DeltaTime);
+				transform->Position.y += rigidBody->Velocity.y * static_cast<float>(Time::DeltaTime);
 
 				// CEDAR_INFO("entity with id: {} transform positions: x: {}, y: {}", entity.GetId(), transform->Position.x, transform->Position.y);
 			}

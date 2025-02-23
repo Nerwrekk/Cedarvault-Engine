@@ -14,7 +14,7 @@ namespace cedar
 			RequireComponent<AnimationComponent>();
 		}
 
-		virtual void Update(double deltaTime) override
+		virtual void Update() override
 		{
 			for (auto& entity : GetSystemEntities())
 			{

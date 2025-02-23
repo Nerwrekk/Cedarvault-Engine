@@ -85,7 +85,7 @@ namespace cedar
 			m_ComponentSignature.set(componentId);
 		}
 
-		virtual void Update(double deltaTime) {};
+		virtual void Update() {};
 
 	protected:
 		Signature m_ComponentSignature;
@@ -186,11 +186,11 @@ namespace cedar
 			return nullptr;
 		}
 
-		void UpdateAllSystems(double deltaTime)
+		void UpdateAllSystems()
 		{
 			for (auto& [key, system] : m_systems)
 			{
-				system->Update(deltaTime);
+				system->Update();
 			}
 		}
 

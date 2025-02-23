@@ -6,6 +6,7 @@
 #include "ECS/Systems/AnimationSystem.h"
 #include "ECS/Systems/CollisionSystem.h"
 #include "Common/Input.h"
+#include "Common/Time.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -134,11 +135,13 @@ namespace cedar
 		}
 
 		//difference in ticks from last frame, converted to seconds
-		double deltaTime = (SDL_GetTicks() - previousMilliFrame) / 1000.f;
+		float deltaTime = (SDL_GetTicks() - previousMilliFrame) / 1000.f;
+
+		Time::DeltaTime = deltaTime;
 
 		previousMilliFrame = SDL_GetTicks();
 
-		m_entityManager->UpdateAllSystems(deltaTime);
+		m_entityManager->UpdateAllSystems();
 
 		m_entityManager->Update();
 	}
