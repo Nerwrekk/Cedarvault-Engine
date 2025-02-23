@@ -5,6 +5,7 @@
 #include "ECS/Systems/MovementSystem.h"
 #include "ECS/Systems/AnimationSystem.h"
 #include "ECS/Systems/CollisionSystem.h"
+#include "Common/Input.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -61,6 +62,8 @@ namespace cedar
 			return;
 		}
 
+		Input::InitKeyStates();
+
 		// SDL_SetWindowFullscreen(m_window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 
 		m_isRunning = true;
@@ -93,6 +96,8 @@ namespace cedar
 
 	void Application::ProccessInput()
 	{
+		Input::UpdateKeyStates();
+
 		SDL_Event sdlEvent;
 		while (SDL_PollEvent(&sdlEvent))
 		{

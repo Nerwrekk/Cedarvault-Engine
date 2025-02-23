@@ -15,7 +15,7 @@ namespace cedar
 			RequireComponent<TransformComponent>();
 			RequireComponent<BoxColliderComponent>();
 
-			EventBus::Inst()->Subscribe<CollisionEvent>(this, &CollisionSystem::OnCollisionEvent);
+			// EventBus::Inst()->Subscribe<CollisionEvent>(this, &CollisionSystem::OnCollisionEvent);
 		}
 
 		void OnCollisionEvent(CollisionEvent& e)

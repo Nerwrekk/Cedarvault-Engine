@@ -26,7 +26,7 @@ int main()
 	//TODO: Make it so Application loads in the correct level!
 	// assetManager.LoadLevel("jungle", "jungle");
 	cedar::EventBus::Inst()->Subscribe<cedar::CollisionEvent>(&::test);
-	cedar::EventBus::Inst()->Subscribe<cedar::KeyRepeatEvent>(&::testKeyboard);
+	// cedar::EventBus::Inst()->Subscribe<cedar::KeyRepeatEvent>(&::testKeyboard);
 	cedar::EventBus::Inst()->Unsubscribe<cedar::CollisionEvent>(&::test);
 	app.Setup([&]()
 	{
