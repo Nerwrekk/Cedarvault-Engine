@@ -13,8 +13,7 @@ namespace Mindi
 	bool json_writer::write(
 	    const json_node& root_node,
 	    const std::string& file_name,
-	    const size_t num_of_indent,
-	    const char list_sep)
+	    const size_t num_of_indent)
 	{
 		if (!file_name.find(".json"))
 		{
@@ -272,11 +271,6 @@ namespace Mindi
 		default:
 			return "ERROR FAILED TO PROCESS NODE TYPE";
 		}
-	}
-
-	std::string json_writer::process_object(const json_node* node)
-	{
-		return "NOT IMPLEMENTED";
 	}
 
 	std::string json_writer::process_float(const double value)

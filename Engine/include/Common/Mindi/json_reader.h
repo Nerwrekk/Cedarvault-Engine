@@ -36,12 +36,12 @@ namespace Mindi
 		static void create_json_node(json_values& json_values, json_type type);
 		static std::pair<std::string, std::string> get_prop_and_value(const std::string& line);
 
-		static void process_json_type(std::ifstream& file, json_values& json_values);
-		static void process_string(std::ifstream& file, json_values& json_values);
-		static void process_float(std::ifstream& file, const json_values& json_values);
-		static void process_int(std::ifstream& file, const json_values& json_values);
-		static void process_bool(std::ifstream& file, const json_values& json_values);
-		static void process_null(std::ifstream& file, const json_values& json_values);
+		static void process_json_type(json_values& json_values);
+		static void process_string(json_values& json_values);
+		static void process_float(const json_values& json_values);
+		static void process_int(const json_values& json_values);
+		static void process_bool(const json_values& json_values);
+		static void process_null(const json_values& json_values);
 
 		template <typename T>
 		static void set_value(const json_values& json_values, T value)

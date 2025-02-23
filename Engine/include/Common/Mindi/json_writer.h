@@ -10,7 +10,7 @@ namespace Mindi
 	class json_writer
 	{
 	public:
-		static bool write(const json_node& root_node, const std::string& file_name, const size_t num_of_indent = 1, const char list_sep = ',');
+		static bool write(const json_node& root_node, const std::string& file_name, const size_t num_of_indent = 1);
 
 	private:
 		static void write_object(const std::string& prop, const json_node* node, std::ofstream& file, const size_t num_of_indent);
@@ -21,7 +21,6 @@ namespace Mindi
 		static [[nodiscard]] std::string set_indent(const size_t num_of_indent);
 
 		static [[nodiscard]] std::string process_node(const json_node* node);
-		static [[nodiscard]] std::string process_object(const json_node* node);
 		static [[nodiscard]] std::string process_float(const double value);
 		static [[nodiscard]] std::string process_boolean(const bool value);
 	};

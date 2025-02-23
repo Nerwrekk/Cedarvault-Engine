@@ -102,7 +102,7 @@ namespace Mindi
 					json.type = type;
 					json.value = &token;
 					clean_json_value(*json.value);
-					process_json_type(file, json);
+					process_json_type(json);
 					token.clear();
 				}
 
@@ -246,28 +246,28 @@ namespace Mindi
 		return std::make_pair(prop, value);
 	}
 
-	void json_reader::process_json_type(std::ifstream& file, json_values& json_values)
+	void json_reader::process_json_type(json_values& json_values)
 	{
 		switch (json_values.type)
 		{
 		case json_type::Int:
-			process_int(file, json_values);
+			process_int(json_values);
 			break;
 
 		case json_type::Float:
-			process_float(file, json_values);
+			process_float(json_values);
 			break;
 
 		case json_type::String:
-			process_string(file, json_values);
+			process_string(json_values);
 			break;
 
 		case json_type::Boolean:
-			process_bool(file, json_values);
+			process_bool(json_values);
 			break;
 
 		case json_type::Null:
-			process_null(file, json_values);
+			process_null(json_values);
 			break;
 
 		case json_type::Object:
@@ -279,7 +279,7 @@ namespace Mindi
 		}
 	}
 
-	void json_reader::process_string(std::ifstream& file, json_values& json_values)
+	void json_reader::process_string(json_values& json_values)
 	{
 		set_value(json_values, json_values.value->c_str());
 	}
@@ -298,7 +298,7 @@ namespace Mindi
 		json_values.out_node = json_arr;
 	}
 
-	void json_reader::process_float(std::ifstream& file, const json_values& json_values)
+	void json_reader::process_float(const json_values& json_values)
 	{
 		clean_json_value(*json_values.value);
 
@@ -306,21 +306,21 @@ namespace Mindi
 		set_value(json_values, utils::to_num<double>(*json_values.value));
 	}
 
-	void json_reader::process_int(std::ifstream& file, const json_values& json_values)
+	void json_reader::process_int(const json_values& json_values)
 	{
 		clean_json_value(*json_values.value);
 
 		set_value(json_values, std::stoi(*json_values.value));
 	}
 
-	void json_reader::process_bool(std::ifstream& file, const json_values& json_values)
+	void json_reader::process_bool(const json_values& json_values)
 	{
 		clean_json_value(*json_values.value);
 		const bool val = (*json_values.value)[0] == 't' ? true : false;
 		set_value(json_values, val);
 	}
 
-	void json_reader::process_null(std::ifstream& file, const json_values& json_values)
+	void json_reader::process_null(const json_values& json_values)
 	{
 		set_value(json_values, nullptr);
 	}

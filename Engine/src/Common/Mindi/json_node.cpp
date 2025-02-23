@@ -12,10 +12,6 @@ namespace Mindi
 	{
 	}
 
-	json_node::json_node(std::vector<std::pair<std::string, json_node>>&& nodes)
-	{
-	}
-
 	json_node::json_node(json_node* parent_node)
 	    : json_node(parent_node, json_type::Null)
 	{
@@ -97,7 +93,7 @@ namespace Mindi
 		}
 	}
 
-	void json_node::set_string(const std::string& str, const size_t item_index)
+	void json_node::set_string(const std::string& str)
 	{
 		//this checks if the type has been set before, otherwise, we know it is gonna be a string node
 		type = json_type::String;
@@ -106,55 +102,45 @@ namespace Mindi
 		m_content = std::string(str);
 	}
 
-	std::string json_node::get_string(const size_t item_index) const
+	std::string json_node::get_string() const
 	{
 		return std::get<std::string>(m_content);
 	}
 
-	void json_node::set_float(const double num, const size_t item_index)
+	void json_node::set_float(const double num)
 	{
 		type = json_type::Float;
 		m_content = num;
 	}
 
-	double json_node::get_float(const size_t item_index) const
+	double json_node::get_float() const
 	{
 		return std::get<double>(m_content);
 	}
 
-	void json_node::set_int(const int num, const size_t item_index)
+	void json_node::set_int(const int num)
 	{
 		type = json_type::Int;
 		m_content = num;
 	}
 
-	int json_node::get_int(const size_t item_index) const
+	int json_node::get_int() const
 	{
 		return std::get<int>(m_content);
 	}
 
-	void json_node::set_bool(const bool value, const size_t item_index)
+	void json_node::set_bool(const bool value)
 	{
 		m_content = value;
 		type = json_type::Boolean;
 	}
 
-	bool json_node::get_bool(const size_t item_index) const
+	bool json_node::get_bool() const
 	{
 		return std::get<bool>(m_content);
 	}
 
-	void json_node::set_obj(json_object& value, const size_t item_index)
-	{
-		/* m_content = new<json_object>();
-
-    for (auto& pair : value)
-    {
-        std::get<<json_object>>(m_content)->emplace(pair.first, std::move(pair.second));
-    }*/
-	}
-
-	json_object& json_node::get_obj(const size_t item_index) const
+	json_object& json_node::get_obj() const
 	{
 		return *std::get<json_object*>(m_content);
 	}
@@ -193,7 +179,7 @@ namespace Mindi
 
 		try
 		{
-			auto& discard = std::get<json_array*>(m_content);
+			auto& _ = std::get<json_array*>(m_content);
 		}
 		catch (std::bad_variant_access const)
 		{
@@ -214,7 +200,7 @@ namespace Mindi
 
 		try
 		{
-			auto& disc = std::get<json_array*>(m_content);
+			auto& _ = std::get<json_array*>(m_content);
 		}
 		catch (std::bad_variant_access const&)
 		{
@@ -291,8 +277,6 @@ namespace Mindi
 			return *this;
 
 		throw std::exception("not implemented yet");
-
-		return *this;
 	}
 
 	bool json_node::operator==(const json_node& r_node) const

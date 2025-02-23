@@ -86,7 +86,7 @@ namespace Mindi
 
 			try
 			{
-				auto& discard = std::get<json_array*>(m_content);
+				auto& _ = std::get<json_array*>(m_content);
 			}
 			catch (std::bad_variant_access const&)
 			{
@@ -118,27 +118,25 @@ namespace Mindi
 
 	public:
 		json_node();
-		json_node(std::vector<std::pair<std::string, json_node>>&& nodes);
 		json_node(json_node* parent_node);
 		json_node(json_node* parent_node, json_type type);
 		json_node(const json_node& other);
 		~json_node();
 		json_node(json_node&& other) noexcept;
 
-		void set_string(const std::string& str, const size_t item_index = 0);
-		[[nodiscard]] std::string get_string(const size_t item_index = 0) const;
+		void set_string(const std::string& str);
+		[[nodiscard]] std::string get_string() const;
 
-		void set_float(const double num, const size_t item_index = 0);
-		[[nodiscard]] double get_float(const size_t item_index = 0) const;
+		void set_float(const double num);
+		[[nodiscard]] double get_float() const;
 
-		void set_int(const int num, const size_t item_index = 0);
-		[[nodiscard]] int get_int(const size_t item_index = 0) const;
+		void set_int(const int num);
+		[[nodiscard]] int get_int() const;
 
-		void set_bool(const bool value, const size_t item_index = 0);
-		[[nodiscard]] bool get_bool(const size_t item_index = 0) const;
+		void set_bool(const bool value);
+		[[nodiscard]] bool get_bool() const;
 
-		void set_obj(json_object& value, const size_t item_index = 0);
-		[[nodiscard]] json_object& get_obj(const size_t item_index = 0) const;
+		[[nodiscard]] json_object& get_obj() const;
 
 		//Creates an json array
 		template <typename T>
@@ -146,7 +144,7 @@ namespace Mindi
 		{
 			type = json_type::Array;
 
-			const auto arr_type = *typeid(arr.at(0)).name();
+			// const auto arr_type = *typeid(arr.at(0)).name();
 
 			json_array json_nodes;
 			for (T& element : arr)
