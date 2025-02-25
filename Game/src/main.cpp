@@ -1,6 +1,18 @@
 #include "CedarVault.h"
 
-#include <iostream>
+#include <sol/sol.hpp>
+
+void TestLua()
+{
+	sol::state lua;
+	lua.open_libraries(sol::lib::base);
+
+	lua.script_file("./assets/scripts/testLua.lua");
+
+	int someVariable = lua["Some_variable"];
+
+	CEDAR_WARN("someVariable is: {}", someVariable);
+}
 
 void test(cedar::CollisionEvent& collevent)
 {
@@ -16,6 +28,8 @@ void testKeyboard(cedar::KeyRepeatEvent& e)
 
 int main()
 {
+	TestLua();
+
 	cedar::Application app;
 
 	cedar::AssetManager assetManager(app.GetRenderer());
