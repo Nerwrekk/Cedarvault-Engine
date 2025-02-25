@@ -11,9 +11,9 @@ void TestLua()
 
 	int someVariable = lua["Some_variable"];
 
-	bool isFullScreen = lua["config"]["fullscreen"];
+	bool isFullScreen = lua["Config"]["fullscreen"];
 
-	sol::table config = lua[config];
+	sol::table config = lua["Config"];
 
 	CEDAR_WARN("someVariable is: {}", someVariable);
 }
