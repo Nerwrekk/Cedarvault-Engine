@@ -101,5 +101,5 @@
   "C_Cpp.autocomplete": "default", // Make sure autocompletion is enabled
   "C_Cpp.hover": "default",
   "C_Cpp.errorSquiggles": "disabled",
-  "Lua.diagnostics.globals": ["some_variable"] // Enable hover for showing type information
+  "Lua.diagnostics.disable": ["lowercase-global"] // Enable hover for showing type information
 }
