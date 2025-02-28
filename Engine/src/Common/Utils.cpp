@@ -48,10 +48,10 @@ namespace utils
 			}
 		}
 
-		void string::replace(std::string& line, std::string& replace_from, std::string& replace_to)
-		{
-			//TODO: Implement function
-		}
+		// void string::replace(std::string& line, std::string& replace_from, std::string& replace_to)
+		// {
+		// 	//TODO: Implement function
+		// }
 	}
 
 } // namespace utils

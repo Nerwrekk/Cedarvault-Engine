@@ -86,7 +86,18 @@
     "set": "cpp",
     "source_location": "cpp",
     "stack": "cpp",
-    "variant": "cpp"
+    "variant": "cpp",
+    "strstream": "cpp",
+    "*.tcc": "cpp",
+    "cinttypes": "cpp",
+    "codecvt": "cpp",
+    "csignal": "cpp",
+    "cwctype": "cpp",
+    "memory_resource": "cpp",
+    "random": "cpp",
+    "string_view": "cpp",
+    "numbers": "cpp",
+    "semaphore": "cpp"
   },
   "[cpp]": {
     "editor.defaultFormatter": "ms-vscode.cpptools"

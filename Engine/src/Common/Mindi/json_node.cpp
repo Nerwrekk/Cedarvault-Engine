@@ -1,5 +1,6 @@
 #include "Common/Mindi/json_node.h"
 
+#include <exception>
 #include <algorithm>
 #include <locale>
 #include <iostream>
@@ -255,7 +256,7 @@ namespace Mindi
 	{
 		if (this->get_type() != json_type::Array)
 		{
-			throw std::exception("current node is not a json_array");
+			throw std::runtime_error("current node is not a json_array");
 		}
 		//std::get<<json_array>>(m_content)->push_back(json_node(this));
 
@@ -276,7 +277,7 @@ namespace Mindi
 		if (this == &other)
 			return *this;
 
-		throw std::exception("not implemented yet");
+		throw std::runtime_error("not implemented yet");
 	}
 
 	bool json_node::operator==(const json_node& r_node) const

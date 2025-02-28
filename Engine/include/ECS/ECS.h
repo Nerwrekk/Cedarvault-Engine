@@ -17,6 +17,7 @@
 
 namespace cedar
 {
+	class EntityManager;
 	//Entity is just a simple container with an ID
 	class CEDAR_API Entity
 	{
@@ -168,7 +169,7 @@ namespace cedar
 		}
 
 		template <typename TSystem>
-		void HasSystem() const
+		bool HasSystem() const
 		{
 			auto system = m_systems.find(std::type_index(typeid(TSystem)));
 			return (system != m_systems.end());

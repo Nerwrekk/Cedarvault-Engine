@@ -3,6 +3,7 @@
 #include <map>
 #include <filesystem>
 #include <string>
+#include <vector>
 #include "SDL2/SDL_image.h"
 
 namespace cedar

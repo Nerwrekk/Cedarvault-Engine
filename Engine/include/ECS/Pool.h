@@ -27,7 +27,7 @@ namespace cedar
 			return m_data.empty();
 		};
 
-		size_t Size()
+		std::size_t Size()
 		{
 			return m_data.size();
 		}
