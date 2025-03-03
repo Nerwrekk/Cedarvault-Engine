@@ -1,4 +1,5 @@
 #include "Luie/Luie.h"
+#include "Luie/LuaBehaviour.h"
 
 #include <filesystem>
 #include "Common/Logger.h"
@@ -14,6 +15,11 @@ namespace cedar
 		    : lua()
 		{
 			lua.open_libraries(sol::lib::base);
+
+			lua.new_usertype<LuaBehaviour>("LuaBehaviour",
+			    sol::constructors<LuaBehaviour()>(),
+			    "OnStart", &LuaBehaviour::OnStart,
+			    "OnUpdate", &LuaBehaviour::OnUpdate);
 		}
 
 		ScriptEngine::~ScriptEngine()
