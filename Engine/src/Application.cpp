@@ -19,6 +19,7 @@ namespace cedar
 	{
 		m_entityManager = std::make_unique<EntityManager>();
 		m_eventBus = std::make_unique<EventBus>();
+		m_luieScriptEngine = std::make_unique<Luie::ScriptEngine>();
 
 		Initialize();
 	}

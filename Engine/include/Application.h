@@ -4,6 +4,7 @@
 #include "ECS/ECS.h"
 #include "ECS/Systems/RenderSystem.h"
 #include "Common/Event/EventBus.h"
+#include "Luie/Luie.h"
 
 #include <functional>
 #include <memory>
@@ -44,6 +45,11 @@ namespace cedar
 			return m_renderer;
 		}
 
+		Luie::ScriptEngine* GetScriptEngine() const
+		{
+			return m_luieScriptEngine.get();
+		}
+
 	private:
 		void ProccessInput();
 		void Update();
@@ -53,6 +59,7 @@ namespace cedar
 	private:
 		std::unique_ptr<EntityManager> m_entityManager;
 		std::unique_ptr<EventBus> m_eventBus;
+		std::unique_ptr<Luie::ScriptEngine> m_luieScriptEngine;
 		std::shared_ptr<RenderSystem> m_renderSystem;
 		SDL_Window* m_window;
 		SDL_Renderer* m_renderer;

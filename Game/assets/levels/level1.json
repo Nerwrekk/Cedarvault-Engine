@@ -1,0 +1,22 @@
+{
+  "entieties": [
+    {
+      "components": {
+        "transform": {
+          "position": { "x": 240, "y": 100 },
+          "scale": { "x": 1, "y": 1 },
+          "rotation": 0.0
+        },
+        "ridgidbody": {
+          "velocity": { "x": 0.0, "y": 0.0 }
+        },
+        "sprite": {
+          "textureAssetId": "chopper",
+          "width": 32,
+          "height": 32,
+          "zIndex": 5
+        }
+      }
+    }
+  ]
+}

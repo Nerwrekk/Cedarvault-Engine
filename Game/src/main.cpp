@@ -32,10 +32,8 @@ void testKeyboard(cedar::KeyRepeatEvent& e)
 
 int main()
 {
-	TestLua();
-
 	cedar::Application app;
-
+	app.GetScriptEngine()->LoadScripts("./assets/scripts");
 	cedar::AssetManager assetManager(app.GetRenderer());
 	assetManager.LoadAssets("./assets/images");
 	assetManager.LoadTilemaps("./assets/tilemaps");
