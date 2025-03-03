@@ -2,6 +2,9 @@ exe/
 conan/
 temp.txt
 
+# cmake
+CMakeUserPresets.json
+
 # Common build directories
 /build*/
 
