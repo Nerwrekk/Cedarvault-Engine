@@ -15,18 +15,18 @@ namespace cedar
 			~ScriptEngine();
 
 			void LoadScripts(const std::string& path);
-			void CallFunction(const std::string& funcName);
+			void CallFunction(const std::string& scriptFileName, const std::string& funcName);
 			void ReloadScript(const std::string& name);
 
 			sol::state& GetLuaState()
 			{
-				return lua;
+				return m_lua;
 			}
 
 		private:
-			sol::state lua;
-			//filename <-> file path
-			std::unordered_map<std::string, std::string> scripts;
+			sol::state m_lua;
+			//filename <-> lua table
+			std::unordered_map<std::string, sol::table> m_scripts;
 		};
 	} // namespace luie
 } // namespace cedar

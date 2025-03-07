@@ -34,6 +34,8 @@ int main()
 {
 	cedar::Application app;
 	app.GetScriptEngine()->LoadScripts("./assets/scripts");
+	app.GetScriptEngine()->CallFunction("", "");
+	
 	cedar::AssetManager assetManager(app.GetRenderer());
 	assetManager.LoadAssets("./assets/images");
 	assetManager.LoadTilemaps("./assets/tilemaps");

@@ -1,4 +1,4 @@
-Chopper = LuaBehaviour:new()
+Chopper = {}
 
 function Chopper:OnStart()
     print("inside chopper lua script")

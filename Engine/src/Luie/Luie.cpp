@@ -12,12 +12,12 @@ namespace cedar
 	namespace Luie
 	{
 		ScriptEngine::ScriptEngine()
-		    : lua()
+		    : m_lua()
 		{
-			lua.open_libraries(sol::lib::base);
+			m_lua.open_libraries(sol::lib::base);
 
-			lua.new_usertype<LuaBehaviour>("LuaBehaviour",
-			    sol::constructors<LuaBehaviour()>(),
+			m_lua.new_usertype<LuaBehaviour>("LuaBehaviour",
+			    "new", sol::constructors<LuaBehaviour()>(),
 			    "OnStart", &LuaBehaviour::OnStart,
 			    "OnUpdate", &LuaBehaviour::OnUpdate);
 		}
@@ -39,15 +39,34 @@ namespace cedar
 
 				for (const auto& dirEntry : fs::directory_iterator(path))
 				{
+					sol::table scriptEnv = m_lua.create_table();
+					bool anyValid = false;
 					if (fs::is_regular_file(dirEntry.status()))
 					{
 						// Print the file name
 						const auto fileName = dirEntry.path().stem().string();
 						CEDAR_WARN("File: {}", fileName);
 
-						//TODO: load scripts here
-						lua.script_file(dirEntry.path().string());
-						scripts[fileName] = dirEntry.path().string();
+						m_lua.script_file(dirEntry.path().string());
+
+						// Move functions from global m_lua state to scriptEnv
+						// if (m_lua[fileName]["OnStart"].valid())
+						// {
+						// 	anyValid = true;
+						// 	scriptEnv.set("OnStart", m_lua[fileName]["OnStart"]);
+						// }
+
+						// if (m_lua[fileName]["OnUpdate"].valid())
+						// {
+						// 	anyValid = true;
+						// 	scriptEnv.set("OnUpdate", m_lua[fileName]["OnStart"]);
+						// }
+
+						sol::optional<sol::table> table = m_lua[fileName];
+						if (table != sol::nullopt)
+						{
+							m_scripts[fileName] = m_lua[fileName];
+						}
 					}
 				}
 			}
@@ -57,8 +76,26 @@ namespace cedar
 			}
 		}
 
-		void ScriptEngine::CallFunction(const std::string& funcName)
+		void ScriptEngine::CallFunction(const std::string& scriptFileName, const std::string& funcName)
 		{
+			while (true)
+			{
+				for (auto& [filemame, scriptEnv] : m_scripts)
+				{
+					sol::function startfunc = scriptEnv["OnStart"];
+					sol::function Updatefunc = scriptEnv["OnUpdate"];
+
+					if (startfunc.valid())
+					{
+						startfunc();
+					}
+
+					if (Updatefunc.valid())
+					{
+						Updatefunc();
+					}
+				}
+			}
 		}
 
 		void ScriptEngine::ReloadScript(const std::string& name)

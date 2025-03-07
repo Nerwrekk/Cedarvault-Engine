@@ -1,6 +1,8 @@
 Some_variable = 1
 testVar = 4;
 
+test = LuaBehaviour:new()
+test:OnStart()
 -- This is a Lua table
 -- it is the only data structure in lua that we are allowed to use/create
 Config = {
