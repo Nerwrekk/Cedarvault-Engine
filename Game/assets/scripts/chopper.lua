@@ -1,9 +1,9 @@
 Chopper = {}
 
 function Chopper:OnStart()
-    print("inside chopper lua script")
+    print("OnStart chopper")
 end
 
 function Chopper:OnUpdate()
-    print("inside chopper lua script")
+    print("OnUpdate chopper")
 end

@@ -16,21 +16,6 @@ namespace cedar
 
 		virtual void Update() override
 		{
-			if (Input::IsKeyPressed(Key::A))
-			{
-				CEDAR_INFO("A is pressed");
-			}
-
-			if (Input::IsKeyReleased(Key::A))
-			{
-				CEDAR_INFO("A is released");
-			}
-
-			if (Input::IsKeyRepeated(Key::D))
-			{
-				CEDAR_INFO("D is repeadet");
-			}
-
 			for (auto& entity : GetSystemEntities())
 			{
 				auto transform = entity.GetComponent<TransformComponent>();

@@ -49,19 +49,6 @@ namespace cedar
 
 						m_lua.script_file(dirEntry.path().string());
 
-						// Move functions from global m_lua state to scriptEnv
-						// if (m_lua[fileName]["OnStart"].valid())
-						// {
-						// 	anyValid = true;
-						// 	scriptEnv.set("OnStart", m_lua[fileName]["OnStart"]);
-						// }
-
-						// if (m_lua[fileName]["OnUpdate"].valid())
-						// {
-						// 	anyValid = true;
-						// 	scriptEnv.set("OnUpdate", m_lua[fileName]["OnStart"]);
-						// }
-
 						sol::optional<sol::table> table = m_lua[fileName];
 						if (table != sol::nullopt)
 						{
@@ -78,24 +65,33 @@ namespace cedar
 
 		void ScriptEngine::CallFunction(const std::string& scriptFileName, const std::string& funcName)
 		{
-			while (true)
+			auto it = m_scripts.find(scriptFileName);
+			if (it != m_scripts.end())
 			{
-				for (auto& [filemame, scriptEnv] : m_scripts)
+				sol::table luaTable = it->second;
+				sol::function func = luaTable[funcName];
+
+				if (func.valid())
 				{
-					sol::function startfunc = scriptEnv["OnStart"];
-					sol::function Updatefunc = scriptEnv["OnUpdate"];
-
-					if (startfunc.valid())
-					{
-						startfunc();
-					}
-
-					if (Updatefunc.valid())
-					{
-						Updatefunc();
-					}
+					func();
 				}
 			}
+
+			// for (auto& [filemame, scriptEnv] : m_scripts)
+			// {
+			// 	sol::function startfunc = scriptEnv["OnStart"];
+			// 	sol::function Updatefunc = scriptEnv["OnUpdate"];
+
+			// 	if (startfunc.valid())
+			// 	{
+			// 		startfunc();
+			// 	}
+
+			// 	if (Updatefunc.valid())
+			// 	{
+			// 		Updatefunc();
+			// 	}
+			// }
 		}
 
 		void ScriptEngine::ReloadScript(const std::string& name)

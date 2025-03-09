@@ -35,7 +35,7 @@ int main()
 	cedar::Application app;
 	app.GetScriptEngine()->LoadScripts("./assets/scripts");
 	app.GetScriptEngine()->CallFunction("", "");
-	
+
 	cedar::AssetManager assetManager(app.GetRenderer());
 	assetManager.LoadAssets("./assets/images");
 	assetManager.LoadTilemaps("./assets/tilemaps");
@@ -74,6 +74,7 @@ int main()
 		chopper.AddComponent<cedar::SpriteComponent>("chopper", 32, 32, 1);
 		chopper.AddComponent<cedar::AnimationComponent>(2, 10, true);
 		chopper.AddComponent<cedar::BoxColliderComponent>(20, 18, glm::vec2(4, 8));
+		chopper.AddComponent<cedar::ScriptComponent>(std::vector<std::string> { "Chopper" });
 		chopper.GetComponent<cedar::TransformComponent>()->Position = { 100, 440 };
 	});
 

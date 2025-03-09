@@ -5,6 +5,7 @@
 #include "ECS/Systems/MovementSystem.h"
 #include "ECS/Systems/AnimationSystem.h"
 #include "ECS/Systems/CollisionSystem.h"
+#include "ECS/Systems/ScriptSystem.h"
 #include "Common/Input.h"
 #include "Common/Time.h"
 
@@ -74,6 +75,7 @@ namespace cedar
 		m_entityManager->AddSystem<RenderSystem>();
 		m_entityManager->AddSystem<AnimationSystem>();
 		m_entityManager->AddSystem<CollisionSystem>();
+		m_entityManager->AddSystem<ScriptSystem>(m_luieScriptEngine.get());
 		auto renderSystem = m_entityManager->GetSystem<RenderSystem>().get();
 		m_renderSystem.reset(renderSystem);
 	}
