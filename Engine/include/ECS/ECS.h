@@ -74,7 +74,7 @@ namespace cedar
 		}
 		virtual ~BaseSystem() = default;
 
-		void AddEntityToSystem(Entity entity);
+		virtual void AddEntityToSystem(Entity entity);
 		void RemoveEntityFromSystem(Entity entity);
 		std::vector<Entity>& GetSystemEntities();
 		const Signature& GetComponentSignature();

@@ -1,9 +1,10 @@
 #include "Luie/Luie.h"
 #include "Luie/LuaBehaviour.h"
-
-#include <filesystem>
 #include "Common/Logger.h"
 #include "Common/Utils.h"
+#include "ECS/ECS.h"
+
+#include <filesystem>
 
 namespace fs = std::filesystem;
 
@@ -24,6 +25,25 @@ namespace cedar
 
 		ScriptEngine::~ScriptEngine()
 		{
+		}
+
+		void ScriptEngine::Initialize()
+		{
+			m_lua.new_usertype<Entity>("entity",
+			    "GetID", &Entity::GetId);
+
+			// Base script class that all scripts inherit from
+			m_lua.script(R"(
+				EntityScript = {}
+				EntityScript.__index = EntityScript
+		
+				function EntityScript:new(entity)
+					local obj = setmetatable({}, self)
+					obj.entity = entity  -- Store entity id reference
+					obj.dog = "bark"
+					return obj
+				end
+			)");
 		}
 
 		void ScriptEngine::LoadScripts(const std::string& path)
@@ -97,6 +117,17 @@ namespace cedar
 		void ScriptEngine::ReloadScript(const std::string& name)
 		{
 		}
-	} // namespace Luie
+
+		std::list<sol::table>& ScriptEngine::GetEntityScriptInstances(int entityId)
+		{
+			return m_entityScripts[entityId];
+		}
+
+		void ScriptEngine::AttachScriptToEntity(int entityId, sol::table& scriptInstance)
+		{
+			m_entityScripts[entityId].push_back(scriptInstance);
+		}
+	}
+	// namespace Luie
 
 } // namespace cedar

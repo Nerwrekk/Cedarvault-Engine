@@ -71,6 +71,8 @@ namespace cedar
 
 		m_isRunning = true;
 
+		m_luieScriptEngine->Initialize();
+
 		m_entityManager->AddSystem<MovementSystem>();
 		m_entityManager->AddSystem<RenderSystem>();
 		m_entityManager->AddSystem<AnimationSystem>();

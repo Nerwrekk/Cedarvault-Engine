@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ECS/Components/Components.h"
+#include "Common/Logger.h"
 #include "Common/Input.h"
 #include "Common/Time.h"
 #include "Luie/Luie.h"
@@ -21,16 +22,62 @@ namespace cedar
 			for (auto& entity : GetSystemEntities())
 			{
 				auto scriptComp = entity.GetComponent<ScriptComponent>();
-				for (auto& script : scriptComp->Scripts)
+				// for (auto& script : scriptComp->Scripts)
+				// {
+				// 	if (!scriptComp->HasRunOnStart)
+				// 	{
+				// 		scriptComp->HasRunOnStart = true;
+				// 		p_luieEngine->CallFunction(script, "OnStart");
+				// 	}
+
+				// 	p_luieEngine->CallFunction(script, "OnUpdate");
+				// }
+
+				for (sol::table& scriptInstance : p_luieEngine->GetEntityScriptInstances(entity.GetId()))
 				{
 					if (!scriptComp->HasRunOnStart)
 					{
 						scriptComp->HasRunOnStart = true;
-						p_luieEngine->CallFunction(script, "OnStart");
+
+						sol::function onStartFunc = scriptInstance["OnStart"];
+						if (onStartFunc.valid())
+						{
+							onStartFunc(scriptInstance);
+						}
 					}
 
-					p_luieEngine->CallFunction(script, "OnUpdate");
+					sol::function onUpdateFunc = scriptInstance["OnUpdate"];
+					if (onUpdateFunc.valid())
+					{
+						onUpdateFunc(scriptInstance);
+					}
 				}
+			}
+		}
+
+		virtual void AddEntityToSystem(Entity entity) override
+		{
+			m_entities.push_back(entity);
+
+			auto scriptComp = entity.GetComponent<ScriptComponent>();
+
+			for (auto& script : scriptComp->Scripts)
+			{
+				auto& lua = p_luieEngine->GetLuaState();
+				sol::table scriptClass = lua[script];
+				sol::function constructor = scriptClass["new"];
+
+				if (!constructor.valid())
+				{
+					CEDAR_FATAL("Error: Script {} does not have a valid 'new' function!", script);
+				}
+
+				sol::table scriptInstance = constructor(scriptClass, sol::make_object(lua, entity));
+
+				lua[script] = scriptInstance;
+				p_luieEngine->AttachScriptToEntity(entity.GetId(), scriptInstance);
+				// auto scriptName = script + "_" + entity.GetId();
+				// lua[scriptName] = scriptInstance; // Store instance in Lua
 			}
 		}
 
