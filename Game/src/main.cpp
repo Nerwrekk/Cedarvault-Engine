@@ -53,6 +53,7 @@ int main()
 		tank.AddComponent<cedar::SpriteComponent>("tank-panther-right", 32, 32, 0);
 		tank.AddComponent<cedar::BoxColliderComponent>(20, 18, glm::vec2(4, 8));
 		tank.GetComponent<cedar::TransformComponent>()->Position = { 100, 400 };
+		tank.AddComponent<cedar::ScriptComponent>(std::vector<std::string> { "Tank" });
 
 		auto truck = app.Manager()->CreateEntity();
 		truck.AddComponent<cedar::RigidBodyComponent>(glm::vec2(0.f, 0.f));

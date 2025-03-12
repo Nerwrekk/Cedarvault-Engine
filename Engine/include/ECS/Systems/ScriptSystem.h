@@ -74,10 +74,9 @@ namespace cedar
 
 				sol::table scriptInstance = constructor(scriptClass, sol::make_object(lua, entity));
 
-				lua[script] = scriptInstance;
+				//TODO: keep the line below for now, but we prob don't need it
+				// lua[script + entity.GetId()] = scriptInstance;
 				p_luieEngine->AttachScriptToEntity(entity.GetId(), scriptInstance);
-				// auto scriptName = script + "_" + entity.GetId();
-				// lua[scriptName] = scriptInstance; // Store instance in Lua
 			}
 		}
 
