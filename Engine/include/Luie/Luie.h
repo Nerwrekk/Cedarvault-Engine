@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ECS/ECS.h"
+
 #include <sol/sol.hpp>
 #include <unordered_map>
 #include <list>

@@ -8,6 +8,7 @@
 
 namespace cedar
 {
+
 	class ScriptSystem : public BaseSystem
 	{
 	public:

@@ -2,7 +2,8 @@
 #include "Luie/LuaBehaviour.h"
 #include "Common/Logger.h"
 #include "Common/Utils.h"
-#include "ECS/ECS.h"
+#include "ECS/Components/Components.h"
+#include "Luie/LuieBindings.h"
 
 #include <filesystem>
 
@@ -32,19 +33,21 @@ namespace cedar
 			m_lua.new_usertype<Entity>("entity",
 			    "GetID", &Entity::GetId);
 
+			m_lua.set_function("SetPosition", SetEntityPosition);
+
 			// Base script class that all scripts inherit from
 			m_lua.script(R"(
-				EntityScript = {}
-				EntityScript.__index = EntityScript
+				LuieScript = {}
+				LuieScript.__index = LuieScript
 		
-				function EntityScript:new(entity)
+				function LuieScript:new(entity)
 					local obj = setmetatable({}, self)
 					obj.entity = entity  -- Store entity id reference
 					obj.dog = "bark"
 					return obj
 				end
-				function EntityScript:SetEntityPosition(x, y)
-					SetEntityPosition(entity, x, y)
+				function LuieScript:SetEntityPosition(x, y)
+					SetPosition(self.entity, x, y)
 				end
 			)");
 		}

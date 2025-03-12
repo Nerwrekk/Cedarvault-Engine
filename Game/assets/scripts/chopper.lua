@@ -1,8 +1,8 @@
-Chopper = setmetatable({}, { __index = EntityScript })
+Chopper = setmetatable({}, { __index = LuieScript })
 Chopper.__index = Chopper
 
 function Chopper:new(entity)
-    local obj = EntityScript.new(self, entity) -- Call base constructor
+    local obj = LuieScript.new(self, entity) -- Call base constructor
     return obj
 end
 
