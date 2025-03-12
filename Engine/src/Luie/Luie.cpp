@@ -33,8 +33,6 @@ namespace cedar
 			m_lua.new_usertype<Entity>("entity",
 			    "GetID", &Entity::GetId);
 
-			m_lua.set_function("SetPosition", SetEntityPosition);
-
 			// Base script class that all scripts inherit from
 			m_lua.script(R"(
 				LuieScript = {}
@@ -46,10 +44,17 @@ namespace cedar
 					obj.dog = "bark"
 					return obj
 				end
+
 				function LuieScript:SetEntityPosition(x, y)
 					SetPosition(self.entity, x, y)
 				end
+
+				function LuieScript:GetEntityPosition()
+    				return GetPosition(self.entity)
+				end
 			)");
+
+			SetLuieBindings(m_lua);
 		}
 
 		void ScriptEngine::LoadScripts(const std::string& path)

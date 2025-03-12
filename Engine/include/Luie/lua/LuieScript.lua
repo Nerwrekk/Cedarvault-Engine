@@ -11,3 +11,7 @@ end
 function LuieScript:SetEntityPosition(x, y)
     SetPosition(self.entity, x, y)
 end
+
+function LuieScript:GetEntityPosition()
+    return GetPosition(self.entity)
+end

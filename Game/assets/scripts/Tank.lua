@@ -13,9 +13,9 @@ function Tank:OnStart()
 end
 
 function Tank:OnUpdate()
-    print("inside OnUpdate Tank lua script attached to entity: " .. self.entity:GetID())
+    -- print("inside OnUpdate Tank lua script attached to entity: " .. self.entity:GetID())
     self:SetEntityPosition(self.x, self.y)
     self.x = self.x + 1
     self.y = self.y + 1
-    print("Entity x: " .. self.x .. " y: " .. self.y)
+    -- print("Entity x: " .. self.x .. " y: " .. self.y)
 end

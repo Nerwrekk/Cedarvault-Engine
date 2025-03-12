@@ -71,7 +71,7 @@ int main()
 		}
 
 		auto chopper = app.Manager()->CreateEntity();
-		chopper.AddComponent<cedar::RigidBodyComponent>(glm::vec2(0.f, -10.f));
+		chopper.AddComponent<cedar::RigidBodyComponent>(glm::vec2(0.f, 0.f));
 		chopper.AddComponent<cedar::SpriteComponent>("chopper", 32, 32, 1);
 		chopper.AddComponent<cedar::AnimationComponent>(2, 10, true);
 		chopper.AddComponent<cedar::BoxColliderComponent>(20, 18, glm::vec2(4, 8));
