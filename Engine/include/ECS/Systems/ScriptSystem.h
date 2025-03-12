@@ -43,7 +43,7 @@ namespace cedar
 					sol::function onUpdateFunc = scriptInstance["OnUpdate"];
 					if (onUpdateFunc.valid())
 					{
-						onUpdateFunc(scriptInstance);
+						onUpdateFunc(scriptInstance, Time::DeltaTime);
 					}
 				}
 			}

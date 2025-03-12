@@ -12,7 +12,8 @@ function Tank:OnStart()
     print("inside Tank lua script")
 end
 
-function Tank:OnUpdate()
+function Tank:OnUpdate(deltaTime)
+    print("DeltaTime is: " .. deltaTime)
     -- print("inside OnUpdate Tank lua script attached to entity: " .. self.entity:GetID())
     self:SetEntityPosition(self.x, self.y)
     self.x = self.x + 1
