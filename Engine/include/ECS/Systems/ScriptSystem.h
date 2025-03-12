@@ -22,30 +22,23 @@ namespace cedar
 			for (auto& entity : GetSystemEntities())
 			{
 				auto scriptComp = entity.GetComponent<ScriptComponent>();
-				// for (auto& script : scriptComp->Scripts)
-				// {
-				// 	if (!scriptComp->HasRunOnStart)
-				// 	{
-				// 		scriptComp->HasRunOnStart = true;
-				// 		p_luieEngine->CallFunction(script, "OnStart");
-				// 	}
-
-				// 	p_luieEngine->CallFunction(script, "OnUpdate");
-				// }
-
-				for (sol::table& scriptInstance : p_luieEngine->GetEntityScriptInstances(entity.GetId()))
+				//OnStart
+				if (!scriptComp->HasRunOnStart)
 				{
-					if (!scriptComp->HasRunOnStart)
+					scriptComp->HasRunOnStart = true;
+					for (sol::table& scriptInstance : p_luieEngine->GetEntityScriptInstances(entity.GetId()))
 					{
-						scriptComp->HasRunOnStart = true;
-
 						sol::function onStartFunc = scriptInstance["OnStart"];
 						if (onStartFunc.valid())
 						{
 							onStartFunc(scriptInstance);
 						}
 					}
+				}
 
+				//OnUpdate
+				for (sol::table& scriptInstance : p_luieEngine->GetEntityScriptInstances(entity.GetId()))
+				{
 					sol::function onUpdateFunc = scriptInstance["OnUpdate"];
 					if (onUpdateFunc.valid())
 					{

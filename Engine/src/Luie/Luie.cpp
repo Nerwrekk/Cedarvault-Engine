@@ -43,6 +43,9 @@ namespace cedar
 					obj.dog = "bark"
 					return obj
 				end
+				function EntityScript:SetEntityPosition(x, y)
+					SetEntityPosition(entity, x, y)
+				end
 			)");
 		}
 
