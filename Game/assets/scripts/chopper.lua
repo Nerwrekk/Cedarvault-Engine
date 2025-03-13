@@ -14,15 +14,17 @@ end
 function Chopper:OnUpdate(deltaTime)
     local xPos, yPos = self:GetEntityPosition()
     if IsKeyRepeated(Keys.A) then
-        self:SetEntityPosition(xPos - (self.moveSpeed * deltaTime), yPos)
+        xPos = xPos - (self.moveSpeed * deltaTime)
     end
     if IsKeyRepeated(Keys.D) then
-        self:SetEntityPosition(xPos + (self.moveSpeed * deltaTime), yPos)
+        xPos = xPos + (self.moveSpeed * deltaTime)
     end
     if IsKeyRepeated(Keys.W) then
-        self:SetEntityPosition(xPos, yPos - (self.moveSpeed * deltaTime))
+        yPos = yPos - (self.moveSpeed * deltaTime)
     end
     if IsKeyRepeated(Keys.S) then
-        self:SetEntityPosition(xPos, yPos + (self.moveSpeed * deltaTime))
+        yPos = yPos + (self.moveSpeed * deltaTime)
     end
+
+    self:SetEntityPosition(xPos, yPos)
 end

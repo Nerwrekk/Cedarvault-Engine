@@ -59,7 +59,7 @@ int main()
 		truck.AddComponent<cedar::SpriteComponent>("tank-panther-right", 32, 32, 0);
 		truck.GetComponent<cedar::TransformComponent>()->Position = { 0, 10 };
 		truck.AddComponent<cedar::BoxColliderComponent>(32, 32, glm::vec2(0, 0));
-		truck.AddComponent<cedar::ScriptComponent>(std::vector<std::string> { "Chopper" });
+		truck.AddComponent<cedar::ScriptComponent>(std::vector<std::string> { "Tank" });
 
 		for (int i = 0; i < 5; i++)
 		{

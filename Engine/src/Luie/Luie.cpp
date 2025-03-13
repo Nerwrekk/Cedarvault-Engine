@@ -52,6 +52,14 @@ namespace cedar
 				function LuieScript:GetEntityPosition()
     				return GetPosition(self.entity)
 				end
+
+				function LuieScript:SetEntityVelocity(x, y)
+    				SetVelocity(self.entity, x, y)
+				end
+
+				function LuieScript:GetEntityVelocity()
+    				return GetVelocity(self.entity)
+				end
 			)");
 
 			SetLuieBindings(m_lua);
