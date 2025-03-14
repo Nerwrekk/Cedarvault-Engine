@@ -55,6 +55,7 @@ namespace cedar
 		keys["D"] = Key::D;
 		keys["W"] = Key::W;
 		keys["S"] = Key::S;
+		keys["Space"] = Key::Space;
 
 		lua["Keys"] = keys;
 	}

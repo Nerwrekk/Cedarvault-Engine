@@ -8,23 +8,30 @@ function Chopper:new(entity)
 end
 
 function Chopper:OnStart()
-    print("OnStart chopper" .. self.entity:GetID())
 end
 
 function Chopper:OnUpdate(deltaTime)
-    local xPos, yPos = self:GetEntityPosition()
+    local xVel, yVel = self:GetEntityVelocity()
     if IsKeyRepeated(Keys.A) then
-        xPos = xPos - (self.moveSpeed * deltaTime)
+        xVel = xVel - (self.moveSpeed * deltaTime)
     end
     if IsKeyRepeated(Keys.D) then
-        xPos = xPos + (self.moveSpeed * deltaTime)
+        xVel = xVel + (self.moveSpeed * deltaTime)
     end
     if IsKeyRepeated(Keys.W) then
-        yPos = yPos - (self.moveSpeed * deltaTime)
+        yVel = yVel - (self.moveSpeed * deltaTime)
     end
     if IsKeyRepeated(Keys.S) then
-        yPos = yPos + (self.moveSpeed * deltaTime)
+        yVel = yVel + (self.moveSpeed * deltaTime)
     end
 
-    self:SetEntityPosition(xPos, yPos)
+    if IsKeyPressed(Keys.Space) then
+        print("Space was pressed")
+    end
+
+    if IsKeyReleased(Keys.Space) then
+        print("Space was Released")
+    end
+
+    self:SetEntityVelocity(xVel, yVel)
 end

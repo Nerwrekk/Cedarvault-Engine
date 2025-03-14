@@ -25,9 +25,9 @@ void test(cedar::CollisionEvent& collevent)
 	CEDAR_WARN("TEST: entity: {} collided with entity: {}", collevent.First.GetId(), collevent.Second.GetId());
 }
 
-void testKeyboard(cedar::KeyRepeatEvent& e)
+void testKeyboard(cedar::KeyPressEvent& e)
 {
-	CEDAR_WARN("Key repeated: {}", e.Key);
+	CEDAR_WARN("Key pressed: {}", e.Key);
 }
 
 int main()
@@ -43,9 +43,9 @@ int main()
 
 	//TODO: Make it so Application loads in the correct level!
 	// assetManager.LoadLevel("jungle", "jungle");
-	cedar::EventBus::Inst()->Subscribe<cedar::CollisionEvent>(&::test);
-	// cedar::EventBus::Inst()->Subscribe<cedar::KeyRepeatEvent>(&::testKeyboard);
-	cedar::EventBus::Inst()->Unsubscribe<cedar::CollisionEvent>(&::test);
+	// cedar::EventBus::Inst()->Subscribe<cedar::CollisionEvent>(&::test);
+	// cedar::EventBus::Inst()->Subscribe<cedar::KeyPressEvent>(&::testKeyboard);
+	// cedar::EventBus::Inst()->Unsubscribe<cedar::CollisionEvent>(&::test);
 	app.Setup([&]()
 	{
 		auto tank = app.Manager()->CreateEntity();

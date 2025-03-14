@@ -3,20 +3,35 @@ Tank.__index = Tank
 
 function Tank:new(entity)
     local obj = LuieScript.new(self, entity) -- Call base constructor
-    obj.x = 0
-    obj.y = 0
     return obj
 end
 
 function Tank:OnStart()
-    print("inside Tank lua script")
+    self.moveSpeed = 130
 end
 
 function Tank:OnUpdate(deltaTime)
-    -- print("DeltaTime is: " .. deltaTime)
-    -- print("inside OnUpdate Tank lua script attached to entity: " .. self.entity:GetID())
-    self:SetEntityPosition(self.x, self.y)
-    self.x = self.x + 1
-    self.y = self.y + 1
-    -- print("Entity x: " .. self.x .. " y: " .. self.y)
+    local xPos, yPos = self:GetEntityPosition()
+    if IsKeyRepeated(Keys.A) then
+        xPos = xPos - (self.moveSpeed * deltaTime)
+    end
+    if IsKeyRepeated(Keys.D) then
+        xPos = xPos + (self.moveSpeed * deltaTime)
+    end
+    if IsKeyRepeated(Keys.W) then
+        yPos = yPos - (self.moveSpeed * deltaTime)
+    end
+    if IsKeyRepeated(Keys.S) then
+        yPos = yPos + (self.moveSpeed * deltaTime)
+    end
+
+    if IsKeyPressed(Keys.Space) then
+        print("Space was pressed")
+    end
+
+    if IsKeyReleased(Keys.Space) then
+        print("Space was Released")
+    end
+
+    self:SetEntityPosition(xPos, yPos)
 end

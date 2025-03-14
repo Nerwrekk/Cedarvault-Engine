@@ -148,7 +148,8 @@ namespace cedar
 		//from sdl
 		enum : KeyCode
 		{
-			Space = 0x20,
+			//TODO: Fix and add the correct Keycode values
+			Space = 44,
 			Apostrophe = 0x27, /* ' */
 			Comma = 0x2C,      /* , */
 			Minus = 0x2D,      /* - */
