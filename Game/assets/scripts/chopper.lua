@@ -8,6 +8,7 @@ function Chopper:new(entity)
 end
 
 function Chopper:OnStart()
+    self.transform = GetTransformComponent(self.entity)
     self.spriteComponent = GetSpriteComponent(self.entity)
     print(self.spriteComponent.Sprite)
 end
@@ -16,6 +17,7 @@ function Chopper:OnUpdate(deltaTime)
     local xVel, yVel = self:GetEntityVelocity()
     if IsKeyRepeated(Keys.A) then
         xVel = xVel - (self.moveSpeed * deltaTime)
+        print("position x: " .. self.transform.position.x)
     end
     if IsKeyRepeated(Keys.D) then
         xVel = xVel + (self.moveSpeed * deltaTime)

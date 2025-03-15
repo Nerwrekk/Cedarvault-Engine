@@ -7,6 +7,8 @@
 
 #include <sol/sol.hpp>
 #include <tuple>
+#include <glm/glm.hpp>
+
 namespace cedar
 {
 	void SetEntityPosition(Entity entity, double x, double y)
@@ -42,8 +44,23 @@ namespace cedar
 		return entity.GetComponent<SpriteComponent>();
 	}
 
+	TransformComponent* GetTransformComponent(Entity entity)
+	{
+		return entity.GetComponent<TransformComponent>();
+	}
+
 	void SetLuieBindings(sol::state& lua)
 	{
+		lua.new_usertype<glm::vec2>("vec2",
+		    "x", &glm::vec2::x,
+		    "y", &glm::vec2::y);
+
+		//Components
+		lua.new_usertype<TransformComponent>("transform",
+		    "position", &TransformComponent::Position,
+		    "scale", &TransformComponent::Scale,
+		    "rotation", &TransformComponent::Rotation);
+
 		lua.new_usertype<SpriteComponent>("SpriteComponent",
 		    "Sprite", &SpriteComponent::TextureId,
 		    "Width", &SpriteComponent::Width,
@@ -51,9 +68,10 @@ namespace cedar
 		    "ZIndex", &SpriteComponent::ZIndex,
 		    "SrcRect", &SpriteComponent::SrcRect);
 
-		//Components
-		lua.set_function("GetSpriteComponent", GetSpriteComponent);
+		lua.set_function("GetSpriteComponent", &GetSpriteComponent);
+		lua.set_function("GetTransformComponent", &GetTransformComponent);
 
+		//Utility functions
 		lua.set_function("SetPosition", SetEntityPosition);
 		lua.set_function("GetPosition", GetEntityPosition);
 		lua.set_function("SetVelocity", SetEntityVelocity);
