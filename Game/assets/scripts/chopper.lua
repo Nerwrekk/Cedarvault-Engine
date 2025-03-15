@@ -10,7 +10,6 @@ end
 function Chopper:OnStart()
     self.spriteComponent = GetSpriteComponent(self.entity)
     print(self.spriteComponent.Sprite)
-    self.spriteComponent.Sprite = "truck-ford-up"
 end
 
 function Chopper:OnUpdate(deltaTime)
