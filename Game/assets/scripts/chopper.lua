@@ -8,9 +8,9 @@ function Chopper:new(entity)
 end
 
 function Chopper:OnStart()
-    self.transform = GetTransformComponent(self.entity)
+    print("Chopper position: x = " .. self.transform.position.x .. " y = " .. self.transform.position.y)
     self.spriteComponent = GetSpriteComponent(self.entity)
-    print(self.spriteComponent.Sprite)
+    -- print(self.spriteComponent.Sprite)
 end
 
 function Chopper:OnUpdate(deltaTime)

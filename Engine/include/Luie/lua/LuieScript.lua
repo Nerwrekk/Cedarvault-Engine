@@ -4,7 +4,7 @@ LuieScript.__index = LuieScript
 function LuieScript:new(entity)
     local obj = setmetatable({}, self)
     obj.entity = entity -- Store entity id reference
-    obj.dog = "bark"
+    obj.transform = GetTransformComponent(entity)
     return obj
 end
 

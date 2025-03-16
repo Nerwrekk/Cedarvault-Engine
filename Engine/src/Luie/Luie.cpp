@@ -17,11 +17,6 @@ namespace cedar
 		    : m_lua()
 		{
 			m_lua.open_libraries(sol::lib::base);
-
-			m_lua.new_usertype<LuaBehaviour>("LuaBehaviour",
-			    "new", sol::constructors<LuaBehaviour()>(),
-			    "OnStart", &LuaBehaviour::OnStart,
-			    "OnUpdate", &LuaBehaviour::OnUpdate);
 		}
 
 		ScriptEngine::~ScriptEngine()
@@ -41,7 +36,7 @@ namespace cedar
 				function LuieScript:new(entity)
 					local obj = setmetatable({}, self)
 					obj.entity = entity  -- Store entity id reference
-					obj.dog = "bark"
+					obj.transform = GetTransformComponent(entity)
 					return obj
 				end
 
