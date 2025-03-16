@@ -8,6 +8,7 @@ function LuieScript:new(entity)
     return obj
 end
 
+--Directly sets the entities position
 function LuieScript:SetEntityPosition(x, y)
     SetPosition(self.entity, x, y)
 end

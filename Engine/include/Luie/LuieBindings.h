@@ -55,6 +55,12 @@ namespace cedar
 		    "x", &glm::vec2::x,
 		    "y", &glm::vec2::y);
 
+		lua.new_usertype<SDL_Rect>("sdl_rect",
+		    "x", &SDL_Rect::x,
+		    "y", &SDL_Rect::y,
+		    "w", &SDL_Rect::w,
+		    "h", &SDL_Rect::h);
+
 		//Components
 		lua.new_usertype<TransformComponent>("transform",
 		    "position", &TransformComponent::Position,
