@@ -1,6 +1,11 @@
+---@class SpriteComponent
+---@field entity Entity
+---@field transform Transform
 LuieScript = {}
 LuieScript.__index = LuieScript
 
+--- Sets the position
+---@param entity Entity
 function LuieScript:new(entity)
     local obj = setmetatable({}, self)
     obj.entity = entity -- Store entity id reference
