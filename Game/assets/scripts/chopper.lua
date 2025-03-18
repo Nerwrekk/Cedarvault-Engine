@@ -3,11 +3,11 @@ Chopper.__index = Chopper
 
 function Chopper:new(entity)
     local obj = LuieScript.new(self, entity) -- Call base constructor
-    obj.moveSpeed = 100
     return obj
 end
 
 function Chopper:OnStart()
+    self.moveSpeed = 100
     print("Chopper position: x = " .. self.transform.position.x .. " y = " .. self.transform.position.y)
     self.sprite = GetSpriteComponent(self.entity)
     self.sprite.Sprite = "chopper-spritesheet"

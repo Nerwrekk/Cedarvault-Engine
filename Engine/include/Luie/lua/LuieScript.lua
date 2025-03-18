@@ -1,4 +1,4 @@
----@class SpriteComponent
+---@class LuieScript
 ---@field entity Entity
 ---@field transform Transform
 LuieScript = {}
