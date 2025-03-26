@@ -25,6 +25,17 @@ find_package(sol2 REQUIRED)
 find_package(glm REQUIRED)
 find_package(spdlog REQUIRED)
 
+# Find nethost.lib (used to locate .NET runtime)
+find_library(NETHOST_LIB 
+    NAMES nethost.lib
+    PATHS "${CMAKE_CURRENT_SOURCE_DIR}/include/MeanScript/host"
+)
+
+# Ensure the library was found
+if(NOT NETHOST_LIB)
+    message(FATAL_ERROR "nethost.lib not found! Install .NET Hosting Bundle.")
+endif()
+
 # includes directories
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -45,6 +56,7 @@ target_link_directories(${PROJECT_NAME} PUBLIC
 
 # link libraries 
 target_link_libraries(${PROJECT_NAME} PUBLIC 
+    ${NETHOST_LIB}
     ${CONAN_LIBS}
     spdlog::spdlog
     SDL2::SDL2main
