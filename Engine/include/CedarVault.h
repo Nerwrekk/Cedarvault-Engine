@@ -9,6 +9,7 @@
 #include "Common/Mindi/Mindi.h"
 #include "Common/Event/Events/Events.h"
 #include "Common/Event/EventBus.h"
+#include "MeanScript/MeanScript.h"
 
 #include <glm/glm.hpp>
 

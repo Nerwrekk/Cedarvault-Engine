@@ -18,6 +18,8 @@ setup_compile_options(${PROJECT_NAME})
 # Use PUBLIC when you need the definition to be shared with other targets that link against your target. This is often the case with headers that require specific macros to work properly when used by other code.
 target_compile_definitions(${PROJECT_NAME} PRIVATE CEDAR_EXPORT) 
 
+file(COPY include/MeanScript/meanscript.runtimeconfig.json DESTINATION ${CMAKE_BINARY_DIR}/bin)
+
 #find third-party packages
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
@@ -28,7 +30,7 @@ find_package(spdlog REQUIRED)
 # Find nethost.lib (used to locate .NET runtime)
 find_library(NETHOST_LIB 
     NAMES nethost.lib
-    PATHS "${CMAKE_CURRENT_SOURCE_DIR}/include/MeanScript/host"
+    PATHS "C:/Program Files/dotnet/packs/Microsoft.NETCore.App.Host.win-x64/8.0.14/runtimes/win-x64/native"
 )
 
 # Ensure the library was found
@@ -38,6 +40,7 @@ endif()
 
 # includes directories
 target_include_directories(${PROJECT_NAME} PUBLIC
+    "C:/Program Files/dotnet/packs/Microsoft.NETCore.App.Host.win-x64/8.0.14/runtimes/win-x64/native"
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_BINARY_DIR}/include
     ${CONAN_INCLUDE_DIRS}

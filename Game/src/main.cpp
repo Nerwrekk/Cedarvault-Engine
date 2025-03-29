@@ -30,8 +30,11 @@ void testKeyboard(cedar::KeyPressEvent& e)
 	CEDAR_WARN("Key pressed: {}", e.Key);
 }
 
+#define __NETHOST_H__
+
 int main()
 {
+	Mean::MeanScript::Init();
 	cedar::Application app;
 	app.GetScriptEngine()->LoadScripts("./assets/scripts");
 	app.GetScriptEngine()->CallFunction("", "");
