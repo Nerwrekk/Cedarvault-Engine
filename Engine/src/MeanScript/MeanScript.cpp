@@ -141,7 +141,30 @@ namespace
 
 namespace Mean
 {
+#ifdef _WIN32
+	template <typename TFunc>
+	TFunc LoadFunctionPtr(void* InLibraryHandle, const char* InFunctionName)
+	{
+		auto result = (TFunc)GetProcAddress((HMODULE)InLibraryHandle, InFunctionName);
+		return result;
+	}
+#else
+	template <typename TFunc>
+	TFunc LoadFunctionPtr(void* InLibraryHandle, const char* InFunctionName)
+	{
+		auto result = (TFunc)dlsym(InLibraryHandle, InFunctionName);
+		return result;
+	}
+#endif
+
 	// Globals to hold hostfxr exports
+	hostfxr_set_error_writer_fn SetHostFXRErrorWriter = nullptr;
+	hostfxr_initialize_for_runtime_config_fn InitHostFXRForRuntimeConfig = nullptr;
+	hostfxr_get_runtime_delegate_fn GetRuntimeDelegate = nullptr;
+	hostfxr_close_fn CloseHostFXR = nullptr;
+
+	// ErrorCallbackFn ErrorCallback = nullptr;
+
 	hostfxr_initialize_for_runtime_config_fn init_for_config;
 	hostfxr_get_runtime_delegate_fn get_delegate;
 	hostfxr_close_fn close_fn;
