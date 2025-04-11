@@ -32,6 +32,7 @@ void testKeyboard(cedar::KeyPressEvent& e)
 
 int main()
 {
+	Mean::MeanScript::Init();
 	cedar::Application app;
 	app.GetScriptEngine()->LoadScripts("./assets/scripts");
 	app.GetScriptEngine()->CallFunction("", "");

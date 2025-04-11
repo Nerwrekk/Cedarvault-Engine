@@ -190,7 +190,7 @@ namespace Mean
 		close_fn = (hostfxr_close_fn)get_export(hostfxr, "hostfxr_close");
 
 		// Initialize runtime with .NET 5+ configuration
-		const char_t* configPath = L"./meanscript.runtimeconfig.json";
+		const char_t* configPath = "./meanscript.runtimeconfig.json";
 		if (init_for_config(configPath, nullptr, &runtimeContext) != 0)
 		{
 			std::cerr << "Failed to initialize .NET runtime" << std::endl;

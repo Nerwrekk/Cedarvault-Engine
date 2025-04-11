@@ -9,14 +9,17 @@ endif()
 
 set(DOTNET_PACK_NAME "Microsoft.NETCore.App.Host.${DOTNET_RID}")
 
+#/usr/share/dotnet/packs/Microsoft.NETCore.App.Host.linux-x64/8.0.15/runtimes/linux-x64
+#usr/share/dotnet/packs/Microsoft.NETCore.App.Host.linux-x64/8.0.15/runtimes/linux-x64/native
+#/usr/share/dotnet/packs/Microsoft.NETCore.App.Host.linux-x64/8.0.15/runtimes/linux-x64/native
 # nethost.h (shared across platforms)
-set(NETHOST_INCLUDE "$ENV{HOME}/.dotnet/packs/${DOTNET_PACK_NAME}/${DOTNET_VERSION}/include")
+set(NETHOST_INCLUDE "/usr/share/dotnet/packs/${DOTNET_PACK_NAME}/${DOTNET_VERSION}/runtimes/${DOTNET_RID}/native")
 if(WIN32)
     set(NETHOST_INCLUDE "$ENV{ProgramFiles}/dotnet/packs/${DOTNET_PACK_NAME}/${DOTNET_VERSION}/include")
 endif()
 
 # Native library path
-set(NETHOST_NATIVE_PATH "$ENV{HOME}/.dotnet/packs/${DOTNET_PACK_NAME}/${DOTNET_VERSION}/runtimes/${DOTNET_RID}/native")
+set(NETHOST_NATIVE_PATH "/usr/share/dotnet/packs/${DOTNET_PACK_NAME}/${DOTNET_VERSION}/runtimes/${DOTNET_RID}/native")
 if(WIN32)
     set(NETHOST_NATIVE_PATH "$ENV{ProgramFiles}/dotnet/packs/${DOTNET_PACK_NAME}/${DOTNET_VERSION}/runtimes/${DOTNET_RID}/native")
 endif()

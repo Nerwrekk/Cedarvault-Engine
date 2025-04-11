@@ -40,10 +40,17 @@ find_package(glm REQUIRED)
 find_package(spdlog REQUIRED)
 
 # Find nethost.lib (used to locate .NET runtime)
-find_library(NETHOST_LIB 
-    NAMES nethost.lib
-    PATHS ${NETHOST_NATIVE_PATH}
-)
+if(WIN32)
+    find_library(NETHOST_LIB 
+        NAMES nethost.lib
+        PATHS ${NETHOST_NATIVE_PATH}
+    )
+else()
+    find_library(NETHOST_LIB 
+        NAMES libnethost.a  
+        PATHS ${NETHOST_NATIVE_PATH}
+    )
+endif()
 
 # Ensure the library was found
 if(NOT NETHOST_LIB)
