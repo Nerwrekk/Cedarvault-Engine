@@ -182,7 +182,7 @@ namespace Mean
 	{
 		// Load hostfxr.dll
 		// Pre-allocate a large buffer for the path to hostfxr
-		char_t buffer[4000];
+		char_t buffer[MAX_PATH];
 		size_t buffer_size = sizeof(buffer) / sizeof(char_t);
 		int rc = get_hostfxr_path(buffer, &buffer_size, nullptr);
 		if (rc != 0)
@@ -219,7 +219,7 @@ namespace Mean
 		}
 
 		int status = load_assembly_fn(
-		    L"C:\\dev\\MeanCSharpScript\\publish\\win\\GameScripting.dll",
+		    L"./GameScripting.dll",
 		    L"MeanScriptEngine.MeanScriptEngine, GameScripting",
 		    L"InstantiateScriptToEntity",
 		    UNMANAGEDCALLERSONLY_METHOD,
@@ -227,31 +227,39 @@ namespace Mean
 		    (void**)&instantiate_script);
 
 		status = load_assembly_fn(
-		    L"C:\\dev\\MeanCSharpScript\\publish\\win\\GameScripting.dll",
+		    L"./GameScripting.dll",
 		    L"MeanScriptEngine.MeanScriptEngine, GameScripting",
 		    L"OnUpdateAll",
 		    UNMANAGEDCALLERSONLY_METHOD,
 		    nullptr,
 		    (void**)&update_scripts);
 
-		//test to bind setentitypos here
-		using set_fn = void (*)(cedar::Entity, double, double);
+		SetupNativeBindings();
 
-		set_fn setPosFn = &Mean::SetEntityPosition;
+		return true;
+	}
 
-		typedef void (*bind_fn)(set_fn);
+	typedef void (*bindNative_fn)(MeanNativeBindings);
+	bool MeanScript::SetupNativeBindings()
+	{
+		MeanNativeBindings nativeBindings {};
+		nativeBindings.SetEntityPositionFn = &Mean::SetEntityPosition;
 
-		bind_fn bind = nullptr;
-
-		status = load_assembly_fn(
-		    L"C:\\dev\\MeanCSharpScript\\publish\\win\\GameScripting.dll",
+		bindNative_fn bind = nullptr;
+		int status = load_assembly_fn(
+		    L"./GameScripting.dll",
 		    L"MeanScriptEngine.MeanNativeApi, GameScripting",
 		    L"BindNativeFunctions",
 		    UNMANAGEDCALLERSONLY_METHOD,
 		    nullptr,
 		    (void**)&bind);
 
-		bind(setPosFn);
+		if (status != 0)
+		{
+			return false;
+		}
+
+		bind(nativeBindings);
 
 		return true;
 	}
@@ -260,4 +268,9 @@ namespace Mean
 	{
 		instantiate_script(scriptName, entity);
 	}
-} // namespace Mean
+	void MeanScript::OnUpdateAllScripts(float deltaTime)
+	{
+		update_scripts(deltaTime);
+	}
+}
+// namespace Mean

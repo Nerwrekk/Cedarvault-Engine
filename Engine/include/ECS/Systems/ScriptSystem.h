@@ -47,6 +47,9 @@ namespace cedar
 						onUpdateFunc(scriptInstance, Time::DeltaTime);
 					}
 				}
+
+				//TODO: remove after testing
+				Mean::MeanScript::OnUpdateAllScripts(Time::DeltaTime);
 			}
 		}
 

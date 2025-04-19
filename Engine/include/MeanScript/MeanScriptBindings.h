@@ -10,6 +10,12 @@
 
 namespace Mean
 {
+	using SetEntityPosition_fn = void (*)(cedar::Entity, double, double);
+	struct MeanNativeBindings
+	{
+		SetEntityPosition_fn SetEntityPositionFn;
+	};
+
 	void SetEntityPosition(cedar::Entity entity, double x, double y)
 	{
 		auto transform = entity.GetComponent<cedar::TransformComponent>();

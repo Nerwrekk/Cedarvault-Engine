@@ -45,6 +45,9 @@ Target/
 Targets/
 Debug/
 Release/
+bin/
+publish/
+obj/
 
 # Files
 dna.txt

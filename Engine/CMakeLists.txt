@@ -29,8 +29,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 )
 
 file(COPY include/MeanScript/meanscript.runtimeconfig.json DESTINATION ${CMAKE_BINARY_DIR}/bin)
-
-# file(COPY "C:/Program Files/dotnet/packs/Microsoft.NETCore.App.Host.win-x64/8.0.15/runtimes/win-x64/native/nethost.dll" DESTINATION ${CMAKE_BINARY_DIR}/bin)
+file(COPY include/MeanScript/MeanManaged/publish/win/GameScripting.dll DESTINATION ${CMAKE_BINARY_DIR}/bin)
 
 #find third-party packages
 find_package(SDL2 REQUIRED)
