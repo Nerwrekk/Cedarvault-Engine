@@ -4,6 +4,8 @@
 #include "MeanScript/host/coreclr_delegates.h"
 #include "MeanScript/host/hostfxr.h"
 
+#include "MeanScript/MeanScriptBindings.h"
+
 // Standard headers
 #include <stdio.h>
 #include <stdint.h>
@@ -138,7 +140,8 @@ namespace
 	}
 	// </SnippetInitialize>
 }
-
+using instantiate_fn = void (*)(const char* typeName, cedar::Entity entity);
+using update_fn = void (*)(float);
 namespace Mean
 {
 #ifdef _WIN32
@@ -169,7 +172,11 @@ namespace Mean
 	hostfxr_get_runtime_delegate_fn get_delegate;
 	hostfxr_close_fn close_fn;
 	load_assembly_and_get_function_pointer_fn load_assembly_fn;
+	get_function_pointer_fn get_fn_pointer;
 	void* runtimeContext;
+
+	instantiate_fn instantiate_script = nullptr;
+	update_fn update_scripts = nullptr;
 
 	bool MeanScript::Init()
 	{
@@ -190,7 +197,7 @@ namespace Mean
 		close_fn = (hostfxr_close_fn)get_export(hostfxr, "hostfxr_close");
 
 		// Initialize runtime with .NET 5+ configuration
-		const char_t* configPath = "./meanscript.runtimeconfig.json";
+		const char_t* configPath = L"./meanscript.runtimeconfig.json";
 		if (init_for_config(configPath, nullptr, &runtimeContext) != 0)
 		{
 			std::cerr << "Failed to initialize .NET runtime" << std::endl;
@@ -204,7 +211,53 @@ namespace Mean
 			return false;
 		}
 
+		// Get function pointer to load assemblies
+		if (get_delegate(runtimeContext, hdt_get_function_pointer, (void**)&get_fn_pointer) != 0)
+		{
+			std::cerr << "Failed to get .NET assembly loader" << std::endl;
+			return false;
+		}
+
+		int status = load_assembly_fn(
+		    L"C:\\dev\\MeanCSharpScript\\publish\\win\\GameScripting.dll",
+		    L"MeanScriptEngine.MeanScriptEngine, GameScripting",
+		    L"InstantiateScriptToEntity",
+		    UNMANAGEDCALLERSONLY_METHOD,
+		    nullptr,
+		    (void**)&instantiate_script);
+
+		status = load_assembly_fn(
+		    L"C:\\dev\\MeanCSharpScript\\publish\\win\\GameScripting.dll",
+		    L"MeanScriptEngine.MeanScriptEngine, GameScripting",
+		    L"OnUpdateAll",
+		    UNMANAGEDCALLERSONLY_METHOD,
+		    nullptr,
+		    (void**)&update_scripts);
+
+		//test to bind setentitypos here
+		using set_fn = void (*)(cedar::Entity, double, double);
+
+		set_fn setPosFn = &Mean::SetEntityPosition;
+
+		typedef void (*bind_fn)(set_fn);
+
+		bind_fn bind = nullptr;
+
+		status = load_assembly_fn(
+		    L"C:\\dev\\MeanCSharpScript\\publish\\win\\GameScripting.dll",
+		    L"MeanScriptEngine.MeanNativeApi, GameScripting",
+		    L"BindNativeFunctions",
+		    UNMANAGEDCALLERSONLY_METHOD,
+		    nullptr,
+		    (void**)&bind);
+
+		bind(setPosFn);
+
 		return true;
 	}
 
+	void MeanScript::AttachScriptToEntity(cedar::Entity entity, char* scriptName)
+	{
+		instantiate_script(scriptName, entity);
+	}
 } // namespace Mean

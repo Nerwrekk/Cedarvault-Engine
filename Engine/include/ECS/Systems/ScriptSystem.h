@@ -5,6 +5,7 @@
 #include "Common/Input.h"
 #include "Common/Time.h"
 #include "Luie/Luie.h"
+#include "MeanScript/MeanScript.h"
 
 namespace cedar
 {
@@ -57,6 +58,9 @@ namespace cedar
 
 			for (auto& script : scriptComp->Scripts)
 			{
+				//Testing with MeanScriptEngine
+				Mean::MeanScript::AttachScriptToEntity(entity, (char*)script.c_str());
+
 				auto& lua = p_luieEngine->GetLuaState();
 				sol::table scriptClass = lua[script];
 				sol::function constructor = scriptClass["new"];
