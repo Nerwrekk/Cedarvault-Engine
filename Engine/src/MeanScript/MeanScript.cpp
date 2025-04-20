@@ -244,6 +244,7 @@ namespace Mean
 	{
 		MeanNativeBindings nativeBindings {};
 		nativeBindings.SetEntityPositionFn = &Mean::SetEntityPosition;
+		nativeBindings.GetTranformComponentFn = &Mean::GetTransformComponent;
 
 		bindNative_fn bind = nullptr;
 		int status = load_assembly_fn(

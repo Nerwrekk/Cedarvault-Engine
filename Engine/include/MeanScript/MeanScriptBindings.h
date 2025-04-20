@@ -11,16 +11,27 @@
 namespace Mean
 {
 	using SetEntityPosition_fn = void (*)(cedar::Entity, double, double);
+	using GetTranformComponent_fn = void* (*)(cedar::Entity);
+
 	struct MeanNativeBindings
 	{
 		SetEntityPosition_fn SetEntityPositionFn;
+		GetTranformComponent_fn GetTranformComponentFn;
 	};
 
-	void SetEntityPosition(cedar::Entity entity, double x, double y)
+	extern "C"
 	{
-		auto transform = entity.GetComponent<cedar::TransformComponent>();
-		transform->Position.x = x;
-		transform->Position.y = y;
+		void SetEntityPosition(cedar::Entity entity, double x, double y)
+		{
+			auto transform = entity.GetComponent<cedar::TransformComponent>();
+			transform->Position.x = x;
+			transform->Position.y = y;
+		}
+
+		void* GetTransformComponent(cedar::Entity entity)
+		{
+			return static_cast<void*>(entity.GetComponent<cedar::TransformComponent>());
+		}
 	}
 
 	// std::tuple<double, double> GetEntityPosition(Entity entity)
