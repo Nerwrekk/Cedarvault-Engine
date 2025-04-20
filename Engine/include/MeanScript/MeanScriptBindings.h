@@ -13,10 +13,14 @@ namespace Mean
 	using SetEntityPosition_fn = void (*)(cedar::Entity, double, double);
 	using GetTranformComponent_fn = void* (*)(cedar::Entity);
 
+	//Keyboard functions:
+	using IsKeyPressed_fn = bool (*)(const cedar::KeyCode);
+
 	struct MeanNativeBindings
 	{
 		SetEntityPosition_fn SetEntityPositionFn;
 		GetTranformComponent_fn GetTranformComponentFn;
+		IsKeyPressed_fn IsKeyPressedFn;
 	};
 
 	extern "C"

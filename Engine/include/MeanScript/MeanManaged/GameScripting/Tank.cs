@@ -17,6 +17,11 @@ public class Tank : MeanScriptBehaviour
 
     public override void OnUpdate(float deltaTime)
     {
-        Console.WriteLine($"Transform pos at x: {transform.Position.X} and y: {transform.Position.Y}");
+        // Console.WriteLine($"Transform pos at x: {transform.Position.X} and y: {transform.Position.Y}");
+
+        if (MeanNativeApi.IsKeyPressed(0x04)) //TODO: Fix keycode bindings in csharp
+        {
+            Console.WriteLine("A was pressed");
+        }
     }
 }

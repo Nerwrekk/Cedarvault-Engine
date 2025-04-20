@@ -245,6 +245,7 @@ namespace Mean
 		MeanNativeBindings nativeBindings {};
 		nativeBindings.SetEntityPositionFn = &Mean::SetEntityPosition;
 		nativeBindings.GetTranformComponentFn = &Mean::GetTransformComponent;
+		nativeBindings.IsKeyPressedFn = cedar::Input::IsKeyPressed;
 
 		bindNative_fn bind = nullptr;
 		int status = load_assembly_fn(
