@@ -10,22 +10,26 @@
 
 namespace Mean
 {
-	using SetEntityPosition_fn = void (*)(cedar::Entity, double, double);
+	using SetEntityPosition_fn = void (*)(cedar::Entity, float, float);
 	using GetTranformComponent_fn = void* (*)(cedar::Entity);
 
 	//Keyboard functions:
 	using IsKeyPressed_fn = bool (*)(const cedar::KeyCode);
+	using IsKeyReleased_fn = bool (*)(const cedar::KeyCode);
+	using IsKeyRepeated_fn = bool (*)(const cedar::KeyCode);
 
 	struct MeanNativeBindings
 	{
 		SetEntityPosition_fn SetEntityPositionFn;
 		GetTranformComponent_fn GetTranformComponentFn;
 		IsKeyPressed_fn IsKeyPressedFn;
+		IsKeyReleased_fn IsKeyReleasedFn;
+		IsKeyRepeated_fn IsKeyRepeatedFn;
 	};
 
 	extern "C"
 	{
-		void SetEntityPosition(cedar::Entity entity, double x, double y)
+		void SetEntityPosition(cedar::Entity entity, float x, float y)
 		{
 			auto transform = entity.GetComponent<cedar::TransformComponent>();
 			transform->Position.x = x;

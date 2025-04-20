@@ -7,7 +7,7 @@ namespace MeanScriptEngine
         public virtual void OnStart() { }
         public virtual void OnUpdate(float deltaTime) { }
 
-        public void SetEntityPosition(double x, double y)
+        public void SetEntityPosition(float x, float y)
         {
             MeanNativeApi.SetEntityPosition(Entity, x, y);
         }

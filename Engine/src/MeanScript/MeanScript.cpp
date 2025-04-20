@@ -239,13 +239,16 @@ namespace Mean
 		return true;
 	}
 
-	typedef void (*bindNative_fn)(MeanNativeBindings);
+	// typedef void (*bindNative_fn)(MeanNativeBindings);
+	using bindNative_fn = void (*)(MeanNativeBindings);
 	bool MeanScript::SetupNativeBindings()
 	{
 		MeanNativeBindings nativeBindings {};
 		nativeBindings.SetEntityPositionFn = &Mean::SetEntityPosition;
 		nativeBindings.GetTranformComponentFn = &Mean::GetTransformComponent;
 		nativeBindings.IsKeyPressedFn = cedar::Input::IsKeyPressed;
+		nativeBindings.IsKeyReleasedFn = cedar::Input::IsKeyReleased;
+		nativeBindings.IsKeyRepeatedFn = cedar::Input::IsKeyRepeated;
 
 		bindNative_fn bind = nullptr;
 		int status = load_assembly_fn(
