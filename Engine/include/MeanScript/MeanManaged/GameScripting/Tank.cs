@@ -5,12 +5,10 @@ using MeanScriptEngine.Input;
 public class Tank : MeanScriptBehaviour
 {
     private float moveSpeed = 100f;
-    private TransformComponent transform;
     public override void OnStart()
     {
-        transform = MeanNativeApi.GetTransformComponent(Entity);
         Console.WriteLine($"[Tank] OnStart, is bound to entity with id: {Entity.Id}");
-        Console.WriteLine($"Tank starting position is: x: {transform.Position.X}, y:{transform.Position.Y}");
+        Console.WriteLine($"Tank starting position is: x: {Transform.Position.X}, y:{Transform.Position.Y}");
     }
 
     public override void OnUpdate(float deltaTime)

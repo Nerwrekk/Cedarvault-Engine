@@ -4,9 +4,7 @@
     {
       "type": "shell",
       "label": "Build-Debug",
-      "problemMatcher": [
-        "$gcc"
-      ],
+      "problemMatcher": ["$gcc"],
       "options": {
         "cwd": "${workspaceFolder}"
       },
@@ -16,25 +14,18 @@
       },
       "windows": {
         "command": "powershell.exe",
-        "args": [
-          "./windows_setup.bat",
-          "Debug"
-        ]
+        "args": ["./windows_setup.bat", "Debug"]
       },
       "linux": {
         "sudo": true,
-        "args": [
-          "Debug"
-        ],
+        "args": ["Debug"],
         "command": "${workspaceFolder}/linux_setup.sh"
       }
     },
     {
       "type": "shell",
       "label": "Build-Release",
-      "problemMatcher": [
-        "$gcc"
-      ],
+      "problemMatcher": ["$gcc"],
       "group": {
         "kind": "build"
       },
@@ -42,17 +33,31 @@
         "cwd": "${workspaceFolder}"
       },
       "windows": {
-        "args": [
-          "Release"
-        ],
+        "args": ["Release"],
         "command": "./windows_setup.bat"
       },
       "linux": {
         "sudo": true,
-        "args": [
-          "Release"
-        ],
+        "args": ["Release"],
         "command": "${workspaceFolder}/linux_setup.sh"
+      }
+    },
+    {
+      "type": "shell",
+      "label": "MeanScript-Build-Release",
+      "problemMatcher": ["$gcc"],
+      "group": {
+        "kind": "build"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/Engine/include/MeanScript/MeanManaged"
+      },
+      "windows": {
+        "command": "dotnet publish -c Release -r win-x64 --self-contained false -o ./publish/win"
+      },
+      "linux": {
+        "sudo": true,
+        "command": "dotnet publish -c Release -r linux-x64 --self-contained false -o ./publish/linux"
       }
     }
   ]

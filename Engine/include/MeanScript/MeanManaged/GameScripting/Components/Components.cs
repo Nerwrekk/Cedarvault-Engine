@@ -22,7 +22,7 @@ namespace MeanScriptEngine
 
             public TransformComponent(nint nativePtr)
             {
-                // Assumes TransformComponent starts with position/rotation/scale in order
+                // Assumes TransformComponent starts with position/scale/rotation in order
                 _position = (Vector2*)nativePtr;
                 _scale = _position + 1;
                 _rotation = (double*)_position + 2;

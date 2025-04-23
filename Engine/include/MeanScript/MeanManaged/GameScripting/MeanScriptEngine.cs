@@ -26,6 +26,7 @@ namespace MeanScriptEngine
 
             var script = (MeanScriptBehaviour)Activator.CreateInstance(type)!;
             script.Entity = entity;
+            script.Transform = MeanNativeApi.GetTransformComponent(entity);
             script.OnStart(); //Maybe call OnStart here?
 
             _scripts.Add(script);
