@@ -50,7 +50,7 @@
         "kind": "build"
       },
       "options": {
-        "cwd": "${workspaceFolder}/Engine/include/MeanScript/MeanManaged"
+        "cwd": "${workspaceFolder}/Engine/include/MeanScript/MeanManaged/GameScripting"
       },
       "windows": {
         "command": "dotnet publish -c Release -r win-x64 --self-contained false -o ./publish/win"

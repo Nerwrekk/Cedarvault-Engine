@@ -29,8 +29,11 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 )
 
 file(COPY include/MeanScript/meanscript.runtimeconfig.json DESTINATION ${CMAKE_BINARY_DIR}/bin)
-file(COPY include/MeanScript/MeanManaged/publish/win/GameScripting.dll DESTINATION ${CMAKE_BINARY_DIR}/bin)
-
+if(WIN32)
+    file(COPY include/MeanScript/MeanManaged/GameScripting/publish/win/GameScripting.dll DESTINATION ${CMAKE_BINARY_DIR}/bin)
+else()
+    file(COPY include/MeanScript/MeanManaged/GameScripting/publish/linux/GameScripting.dll DESTINATION ${CMAKE_BINARY_DIR}/bin)
+endif()
 #find third-party packages
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)

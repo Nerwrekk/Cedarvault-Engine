@@ -44,6 +44,11 @@ using string_t = std::basic_string<char_t>;
 /********************************************************************************************
  * Function used to load and activate .NET Core
  ********************************************************************************************/
+#ifdef WIN32
+	#define MEAN_STR(str) L##str
+#else
+	#define MEAN_STR(str) str
+#endif
 
 namespace
 {
@@ -197,7 +202,8 @@ namespace Mean
 		close_fn = (hostfxr_close_fn)get_export(hostfxr, "hostfxr_close");
 
 		// Initialize runtime with .NET 5+ configuration
-		const char_t* configPath = L"./meanscript.runtimeconfig.json";
+
+		const char_t* configPath = MEAN_STR("./meanscript.runtimeconfig.json");
 		if (init_for_config(configPath, nullptr, &runtimeContext) != 0)
 		{
 			std::cerr << "Failed to initialize .NET runtime" << std::endl;
@@ -219,17 +225,17 @@ namespace Mean
 		}
 
 		int status = load_assembly_fn(
-		    L"./GameScripting.dll",
-		    L"MeanScriptEngine.MeanScriptEngine, GameScripting",
-		    L"InstantiateScriptToEntity",
+		    MEAN_STR("./GameScripting.dll"),
+		    MEAN_STR("MeanScriptEngine.MeanScriptEngine, GameScripting"),
+		    MEAN_STR("InstantiateScriptToEntity"),
 		    UNMANAGEDCALLERSONLY_METHOD,
 		    nullptr,
 		    (void**)&instantiate_script);
 
 		status = load_assembly_fn(
-		    L"./GameScripting.dll",
-		    L"MeanScriptEngine.MeanScriptEngine, GameScripting",
-		    L"OnUpdateAll",
+		    MEAN_STR("./GameScripting.dll"),
+		    MEAN_STR("MeanScriptEngine.MeanScriptEngine, GameScripting"),
+		    MEAN_STR("OnUpdateAll"),
 		    UNMANAGEDCALLERSONLY_METHOD,
 		    nullptr,
 		    (void**)&update_scripts);
@@ -252,9 +258,9 @@ namespace Mean
 
 		bindNative_fn bind = nullptr;
 		int status = load_assembly_fn(
-		    L"./GameScripting.dll",
-		    L"MeanScriptEngine.MeanNativeApi, GameScripting",
-		    L"BindNativeFunctions",
+		    MEAN_STR("./GameScripting.dll"),
+		    MEAN_STR("MeanScriptEngine.MeanNativeApi, GameScripting"),
+		    MEAN_STR("BindNativeFunctions"),
 		    UNMANAGEDCALLERSONLY_METHOD,
 		    nullptr,
 		    (void**)&bind);
