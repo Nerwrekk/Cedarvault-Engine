@@ -1,4 +1,4 @@
-set(DOTNET_VERSION "8.0.15")
+set(DOTNET_VERSION "8.0.17")
 
 # Define DOTNET RID (Runtime Identifier)
 if(WIN32)
