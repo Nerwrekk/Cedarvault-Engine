@@ -50,14 +50,14 @@
         "kind": "build"
       },
       "options": {
-        "cwd": "${workspaceFolder}/Engine/include/MeanScript/MeanManaged/GameScripting"
+        "cwd": "${workspaceFolder}/Engine/include/MeanScript/MeanManaged/MeanScripting"
       },
       "windows": {
-        "command": "dotnet publish -c Release -r win-x64 --self-contained false -o ./publish/win"
+        "command": "dotnet publish -c Release -r win-x64 --self-contained true -o ./publish/win"
       },
       "linux": {
         "sudo": true,
-        "command": "dotnet publish -c Release -r linux-x64 --self-contained false -o ./publish/linux"
+        "command": "dotnet publish -c Release -r linux-x64 --self-contained true -o ./publish/linux"
       }
     }
   ]
