@@ -225,16 +225,16 @@ namespace Mean
 		}
 
 		int status = load_assembly_fn(
-		    MEAN_STR("./GameScripting.dll"),
-		    MEAN_STR("MeanScriptEngine.MeanScriptEngine, GameScripting"),
+		    MEAN_STR("./MeanScripting.dll"),
+		    MEAN_STR("MeanScriptEngine.MeanScriptEngine, MeanScripting"),
 		    MEAN_STR("InstantiateScriptToEntity"),
 		    UNMANAGEDCALLERSONLY_METHOD,
 		    nullptr,
 		    (void**)&instantiate_script);
 
 		status = load_assembly_fn(
-		    MEAN_STR("./GameScripting.dll"),
-		    MEAN_STR("MeanScriptEngine.MeanScriptEngine, GameScripting"),
+		    MEAN_STR("./MeanScripting.dll"),
+		    MEAN_STR("MeanScriptEngine.MeanScriptEngine, MeanScripting"),
 		    MEAN_STR("OnUpdateAll"),
 		    UNMANAGEDCALLERSONLY_METHOD,
 		    nullptr,
@@ -258,8 +258,8 @@ namespace Mean
 
 		bindNative_fn bind = nullptr;
 		int status = load_assembly_fn(
-		    MEAN_STR("./GameScripting.dll"),
-		    MEAN_STR("MeanScriptEngine.MeanNativeApi, GameScripting"),
+		    MEAN_STR("./MeanScripting.dll"),
+		    MEAN_STR("MeanScriptEngine.MeanNativeApi, MeanScripting"),
 		    MEAN_STR("BindNativeFunctions"),
 		    UNMANAGEDCALLERSONLY_METHOD,
 		    nullptr,
