@@ -20,7 +20,7 @@ namespace cedar
 	{
 		m_entityManager = std::make_unique<EntityManager>();
 		m_eventBus = std::make_unique<EventBus>();
-		m_luieScriptEngine = std::make_unique<Luie::ScriptEngine>();
+		// m_luieScriptEngine = std::make_unique<Luie::ScriptEngine>();
 
 		Initialize();
 	}
@@ -71,13 +71,14 @@ namespace cedar
 
 		m_isRunning = true;
 
-		m_luieScriptEngine->Initialize();
+		// m_luieScriptEngine->Initialize();
 
 		m_entityManager->AddSystem<MovementSystem>();
 		m_entityManager->AddSystem<RenderSystem>();
 		m_entityManager->AddSystem<AnimationSystem>();
 		m_entityManager->AddSystem<CollisionSystem>();
-		m_entityManager->AddSystem<ScriptSystem>(m_luieScriptEngine.get());
+		// m_entityManager->AddSystem<ScriptSystem>(m_luieScriptEngine.get());
+		m_entityManager->AddSystem<ScriptSystem>(nullptr);
 		auto renderSystem = m_entityManager->GetSystem<RenderSystem>().get();
 		m_renderSystem.reset(renderSystem);
 	}

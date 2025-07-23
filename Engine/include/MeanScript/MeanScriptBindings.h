@@ -4,6 +4,7 @@
 #include "ECS/ECS.h"
 #include "Common/Input.h"
 #include "Common/KeyCodes.h"
+#include "Primitives/MeanString.h"
 
 #include <tuple>
 #include <glm/glm.hpp>
@@ -12,6 +13,8 @@ namespace Mean
 {
 	using SetEntityPosition_fn = void (*)(cedar::Entity, float, float);
 	using GetTranformComponent_fn = void* (*)(cedar::Entity);
+	using GetSpriteComponent_fn = void* (*)(cedar::Entity);
+	using GetSpriteTextureId_fn = const char* (*)(cedar::Entity);
 
 	//Keyboard functions:
 	using IsKeyPressed_fn = bool (*)(const cedar::KeyCode);
@@ -25,6 +28,13 @@ namespace Mean
 		IsKeyPressed_fn IsKeyPressedFn;
 		IsKeyReleased_fn IsKeyReleasedFn;
 		IsKeyRepeated_fn IsKeyRepeatedFn;
+		GetSpriteComponent_fn GetSpriteComponent;
+		GetSpriteTextureId_fn GetSpriteTextureId;
+
+		//MeanString
+		MeanString_GetString_fn GetMeanStringFn;
+		MeanString_SetString_fn SetMeanStringfn;
+		MeanString_GetSize_fn GetMeanStringSizeFn;
 	};
 
 	extern "C"
@@ -39,6 +49,18 @@ namespace Mean
 		void* GetTransformComponent(cedar::Entity entity)
 		{
 			return static_cast<void*>(entity.GetComponent<cedar::TransformComponent>());
+		}
+
+		void* GetSpriteComponent(cedar::Entity entity)
+		{
+			return static_cast<void*>(entity.GetComponent<cedar::SpriteComponent>());
+		}
+
+		const char* GetSpriteTextureId(cedar::Entity entity)
+		{
+			auto sprite = entity.GetComponent<cedar::SpriteComponent>();
+
+			return sprite->TextureId.GetNativeString();
 		}
 	}
 

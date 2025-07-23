@@ -57,7 +57,7 @@ namespace cedar
 				auto transform = entity.GetComponent<TransformComponent>();
 				auto spriteComponent = entity.GetComponent<SpriteComponent>();
 
-				SDL_Texture* texture = AssetManager::Inst()->GetTexture(spriteComponent->TextureId);
+				SDL_Texture* texture = AssetManager::Inst()->GetTexture(spriteComponent->TextureId.GetString());
 
 				SDL_Rect srcRect = spriteComponent->SrcRect;
 

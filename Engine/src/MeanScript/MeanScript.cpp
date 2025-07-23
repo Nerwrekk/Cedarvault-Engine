@@ -5,6 +5,7 @@
 #include "MeanScript/host/hostfxr.h"
 
 #include "MeanScript/MeanScriptBindings.h"
+#include "MeanScript/Primitives/MeanString.h"
 
 // Standard headers
 #include <stdio.h>
@@ -251,10 +252,21 @@ namespace Mean
 	{
 		MeanNativeBindings nativeBindings {};
 		nativeBindings.SetEntityPositionFn = &Mean::SetEntityPosition;
+
+		//Component bindings
 		nativeBindings.GetTranformComponentFn = &Mean::GetTransformComponent;
+		nativeBindings.GetSpriteComponent = &Mean::GetSpriteComponent;
+		nativeBindings.GetSpriteTextureId = &Mean::GetSpriteTextureId;
+
+		//Keyboard bindings
 		nativeBindings.IsKeyPressedFn = cedar::Input::IsKeyPressed;
 		nativeBindings.IsKeyReleasedFn = cedar::Input::IsKeyReleased;
 		nativeBindings.IsKeyRepeatedFn = cedar::Input::IsKeyRepeated;
+
+		//MeanString bindings
+		nativeBindings.GetMeanStringFn = &Mean::MeanString_GetString;
+		nativeBindings.SetMeanStringfn = &Mean::MeanString_SetString;
+		nativeBindings.GetMeanStringSizeFn = &Mean::MeanString_GetSize;
 
 		bindNative_fn bind = nullptr;
 		int status = load_assembly_fn(
