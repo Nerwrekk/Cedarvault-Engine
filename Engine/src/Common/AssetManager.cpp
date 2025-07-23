@@ -219,7 +219,17 @@ namespace cedar
 
 	SDL_Texture* AssetManager::GetTexture(const std::string& assetId) const
 	{
-		return m_textures.at(assetId);
+		SDL_Texture* texture;
+		try
+		{
+			texture = m_textures.at(assetId);
+		}
+		catch (const std::exception& e)
+		{
+			CEDAR_FATAL("Unable to find asset with assed id: {}", assetId);
+		}
+
+		return texture;
 	}
 
 	SDL_Texture* AssetManager::GetTileMap(const std::string& tilemapId) const
