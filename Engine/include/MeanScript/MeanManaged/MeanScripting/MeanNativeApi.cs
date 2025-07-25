@@ -131,9 +131,7 @@ namespace MeanScriptEngine
         {
             var nativePtr = (nint)GetSpriteComponentFn.Invoke(entity);
 
-            var textureId = GetSpriteTextureId(entity);
-
-            return new SpriteComponent(textureId, nativePtr);
+            return new SpriteComponent(nativePtr);
         }
 
         public static unsafe string GetSpriteTextureId(Entity entity)

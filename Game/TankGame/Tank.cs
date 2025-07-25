@@ -5,7 +5,7 @@ using MeanScriptEngine.Input;
 
 public class Tank : MeanScriptBehaviour
 {
-    private float moveSpeed = 130f;
+    private float moveSpeed = 230f;
     private SpriteComponent spriteComponent;
     public override void OnStart()
     {

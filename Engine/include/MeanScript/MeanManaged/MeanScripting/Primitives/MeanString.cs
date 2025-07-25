@@ -1,8 +1,4 @@
-using System;
 using System.Runtime.InteropServices;
-using System.Text;
-
-using MeanScriptEngine;
 
 namespace MeanScriptEngine
 {
@@ -52,13 +48,17 @@ namespace MeanScriptEngine
             public override string ToString()
             {
                 if (nativePtr == IntPtr.Zero)
+                {
                     return string.Empty;
+                }
 
                 IntPtr dataPtr = MeanNativeApi.GetMeanStringPtr(nativePtr);
                 int length = (int)MeanNativeApi.GetMeanStringSizePtr(nativePtr);
 
                 if (dataPtr == IntPtr.Zero || length == 0)
+                {
                     return string.Empty;
+                }
 
                 return Marshal.PtrToStringUTF8(dataPtr, length) ?? string.Empty;
             }
@@ -66,7 +66,9 @@ namespace MeanScriptEngine
             public void Set(string value)
             {
                 if (nativePtr == IntPtr.Zero)
+                {
                     throw new ObjectDisposedException(nameof(MeanString));
+                }
 
                 MeanNativeApi.SetMeanStringPtr(nativePtr, value);
             }

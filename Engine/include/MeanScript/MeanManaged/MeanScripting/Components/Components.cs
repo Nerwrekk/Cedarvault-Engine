@@ -52,7 +52,7 @@ namespace MeanScriptEngine
             public ref UInt32 Zindex => ref *_zIndex;
             public ref SDL_Rect SrcRect => ref *_srcRect;
 
-            public SpriteComponent(string textureId, nint nativePtr)
+            public SpriteComponent(nint nativePtr)
             {
                 byte* basePtr = (byte*)nativePtr;
                 _width = (int*)(basePtr + 0);
