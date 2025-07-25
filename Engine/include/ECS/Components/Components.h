@@ -7,3 +7,4 @@
 #include "AnimationComponent.h"
 #include "BoxColliderComponent.h"
 #include "ScriptComponent.h"
+#include "CameraFollowComponent.h"

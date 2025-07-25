@@ -61,6 +61,12 @@ namespace cedar
 		    SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC //no flags
 		);
 
+		//Init the camera
+		m_camera.x = 0;
+		m_camera.y = 0;
+		m_camera.w = windowInit.WindowWidth;
+		m_camera.h = windowInit.WindowHeight;
+
 		if (!m_renderer)
 		{
 			CEDAR_FATAL("Error creating SDL renderer");

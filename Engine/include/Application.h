@@ -67,6 +67,7 @@ namespace cedar
 		bool m_isRunning = false;
 		//Note to self to remember to always pre-initialize fields in a class!
 		int previousMilliFrame = 0;
+		SDL_Rect m_camera;
 	};
 
 } // namespace cedar
