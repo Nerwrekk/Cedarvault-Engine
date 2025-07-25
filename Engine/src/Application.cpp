@@ -32,6 +32,8 @@ namespace cedar
 
 	void Application::Initialize()
 	{
+		Mean::MeanScript::Init();
+
 		if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 		{
 			CEDAR_FATAL("Error init SDL");

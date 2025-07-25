@@ -1,23 +1,5 @@
 #include "CedarVault.h"
 
-#include <sol/sol.hpp>
-
-void TestLua()
-{
-	sol::state lua;
-	lua.open_libraries(sol::lib::base);
-
-	lua.script_file("./assets/scripts/testLua.lua");
-
-	int someVariable = lua["Some_variable"];
-
-	bool isFullScreen = lua["Config"]["fullscreen"];
-
-	sol::table config = lua["Config"];
-
-	CEDAR_WARN("someVariable is: {}", someVariable);
-}
-
 void test(cedar::CollisionEvent& collevent)
 {
 	static int timesCalled = 0;
@@ -32,8 +14,9 @@ void testKeyboard(cedar::KeyPressEvent& e)
 
 int main()
 {
-	Mean::MeanScript::Init();
 	cedar::Application app;
+	Mean::MeanScript::InitManagedScriptEngine("");
+	Mean::MeanScript::LoadScriptAssembly("./TankGame.dll");
 	// app.GetScriptEngine()->LoadScripts("./assets/scripts");
 	// app.GetScriptEngine()->CallFunction("", "");
 

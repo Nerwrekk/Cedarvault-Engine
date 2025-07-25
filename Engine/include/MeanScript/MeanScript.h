@@ -14,6 +14,8 @@ namespace Mean
 		static void Shutdown();
 		static void CallMethod(const std::string& assemblyPath, const std::string& className, const std::string& methodName);
 
+		static void InitManagedScriptEngine(const std::string& scriptDllPath);
+		static void LoadScriptAssembly(const std::string& scriptDllPath);
 		static void AttachScriptToEntity(cedar::Entity entity, char* scriptName);
 		static void OnUpdateAllScripts(float deltaTime);
 

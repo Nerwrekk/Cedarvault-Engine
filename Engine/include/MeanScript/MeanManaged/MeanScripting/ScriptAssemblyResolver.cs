@@ -1,0 +1,48 @@
+using System.Reflection;
+using System.Runtime.Loader;
+
+namespace MeanScriptEngine
+{
+    public static class ScriptAssemblyResolver
+    {
+        public static void SetupDependencyResolver(string[] probingPaths)
+        {
+            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
+            {
+                var requestedAssembly = new AssemblyName(args.Name).Name;
+
+                // Check if assembly is already loaded
+                var loadedAssembly = AppDomain.CurrentDomain.GetAssemblies()
+                    .FirstOrDefault(a => a.GetName().Name == requestedAssembly);
+
+                if (loadedAssembly != null)
+                {
+                    Console.WriteLine($"[Resolver] Returning already loaded assembly: {requestedAssembly}");
+                    return loadedAssembly;
+                }
+
+                foreach (var path in probingPaths)
+                {
+                    var candidate = Path.Combine(path, requestedAssembly + ".dll");
+                    if (File.Exists(candidate))
+                    {
+                        try
+                        {
+                            Console.WriteLine($"[Resolver] Resolved '{requestedAssembly}' from: {candidate}");
+                            return AssemblyLoadContext.Default.LoadFromAssemblyPath(candidate);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"[Resolver] Failed to load {candidate}: {ex}");
+                            return null;
+                        }
+                    }
+                }
+
+                Console.WriteLine($"[Resolver] Could not resolve: {requestedAssembly}");
+
+                return null;
+            };
+        }
+    }
+}

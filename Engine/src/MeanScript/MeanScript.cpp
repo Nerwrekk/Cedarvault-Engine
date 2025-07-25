@@ -30,6 +30,7 @@
 #else
 	#include <dlfcn.h>
 	#include <limits.h>
+	#include "MeanScript.h"
 
 	#define STR(s) s
 	#define CH(c) c
@@ -146,6 +147,8 @@ namespace
 	}
 	// </SnippetInitialize>
 }
+using initialize_fn = void (*)(const char* scriptDllPath);
+using loadScriptAssembly_fn = void (*)(const char* scriptDllPath);
 using instantiate_fn = void (*)(const char* typeName, cedar::Entity entity);
 using update_fn = void (*)(float);
 namespace Mean
@@ -181,6 +184,8 @@ namespace Mean
 	get_function_pointer_fn get_fn_pointer;
 	void* runtimeContext;
 
+	initialize_fn initialize = nullptr;
+	loadScriptAssembly_fn load_script_assembly = nullptr;
 	instantiate_fn instantiate_script = nullptr;
 	update_fn update_scripts = nullptr;
 
@@ -228,6 +233,14 @@ namespace Mean
 		int status = load_assembly_fn(
 		    MEAN_STR("./MeanScripting.dll"),
 		    MEAN_STR("MeanScriptEngine.MeanScriptEngine, MeanScripting"),
+		    MEAN_STR("Initialize"),
+		    UNMANAGEDCALLERSONLY_METHOD,
+		    nullptr,
+		    (void**)&initialize);
+
+		status = load_assembly_fn(
+		    MEAN_STR("./MeanScripting.dll"),
+		    MEAN_STR("MeanScriptEngine.MeanScriptEngine, MeanScripting"),
 		    MEAN_STR("InstantiateScriptToEntity"),
 		    UNMANAGEDCALLERSONLY_METHOD,
 		    nullptr,
@@ -240,6 +253,14 @@ namespace Mean
 		    UNMANAGEDCALLERSONLY_METHOD,
 		    nullptr,
 		    (void**)&update_scripts);
+
+		status = load_assembly_fn(
+		    MEAN_STR("./MeanScripting.dll"),
+		    MEAN_STR("MeanScriptEngine.MeanScriptEngine, MeanScripting"),
+		    MEAN_STR("LoadDllScripts"),
+		    UNMANAGEDCALLERSONLY_METHOD,
+		    nullptr,
+		    (void**)&load_script_assembly);
 
 		SetupNativeBindings();
 
@@ -285,6 +306,16 @@ namespace Mean
 		bind(nativeBindings);
 
 		return true;
+	}
+
+	void MeanScript::InitManagedScriptEngine(const std::string& scriptDllPath)
+	{
+		initialize(scriptDllPath.c_str());
+	}
+
+	void MeanScript::LoadScriptAssembly(const std::string& scriptDllPath)
+	{
+		load_script_assembly(scriptDllPath.c_str());
 	}
 
 	void MeanScript::AttachScriptToEntity(cedar::Entity entity, char* scriptName)
