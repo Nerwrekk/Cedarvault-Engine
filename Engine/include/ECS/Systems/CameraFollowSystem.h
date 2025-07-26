@@ -24,14 +24,14 @@ namespace cedar
 			{
 				auto transform = entity.GetComponent<TransformComponent>();
 
-				if (transform->Position.x < gameSetting->MapWidth)
+				if (transform->Position.x + (camera->w / 2) < gameSetting->MapWidth)
 				{
-					camera->x = transform->Position.x;
+					camera->x = static_cast<int>(transform->Position.x) - (gameSetting->WindowWidth / 2);
 				}
 
-				if (transform->Position.y < gameSetting->MapHeight)
+				if (transform->Position.y + (camera->h / 2) < gameSetting->MapHeight)
 				{
-					camera->y = transform->Position.y;
+					camera->y = static_cast<int>(transform->Position.y) - (gameSetting->WindowHeight / 2);
 				}
 				camera->x = camera->x < 0 ? 0 : camera->x;
 				camera->y = camera->y < 0 ? 0 : camera->y;
