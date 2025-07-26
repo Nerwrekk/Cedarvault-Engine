@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ECS/Components/Components.h"
+#include "Application.h"
 #include "Common/SDL_Wrapper.h"
 #include "Common/AssetManager.h"
 
@@ -51,7 +52,7 @@ namespace cedar
 		{
 			//Note to self, cant sort a const vector! ;)
 			SortEntities(GetSystemEntities());
-
+			auto camera = Application::Get().Camera();
 			for (auto& entity : GetSystemEntities())
 			{
 				auto transform = entity.GetComponent<TransformComponent>();
@@ -63,8 +64,8 @@ namespace cedar
 
 				//Destination rectangle that we want to place our texture.
 				SDL_Rect dstRect = {
-					static_cast<int>(transform->Position.x),
-					static_cast<int>(transform->Position.y),
+					static_cast<int>(transform->Position.x - camera->x),
+					static_cast<int>(transform->Position.y - camera->y),
 					static_cast<int>(spriteComponent->Width * transform->Scale.x),
 					static_cast<int>(spriteComponent->Height * transform->Scale.y)
 				};
@@ -80,8 +81,8 @@ namespace cedar
 					yPos += boxCollider->Offset.y;
 
 					SDL_Rect colliderRect = {
-						static_cast<int>(xPos),
-						static_cast<int>(yPos),
+						static_cast<int>(xPos - camera->x),
+						static_cast<int>(yPos - camera->y),
 						static_cast<int>(boxCollider->Width),
 						static_cast<int>(boxCollider->Height),
 					};

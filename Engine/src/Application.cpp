@@ -7,28 +7,41 @@
 #include "ECS/Systems/CollisionSystem.h"
 #include "ECS/Systems/ScriptSystem.h"
 #include "ECS/Systems/MeanScriptSystem.h"
+#include "ECS/Systems/CameraFollowSystem.h"
+#include "ECS/Systems/RenderSystem.h"
 #include "Common/Input.h"
 #include "Common/Time.h"
+#include "Common/AssetManager.h"
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include <glm/glm.hpp>
 #include <iostream>
 
 namespace cedar
 {
+	Application* Application::s_Application = nullptr;
 	Application::Application()
 	{
 		m_entityManager = std::make_unique<EntityManager>();
 		m_eventBus = std::make_unique<EventBus>();
 		// m_luieScriptEngine = std::make_unique<Luie::ScriptEngine>();
 
+		s_Application = this;
 		Initialize();
 	}
 
 	Application::~Application()
 	{
 		Destroy();
+	}
+
+	Application& Application::Get()
+	{
+		return *s_Application;
+	}
+
+	SDL_Renderer* Application::GetRenderer() const
+	{
+		return m_renderer;
 	}
 
 	void Application::Initialize()
@@ -54,6 +67,9 @@ namespace cedar
 		    windowInit.WindowWidth,
 		    windowInit.WindowHeight,
 		    0);
+
+		GameSetting.WindowWidth = windowInit.WindowWidth;
+		GameSetting.WindowHeight = windowInit.WindowHeight;
 
 		m_renderer = SDL_CreateRenderer(
 		    m_window,
@@ -88,8 +104,10 @@ namespace cedar
 		m_entityManager->AddSystem<CollisionSystem>();
 		// m_entityManager->AddSystem<ScriptSystem>(m_luieScriptEngine.get());
 		m_entityManager->AddSystem<MeanScriptSystem>();
+		m_entityManager->AddSystem<CameraFollowSystem>();
 		auto renderSystem = m_entityManager->GetSystem<RenderSystem>().get();
 		m_renderSystem.reset(renderSystem);
+		// m_renderSystem.reset(renderSystem);
 	}
 
 	void Application::Run()
@@ -108,6 +126,11 @@ namespace cedar
 		SDL_DestroyRenderer(m_renderer);
 
 		SDL_Quit();
+	}
+
+	SDL_Rect* Application::Camera()
+	{
+		return &m_camera;
 	}
 
 	void Application::ProccessInput()
@@ -185,8 +208,8 @@ namespace cedar
 				//Destination rectangle that we want to place our texture.
 				//in order to scale the tilemap both the position and size must be multiplied by the scale
 				SDL_Rect dstRect = {
-					(tileLevelMap->TileSize * static_cast<int>(tileLevelMap->TileScale)) * x,
-					(tileLevelMap->TileSize * static_cast<int>(tileLevelMap->TileScale)) * y,
+					(tileLevelMap->TileSize * static_cast<int>(tileLevelMap->TileScale)) * x - m_camera.x,
+					(tileLevelMap->TileSize * static_cast<int>(tileLevelMap->TileScale)) * y - m_camera.y,
 					tileLevelMap->TileSize * static_cast<int>(tileLevelMap->TileScale),
 					tileLevelMap->TileSize * static_cast<int>(tileLevelMap->TileScale)
 
@@ -202,7 +225,7 @@ namespace cedar
 		SDL_SetRenderDrawColor(m_renderer, 21, 21, 21, 255);
 		SDL_RenderClear(m_renderer);
 
-		RenderCurrentLevel("JungleLevel", 0); //hardcoded for now;
+		RenderCurrentLevel(GameSetting.CurrentLevel, GameSetting.CurrentLevelIndex);
 
 		m_renderSystem->RenderEntites(m_renderer);
 

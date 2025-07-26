@@ -2,6 +2,7 @@
 #include "Common/Logger.h"
 #include "Common/Utils.h"
 #include "Common/Mindi/Mindi.h"
+#include "Application.h"
 
 #include <iostream>
 #include <fstream>
@@ -184,37 +185,20 @@ namespace cedar
 		}
 	}
 
-	void AssetManager::LoadLevel(const std::string& tilemapId, const std::string& levelMapId)
+	void AssetManager::LoadLevel(const std::string& levelMapId, int level)
 	{
-		SDL_Texture* texture = m_tileMaps.at(tilemapId);
-		int width, height;
-		SDL_QueryTexture(texture, nullptr, nullptr, &width, &height);
+		TileLevelMap* tileLevelMap = GetTileLevelMap(levelMapId);
+		auto& map = GetLevelMap(tileLevelMap->levelMapIds.at(level));
 
-		const auto& map = m_levelMaps.at(levelMapId);
-		auto mapNumRows = map.size();
-		for (int y = 0; y < mapNumRows; y++)
-		{
-			auto& colums = map.at(y);
-			for (int x = 0; x < colums.size(); x++)
-			{
-				int positionXY = colums.at(x);
-				int yPos = positionXY / 10;
-				int xPos = positionXY % 10;
-				SDL_Rect srcRect = { 32 * xPos, 32 * yPos, 32, 32 };
+		// const auto& map = m_levelMaps.at(levelMapId);
+		int mapNumRows = map.size();
+		int mapNumCols = map.at(0).size();
 
-				//Destination rectangle that we want to place our texture.
-				//in order to scale the tilemap both the position and size must be multiplied by the scale
-				SDL_Rect dstRect = {
-					(32) * x,
-					(32) * y,
-					32 * 2,
-					32 * 2
+		Application::Get().GameSetting.MapHeight = mapNumRows * tileLevelMap->TileSize * tileLevelMap->TileScale;
+		Application::Get().GameSetting.MapWidth = mapNumCols * tileLevelMap->TileSize * tileLevelMap->TileScale;
 
-				};
-
-				SDL_RenderCopy(m_renderer, texture, &srcRect, &dstRect);
-			}
-		}
+		Application::Get().GameSetting.CurrentLevel = levelMapId;
+		Application::Get().GameSetting.CurrentLevelIndex = level;
 	}
 
 	SDL_Texture* AssetManager::GetTexture(const std::string& assetId) const

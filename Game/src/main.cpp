@@ -24,9 +24,8 @@ int main()
 	assetManager.LoadAssets("./assets/images");
 	assetManager.LoadTilemaps("./assets/tilemaps");
 	assetManager.LoadConfigurations("./assets/configurations");
+	assetManager.LoadLevel("JungleLevel", 0);
 
-	//TODO: Make it so Application loads in the correct level!
-	// assetManager.LoadLevel("jungle", "jungle");
 	// cedar::EventBus::Inst()->Subscribe<cedar::CollisionEvent>(&::test);
 	// cedar::EventBus::Inst()->Subscribe<cedar::KeyPressEvent>(&::testKeyboard);
 	// cedar::EventBus::Inst()->Unsubscribe<cedar::CollisionEvent>(&::test);
@@ -44,6 +43,7 @@ int main()
 		truck.GetComponent<cedar::TransformComponent>()->Position = { 0, 10 };
 		truck.AddComponent<cedar::BoxColliderComponent>(32, 32, glm::vec2(0, 0));
 		truck.AddComponent<cedar::ScriptComponent>(std::vector<std::string> { "Tank" });
+		truck.AddComponent<cedar::CameraFollowComponent>();
 
 		for (int i = 0; i < 5; i++)
 		{

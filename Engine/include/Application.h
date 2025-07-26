@@ -2,22 +2,34 @@
 
 #include "Common/Core.h"
 #include "ECS/ECS.h"
-#include "ECS/Systems/RenderSystem.h"
 #include "Common/Event/EventBus.h"
 #include "Luie/Luie.h"
+#include "Common/SDL_Wrapper.h"
 
 #include <functional>
 #include <memory>
 
 struct SDL_Window;
 struct SDL_Renderer;
+struct SDL_Rect;
 
 namespace cedar
 {
+	class RenderSystem;
 	struct WindowInit
 	{
 		int WindowWidth;
 		int WindowHeight;
+	};
+
+	struct GameSettings
+	{
+		int WindowWidth;
+		int WindowHeight;
+		int MapWidth;
+		int MapHeight;
+		std::string CurrentLevel;
+		int CurrentLevelIndex;
 	};
 
 	class Application
@@ -35,20 +47,24 @@ namespace cedar
 		void Run();
 		void Destroy();
 
+		static Application& Get();
+
 		EntityManager* Manager()
 		{
 			return m_entityManager.get();
 		}
 
-		SDL_Renderer* GetRenderer() const
-		{
-			return m_renderer;
-		}
+		SDL_Renderer* GetRenderer() const;
 
 		Luie::ScriptEngine* GetScriptEngine() const
 		{
 			return m_luieScriptEngine.get();
 		}
+
+		SDL_Rect* Camera();
+
+	public:
+		GameSettings GameSetting;
 
 	private:
 		void ProccessInput();
@@ -68,6 +84,8 @@ namespace cedar
 		//Note to self to remember to always pre-initialize fields in a class!
 		int previousMilliFrame = 0;
 		SDL_Rect m_camera;
+
+		static Application* s_Application;
 	};
 
 } // namespace cedar

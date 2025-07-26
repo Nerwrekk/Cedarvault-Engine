@@ -32,7 +32,7 @@ namespace cedar
 		void LoadTilemaps(const std::string& tilemapPath);
 		void LoadConfigurations(const std::string& configPath);
 
-		void LoadLevel(const std::string& tilemapId, const std::string& levelMapId);
+		void LoadLevel(const std::string& levelMapId, int level);
 
 		SDL_Texture* GetTexture(const std::string& assetId) const;
 		SDL_Texture* GetTileMap(const std::string& tilemapId) const;
