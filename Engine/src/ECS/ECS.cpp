@@ -27,6 +27,13 @@ namespace cedar
 		m_ComponentPools.reserve(32);
 		m_entityComponentSignatures.reserve(32);
 
+		RegisterComponentType<RigidBodyComponent>(constants::RigidBodyComponent);
+		RegisterComponentType<AnimationComponent>(constants::AnimationComponent);
+		RegisterComponentType<BoxColliderComponent>(constants::BoxColliderComponent);
+		RegisterComponentType<CameraFollowComponent>(constants::CameraFollowComponent);
+		RegisterComponentType<ScriptComponent>(constants::ScriptComponent);
+		RegisterComponentType<SpriteComponent>(constants::SpriteComponent);
+
 		//TODO: add assert here!
 		s_EntityManager = this;
 	}

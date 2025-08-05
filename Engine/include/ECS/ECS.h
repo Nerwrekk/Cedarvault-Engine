@@ -14,6 +14,7 @@
 #include <unordered_map>
 #include <set>
 #include <deque>
+#include <functional>
 
 namespace cedar
 {
@@ -187,6 +188,11 @@ namespace cedar
 			return nullptr;
 		}
 
+		using ComponentDataFn = std::function<void(Entity, const void* data)>;
+		std::unordered_map<std::string, ComponentDataFn> ComponentFactories;
+		template <typename TComponent>
+		void RegisterComponentType(const std::string& name);
+
 		void UpdateAllSystems()
 		{
 			for (auto& [key, system] : m_systems)
@@ -248,6 +254,16 @@ namespace cedar
 		m_entityComponentSignatures[entityId].set(componentId);
 
 		CEDAR_INFO("Component with id: {} was added to entity with id: {}", componentId, entityId);
+	}
+
+	template <typename TComponent>
+	void EntityManager::RegisterComponentType(const std::string& name)
+	{
+		ComponentFactories[name] = [this](Entity entity, const void* data)
+		{
+			const TComponent* comp = reinterpret_cast<const TComponent*>(data);
+			AddComponent<TComponent>(entity, *comp);
+		};
 	}
 
 	template <typename TComponent, typename... TArgs>

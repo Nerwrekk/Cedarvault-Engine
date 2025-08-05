@@ -1,10 +1,9 @@
 #pragma once
 
-#include "ECS/Components/Components.h"
 #include "ECS/ECS.h"
 #include "Common/Input.h"
 #include "Common/KeyCodes.h"
-#include "Primitives/MeanString.h"
+#include "MeanScript/Primitives/MeanString.h"
 
 #include <tuple>
 #include <glm/glm.hpp>
@@ -39,29 +38,19 @@ namespace Mean
 
 	extern "C"
 	{
-		void SetEntityPosition(cedar::Entity entity, float x, float y)
-		{
-			auto transform = entity.GetComponent<cedar::TransformComponent>();
-			transform->Position.x = x;
-			transform->Position.y = y;
-		}
+		void SetEntityPosition(cedar::Entity entity, float x, float y);
 
-		void* GetTransformComponent(cedar::Entity entity)
-		{
-			return static_cast<void*>(entity.GetComponent<cedar::TransformComponent>());
-		}
+		void* GetTransformComponent(cedar::Entity entity);
 
-		void* GetSpriteComponent(cedar::Entity entity)
-		{
-			return static_cast<void*>(entity.GetComponent<cedar::SpriteComponent>());
-		}
+		void* GetSpriteComponent(cedar::Entity entity);
 
-		const char* GetSpriteTextureId(cedar::Entity entity)
-		{
-			auto sprite = entity.GetComponent<cedar::SpriteComponent>();
+		const char* GetSpriteTextureId(cedar::Entity entity);
 
-			return sprite->TextureId.GetNativeString();
-		}
+		bool HasComponent(cedar::Entity entity, const char* typeName);
+
+		void* GetComponent(cedar::Entity entity, const char* typeName);
+
+		void AddComponent(cedar::Entity entity, const char* typeName, const void* data, int size);
 	}
 
 	// std::tuple<double, double> GetEntityPosition(Entity entity)

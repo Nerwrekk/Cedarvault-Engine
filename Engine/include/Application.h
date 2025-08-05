@@ -15,6 +15,8 @@ struct SDL_Rect;
 
 namespace cedar
 {
+	//Note! If you need to forward declare a class or a struct thats within a namespace,
+	//you need to make sure that you include that namespace or declare it within that namespace!
 	class RenderSystem;
 	struct WindowInit
 	{
