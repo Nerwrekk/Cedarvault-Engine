@@ -21,6 +21,7 @@ namespace cedar
 				auto transform = entity.GetComponent<TransformComponent>();
 				auto rigidBody = entity.GetComponent<RigidBodyComponent>();
 
+				// CEDAR_INFO("Entity id: {} has velocity: [x: {}, y: {}]", entity.GetId(), rigidBody->Velocity.x, rigidBody->Velocity.y);
 				transform->Position.x += rigidBody->Velocity.x * static_cast<float>(Time::DeltaTime);
 				transform->Position.y += rigidBody->Velocity.y * static_cast<float>(Time::DeltaTime);
 

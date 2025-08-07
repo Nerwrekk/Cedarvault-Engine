@@ -65,6 +65,7 @@ namespace Mean
 
 	void* GetComponent(cedar::Entity entity, const char* typeName)
 	{
+		CEDAR_INFO("[Native] Entity id is: {}", entity.GetId());
 		if (!HasComponent(entity, typeName))
 		{
 			return nullptr;
@@ -110,8 +111,8 @@ namespace Mean
 		{
 			return;
 		}
-
-		auto it = cedar::EntityManager::Instance()->ComponentFactories.find(typeName);
+		std::string str(typeName);
+		auto it = cedar::EntityManager::Instance()->ComponentFactories.find(str);
 		if (it != cedar::EntityManager::Instance()->ComponentFactories.end())
 		{
 			it->second(entity, data);

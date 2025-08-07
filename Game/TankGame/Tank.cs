@@ -12,7 +12,7 @@ public class Tank : MeanScriptBehaviour
         Console.WriteLine($"[Tank] OnStart, is bound to entity with id: {Entity.Id}");
         Console.WriteLine($"Tank starting position is: x: {Transform.Position.X}, y:{Transform.Position.Y}");
 
-        spriteComponent = MeanNativeApi.GetSpriteComponent(Entity);
+        spriteComponent = GetComponent<SpriteComponent>();
         Console.WriteLine($"SpriteComponent width: {spriteComponent.Width}");
         Console.WriteLine($"SpriteComponent height: {spriteComponent.Height}");
         Console.WriteLine($"SpriteComponent zindex: {spriteComponent.Zindex}");
@@ -21,6 +21,7 @@ public class Tank : MeanScriptBehaviour
         Console.WriteLine($"SpriteComponent sdl.w: {spriteComponent.SrcRect.w}");
         Console.WriteLine($"SpriteComponent sdl.h: {spriteComponent.SrcRect.h}");
         Console.WriteLine($"SpriteComponent Texture id: {spriteComponent.TextureId}");
+
         spriteComponent.TextureId = "tank-panther-left";
     }
 
@@ -63,6 +64,7 @@ public class Tank : MeanScriptBehaviour
         {
             Console.WriteLine("Space is being repeated");
             Console.WriteLine($"Deltatime is: {deltaTime}");
+
         }
 
         MeanNativeApi.SetEntityPosition(Entity, xPos, yPos);

@@ -92,7 +92,6 @@ namespace cedar
 		entity.AddComponent<TransformComponent>();
 
 		m_entitiesToBeAdded.insert(entity);
-
 		return entity;
 	}
 

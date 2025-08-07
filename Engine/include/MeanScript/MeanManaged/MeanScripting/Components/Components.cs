@@ -19,6 +19,8 @@ namespace MeanScriptEngine
 
     namespace Components
     {
+        public interface IComponent { }
+
         public unsafe struct TransformComponent
         {
             private Vector2* _position;
@@ -38,7 +40,19 @@ namespace MeanScriptEngine
             }
         }
 
-        public unsafe struct SpriteComponent
+        public unsafe struct RigidBodyComponent : IComponent
+        {
+            private Vector2* _velocity;
+
+            public ref Vector2 Velocity => ref *_velocity;
+
+            public RigidBodyComponent(nint nativePtr)
+            {
+                _velocity = (Vector2*)nativePtr;
+            }
+        }
+
+        public unsafe struct SpriteComponent : IComponent
         {
             private int* _width;
             private int* _height;

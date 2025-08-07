@@ -13,6 +13,8 @@ namespace Mean
 	using SetEntityPosition_fn = void (*)(cedar::Entity, float, float);
 	using GetTranformComponent_fn = void* (*)(cedar::Entity);
 	using GetSpriteComponent_fn = void* (*)(cedar::Entity);
+	using GetComponent_fn = void* (*)(cedar::Entity, const char*);
+	using AddComponent_fn = void (*)(cedar::Entity, const char*, const void* data, int size);
 	using GetSpriteTextureId_fn = const char* (*)(cedar::Entity);
 
 	//Keyboard functions:
@@ -23,12 +25,18 @@ namespace Mean
 	struct MeanNativeBindings
 	{
 		SetEntityPosition_fn SetEntityPositionFn;
-		GetTranformComponent_fn GetTranformComponentFn;
+
+		//Keyboard
 		IsKeyPressed_fn IsKeyPressedFn;
 		IsKeyReleased_fn IsKeyReleasedFn;
 		IsKeyRepeated_fn IsKeyRepeatedFn;
+
+		//Component
+		GetTranformComponent_fn GetTranformComponentFn;
 		GetSpriteComponent_fn GetSpriteComponent;
 		GetSpriteTextureId_fn GetSpriteTextureId;
+		GetComponent_fn GetComponentFn;
+		AddComponent_fn AddComponentFn;
 
 		//MeanString
 		MeanString_GetString_fn GetMeanStringFn;

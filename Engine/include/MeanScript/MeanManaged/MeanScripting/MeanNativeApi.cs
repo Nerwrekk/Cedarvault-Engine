@@ -1,3 +1,4 @@
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using MeanScriptEngine.Components;
 using MeanScriptEngine.Input;
@@ -10,6 +11,12 @@ namespace MeanScriptEngine
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void* GetTransformComponentDelegate(Entity entity);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void* GetComponentDelegate(Entity entity, char* typeName);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void AddComponentDelegate(Entity entity, char* typeName, void* data, int size);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void* GetSpriteComponentDelegate(Entity entity);
@@ -26,16 +33,25 @@ namespace MeanScriptEngine
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate bool IsKeyRepeatedDelegate(Key keyCode);
 
+    //NOTE!! The order of function pointers MATTERS very much and need to match the cpp struct MeanNativeBindings 1 TO 1!!
     [StructLayout(LayoutKind.Sequential)]
     public struct MeanNativeBindings
     {
         public nint SetEntityPositionPtr;
-        public nint GetTransformComponentPtr;
+
+        //Keyboard
         public nint IsKeyPressedPtr;
         public nint IsKeyReleasedPtr;
         public nint IsKeyRepeatedPtr;
+
+        //Component
+        public nint GetTransformComponentPtr;
         public nint GetSpriteComponentPtr;
         public nint GetSpriteTextureIdPtr;
+        public nint GetComponentPtr;
+        public nint AddComponentPtr;
+
+        //MeanString
         public nint GetMeanStringPtr;
         public nint SetMeanStringPtr;
         public nint GetMeanStringSizePtr;
@@ -44,7 +60,7 @@ namespace MeanScriptEngine
     public static class MeanNativeApi
     {
         private static SetEntityPositionDelegate? SetEntityPositionFn;
-        private static GetTransformComponentDelegate? GetTransformComponentFn;
+        private static GetTransformComponentDelegate GetTransformComponentFn;
         private static IsKeyPressedDelegate IsKeyPressedFn;
         private static IsKeyReleasedDelegate IsKeyReleasedFn;
         private static IsKeyRepeatedDelegate IsKeyRepeatedFn;
@@ -55,19 +71,25 @@ namespace MeanScriptEngine
         private static SetMeanStringDelegate SetMeanStringFn;
         private static GetMeanStringSizeDelegate GetMeanStringSizeFn;
 
+        private static GetComponentDelegate GetComponentFn;
+        private static AddComponentDelegate AddComponentFn;
+
         [UnmanagedCallersOnly]
         public static void BindNativeFunctions(MeanNativeBindings mNativeBinds)
         {
             SetEntityPositionFn = Marshal.GetDelegateForFunctionPointer<SetEntityPositionDelegate>(mNativeBinds.SetEntityPositionPtr);
             GetTransformComponentFn = Marshal.GetDelegateForFunctionPointer<GetTransformComponentDelegate>(mNativeBinds.GetTransformComponentPtr);
+            GetSpriteComponentFn = Marshal.GetDelegateForFunctionPointer<GetSpriteComponentDelegate>(mNativeBinds.GetSpriteComponentPtr);
             IsKeyPressedFn = Marshal.GetDelegateForFunctionPointer<IsKeyPressedDelegate>(mNativeBinds.IsKeyPressedPtr);
             IsKeyReleasedFn = Marshal.GetDelegateForFunctionPointer<IsKeyReleasedDelegate>(mNativeBinds.IsKeyReleasedPtr);
             IsKeyRepeatedFn = Marshal.GetDelegateForFunctionPointer<IsKeyRepeatedDelegate>(mNativeBinds.IsKeyRepeatedPtr);
-            GetSpriteComponentFn = Marshal.GetDelegateForFunctionPointer<GetSpriteComponentDelegate>(mNativeBinds.GetSpriteComponentPtr);
             GetSpriteTextureIdFn = Marshal.GetDelegateForFunctionPointer<GetSpriteTextureIdDelegate>(mNativeBinds.GetSpriteTextureIdPtr);
             GetMeanStringFn = Marshal.GetDelegateForFunctionPointer<GetMeanStringDelegate>(mNativeBinds.GetMeanStringPtr);
             SetMeanStringFn = Marshal.GetDelegateForFunctionPointer<SetMeanStringDelegate>(mNativeBinds.SetMeanStringPtr);
             GetMeanStringSizeFn = Marshal.GetDelegateForFunctionPointer<GetMeanStringSizeDelegate>(mNativeBinds.GetMeanStringSizePtr);
+
+            GetComponentFn = Marshal.GetDelegateForFunctionPointer<GetComponentDelegate>(mNativeBinds.GetComponentPtr);
+            AddComponentFn = Marshal.GetDelegateForFunctionPointer<AddComponentDelegate>(mNativeBinds.AddComponentPtr);
         }
 
         public static void SetMeanStringPtr(nint meanStringPtr, [MarshalAs(UnmanagedType.LPUTF8Str)] string value)
@@ -107,9 +129,37 @@ namespace MeanScriptEngine
 
         public static unsafe TransformComponent GetTransformComponent(Entity entity)
         {
+            Console.WriteLine($"Entity id: {entity.Id} is getting its transform component");
+
             var nativePtr = (nint)GetTransformComponentFn.Invoke(entity);
 
             return new TransformComponent(nativePtr);
+        }
+
+        public static unsafe T GetComponent<T>(Entity entity)
+        {
+            Console.WriteLine($"Entity id is: {entity.Id}");
+            IntPtr ptr = Marshal.StringToHGlobalAnsi(typeof(T).Name);
+            var nativePtr = (nint)GetComponentFn.Invoke(entity, (char*)ptr.ToPointer());
+
+            Marshal.FreeHGlobal(ptr);
+
+            return (T)Activator.CreateInstance(typeof(T), nativePtr)!;
+        }
+
+        public static unsafe void AddComponent<T>(Entity entity, T initComponent)
+        where T : unmanaged, IComponentInit
+        {
+            var compName = typeof(T).Name.Replace("Init", "");
+            IntPtr compNamePtr = Marshal.StringToHGlobalAnsi(compName);
+
+            IntPtr dataPtr = Marshal.AllocHGlobal(Marshal.SizeOf<T>());
+            Marshal.StructureToPtr(initComponent, dataPtr, false);
+
+            AddComponentFn.Invoke(entity, (char*)compNamePtr.ToPointer(), dataPtr.ToPointer(), Marshal.SizeOf<T>());
+
+            Marshal.FreeHGlobal(compNamePtr);
+            Marshal.FreeHGlobal(dataPtr);
         }
 
         public static bool IsKeyPressed(Key keyCode)

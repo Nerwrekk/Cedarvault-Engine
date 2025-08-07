@@ -11,7 +11,7 @@
 
 namespace constants
 {
-	inline extern const char* const RigidBodyComponent = "RigidbodyComponent";
+	inline extern const char* const RigidBodyComponent = "RigidBodyComponent";
 	inline extern const char* const SpriteComponent = "SpriteComponent";
 	inline extern const char* const AnimationComponent = "AnimationComponent";
 	inline extern const char* const BoxColliderComponent = "BoxColliderComponent";

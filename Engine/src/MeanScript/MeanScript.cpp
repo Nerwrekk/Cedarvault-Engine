@@ -278,6 +278,8 @@ namespace Mean
 		nativeBindings.GetTranformComponentFn = &Mean::GetTransformComponent;
 		nativeBindings.GetSpriteComponent = &Mean::GetSpriteComponent;
 		nativeBindings.GetSpriteTextureId = &Mean::GetSpriteTextureId;
+		nativeBindings.GetComponentFn = &Mean::GetComponent;
+		nativeBindings.AddComponentFn = &Mean::AddComponent;
 
 		//Keyboard bindings
 		nativeBindings.IsKeyPressedFn = cedar::Input::IsKeyPressed;

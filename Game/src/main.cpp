@@ -38,7 +38,7 @@ int main()
 		tank.GetComponent<cedar::TransformComponent>()->Position = { 100, 400 };
 
 		auto truck = app.Manager()->CreateEntity();
-		truck.AddComponent<cedar::RigidBodyComponent>(glm::vec2(0.f, 0.f));
+		// truck.AddComponent<cedar::RigidBodyComponent>(glm::vec2(0.f, 0.f));
 		truck.AddComponent<cedar::SpriteComponent>("tank-panther-right", 32, 32, 0);
 		truck.GetComponent<cedar::TransformComponent>()->Position = { 0, 10 };
 		truck.AddComponent<cedar::BoxColliderComponent>(32, 32, glm::vec2(0, 0));
@@ -55,12 +55,12 @@ int main()
 		}
 
 		auto chopper = app.Manager()->CreateEntity();
-		chopper.AddComponent<cedar::RigidBodyComponent>(glm::vec2(0.f, 0.f));
 		chopper.AddComponent<cedar::SpriteComponent>("chopper", 32, 32, 1);
 		chopper.AddComponent<cedar::AnimationComponent>(2, 10, true);
 		chopper.AddComponent<cedar::BoxColliderComponent>(20, 18, glm::vec2(4, 8));
-		// chopper.AddComponent<cedar::ScriptComponent>(std::vector<std::string> { "Chopper" });
-		chopper.GetComponent<cedar::TransformComponent>()->Position = { 100, 440 };
+		chopper.AddComponent<cedar::ScriptComponent>(std::vector<std::string> { "Chopper" });
+		// chopper.AddComponent<cedar::RigidBodyComponent>(glm::vec2(50.f, 0.f));
+		// chopper.GetComponent<cedar::TransformComponent>()->Position = { 100, 440 };
 	});
 
 	app.Run();
