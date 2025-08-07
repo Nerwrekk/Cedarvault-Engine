@@ -12,10 +12,8 @@ namespace Mean
 {
 	using SetEntityPosition_fn = void (*)(cedar::Entity, float, float);
 	using GetTranformComponent_fn = void* (*)(cedar::Entity);
-	using GetSpriteComponent_fn = void* (*)(cedar::Entity);
 	using GetComponent_fn = void* (*)(cedar::Entity, const char*);
 	using AddComponent_fn = void (*)(cedar::Entity, const char*, const void* data, int size);
-	using GetSpriteTextureId_fn = const char* (*)(cedar::Entity);
 
 	//Keyboard functions:
 	using IsKeyPressed_fn = bool (*)(const cedar::KeyCode);
@@ -33,8 +31,6 @@ namespace Mean
 
 		//Component
 		GetTranformComponent_fn GetTranformComponentFn;
-		GetSpriteComponent_fn GetSpriteComponent;
-		GetSpriteTextureId_fn GetSpriteTextureId;
 		GetComponent_fn GetComponentFn;
 		AddComponent_fn AddComponentFn;
 
@@ -49,10 +45,6 @@ namespace Mean
 		void SetEntityPosition(cedar::Entity entity, float x, float y);
 
 		void* GetTransformComponent(cedar::Entity entity);
-
-		void* GetSpriteComponent(cedar::Entity entity);
-
-		const char* GetSpriteTextureId(cedar::Entity entity);
 
 		bool HasComponent(cedar::Entity entity, const char* typeName);
 

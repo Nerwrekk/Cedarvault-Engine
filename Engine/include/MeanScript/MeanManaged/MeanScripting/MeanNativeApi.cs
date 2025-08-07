@@ -19,12 +19,6 @@ namespace MeanScriptEngine
     public unsafe delegate void AddComponentDelegate(Entity entity, char* typeName, void* data, int size);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void* GetSpriteComponentDelegate(Entity entity);
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate IntPtr GetSpriteTextureIdDelegate(Entity entity);
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate bool IsKeyPressedDelegate(Key keyCode);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -46,8 +40,6 @@ namespace MeanScriptEngine
 
         //Component
         public nint GetTransformComponentPtr;
-        public nint GetSpriteComponentPtr;
-        public nint GetSpriteTextureIdPtr;
         public nint GetComponentPtr;
         public nint AddComponentPtr;
 
@@ -64,8 +56,6 @@ namespace MeanScriptEngine
         private static IsKeyPressedDelegate IsKeyPressedFn;
         private static IsKeyReleasedDelegate IsKeyReleasedFn;
         private static IsKeyRepeatedDelegate IsKeyRepeatedFn;
-        private static GetSpriteComponentDelegate GetSpriteComponentFn;
-        private static GetSpriteTextureIdDelegate GetSpriteTextureIdFn;
 
         private static GetMeanStringDelegate GetMeanStringFn;
         private static SetMeanStringDelegate SetMeanStringFn;
@@ -79,11 +69,9 @@ namespace MeanScriptEngine
         {
             SetEntityPositionFn = Marshal.GetDelegateForFunctionPointer<SetEntityPositionDelegate>(mNativeBinds.SetEntityPositionPtr);
             GetTransformComponentFn = Marshal.GetDelegateForFunctionPointer<GetTransformComponentDelegate>(mNativeBinds.GetTransformComponentPtr);
-            GetSpriteComponentFn = Marshal.GetDelegateForFunctionPointer<GetSpriteComponentDelegate>(mNativeBinds.GetSpriteComponentPtr);
             IsKeyPressedFn = Marshal.GetDelegateForFunctionPointer<IsKeyPressedDelegate>(mNativeBinds.IsKeyPressedPtr);
             IsKeyReleasedFn = Marshal.GetDelegateForFunctionPointer<IsKeyReleasedDelegate>(mNativeBinds.IsKeyReleasedPtr);
             IsKeyRepeatedFn = Marshal.GetDelegateForFunctionPointer<IsKeyRepeatedDelegate>(mNativeBinds.IsKeyRepeatedPtr);
-            GetSpriteTextureIdFn = Marshal.GetDelegateForFunctionPointer<GetSpriteTextureIdDelegate>(mNativeBinds.GetSpriteTextureIdPtr);
             GetMeanStringFn = Marshal.GetDelegateForFunctionPointer<GetMeanStringDelegate>(mNativeBinds.GetMeanStringPtr);
             SetMeanStringFn = Marshal.GetDelegateForFunctionPointer<SetMeanStringDelegate>(mNativeBinds.SetMeanStringPtr);
             GetMeanStringSizeFn = Marshal.GetDelegateForFunctionPointer<GetMeanStringSizeDelegate>(mNativeBinds.GetMeanStringSizePtr);
@@ -175,20 +163,6 @@ namespace MeanScriptEngine
         public static bool IsKeyRepeated(Key keyCode)
         {
             return IsKeyRepeatedFn(keyCode);
-        }
-
-        public static unsafe SpriteComponent GetSpriteComponent(Entity entity)
-        {
-            var nativePtr = (nint)GetSpriteComponentFn.Invoke(entity);
-
-            return new SpriteComponent(nativePtr);
-        }
-
-        public static unsafe string GetSpriteTextureId(Entity entity)
-        {
-            var textureId = GetSpriteTextureIdFn.Invoke(entity);
-
-            return Marshal.PtrToStringUTF8(textureId);
         }
     }
 }

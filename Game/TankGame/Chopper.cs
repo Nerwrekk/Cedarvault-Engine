@@ -32,7 +32,5 @@ public class Chopper : MeanScriptBehaviour
         {
             _rigidBodyComponent.Velocity.X = 50;
         }
-
-        Console.WriteLine($"Chopper id: {Entity.Id} position is [x: {Transform.Position.X}, y: {Transform.Position.Y}]");
     }
 }

@@ -16,18 +16,6 @@ namespace Mean
 		return static_cast<void*>(entity.GetComponent<cedar::TransformComponent>());
 	}
 
-	void* GetSpriteComponent(cedar::Entity entity)
-	{
-		return static_cast<void*>(entity.GetComponent<cedar::SpriteComponent>());
-	}
-
-	const char* GetSpriteTextureId(cedar::Entity entity)
-	{
-		auto sprite = entity.GetComponent<cedar::SpriteComponent>();
-
-		return sprite->TextureId.GetNativeString();
-	}
-
 	bool HasComponent(cedar::Entity entity, const char* typeName)
 	{
 		if (std::strcmp(typeName, constants::RigidBodyComponent) == 0)
