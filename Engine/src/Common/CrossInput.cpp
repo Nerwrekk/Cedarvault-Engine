@@ -4,8 +4,8 @@
 
 namespace cedar
 {
-	const Uint8* currentKeyState;
-	Uint8 previousKeyState[SDL_NUM_SCANCODES]; // Store previous state
+	const Uint8* currentKeyState = nullptr;
+	Uint8 previousKeyState[SDL_NUM_SCANCODES] = {}; // Store previous state
 
 	bool Input::IsKeyPressed(const KeyCode key)
 	{

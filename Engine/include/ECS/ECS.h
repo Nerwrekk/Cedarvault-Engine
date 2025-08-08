@@ -254,8 +254,6 @@ namespace cedar
 		m_entityComponentSignatures[entityId].set(componentId);
 
 		CEDAR_INFO("Component with id: {} was added to entity with id: {}", componentId, entityId);
-		//TODO: testing here to see if it works
-		AddEntityToSystem(entity);
 	}
 
 	template <typename TComponent>

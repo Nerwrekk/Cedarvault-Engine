@@ -19,12 +19,15 @@ namespace MeanScriptEngine
     public unsafe delegate void AddComponentDelegate(Entity entity, char* typeName, void* data, int size);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.I1)] //NOTE! By default, C# marshals bool as a 4-byte int (BOOL), but native C++ bool is a 1-byte value. This mismatch often causes the return value to be misinterpreted, typically always evaluating to true (because the nonzero 4 bytes contain garbage).
     public delegate bool IsKeyPressedDelegate(Key keyCode);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.I1)]
     public delegate bool IsKeyReleasedDelegate(Key keyCode);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.I1)]
     public delegate bool IsKeyRepeatedDelegate(Key keyCode);
 
     //NOTE!! The order of function pointers MATTERS very much and need to match the cpp struct MeanNativeBindings 1 TO 1!!

@@ -25,7 +25,6 @@ namespace MeanScriptEngine
             {
                 Path.GetFullPath("./")
             });
-
         }
 
         [UnmanagedCallersOnly]

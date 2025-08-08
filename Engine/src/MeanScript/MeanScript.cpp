@@ -169,6 +169,35 @@ namespace Mean
 	}
 #endif
 
+	void WaitForDebugger()
+	{
+#ifdef DEBUG_MODE
+		CEDAR_INFO("Waiting for debugger to attach...");
+	#ifdef WIN32
+		while (!IsDebuggerPresent())
+		{
+			Sleep(100); // Sleep 100 ms to avoid busy waiting
+		}
+	#else
+		bool debugger_present = false;
+		while (!debugger_present)
+		{
+			if (ptrace(PTRACE_TRACEME, 0, nullptr, 0) == -1)
+			{
+				debugger_present = true;
+			}
+			else
+			{
+				ptrace(PTRACE_DETACH, 0, nullptr, 0);
+			}
+
+			usleep(100 * 1000); // sleep 100ms
+		}
+	#endif
+		CEDAR_INFO("Debugger attached, continuing execution.");
+#endif
+	}
+
 	// Globals to hold hostfxr exports
 	hostfxr_set_error_writer_fn SetHostFXRErrorWriter = nullptr;
 	hostfxr_initialize_for_runtime_config_fn InitHostFXRForRuntimeConfig = nullptr;
@@ -263,6 +292,8 @@ namespace Mean
 		    (void**)&load_script_assembly);
 
 		SetupNativeBindings();
+
+		WaitForDebugger();
 
 		return true;
 	}

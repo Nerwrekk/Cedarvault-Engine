@@ -105,5 +105,8 @@ namespace Mean
 		{
 			it->second(entity, data);
 		}
+
+		//TODO: Trying to see if this solution works
+		cedar::EntityManager::Instance()->AddEntityToSystem(entity);
 	}
 }
