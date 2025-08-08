@@ -120,8 +120,6 @@ namespace MeanScriptEngine
 
         public static unsafe TransformComponent GetTransformComponent(Entity entity)
         {
-            Console.WriteLine($"Entity id: {entity.Id} is getting its transform component");
-
             var nativePtr = (nint)GetTransformComponentFn.Invoke(entity);
 
             return new TransformComponent(nativePtr);
@@ -129,7 +127,6 @@ namespace MeanScriptEngine
 
         public static unsafe T GetComponent<T>(Entity entity)
         {
-            Console.WriteLine($"Entity id is: {entity.Id}");
             IntPtr ptr = Marshal.StringToHGlobalAnsi(typeof(T).Name);
             var nativePtr = (nint)GetComponentFn.Invoke(entity, (char*)ptr.ToPointer());
 

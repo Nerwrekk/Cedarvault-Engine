@@ -9,8 +9,8 @@ namespace cedar
 		int NumOfFrames;
 		int CurrentFrame;
 		int FrameRateSpeed;
-		bool ShouldLoop;
 		int StartTime;
+		bool ShouldLoop;
 
 		AnimationComponent(int numOfFrames = 1, int frameRateSpeed = 1, bool shouldLoop = false)
 		{

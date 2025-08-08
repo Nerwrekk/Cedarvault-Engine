@@ -55,7 +55,7 @@ int main()
 		}
 
 		auto chopper = app.Manager()->CreateEntity();
-		chopper.AddComponent<cedar::SpriteComponent>("chopper", 32, 32, 1);
+		chopper.AddComponent<cedar::SpriteComponent>("chopper-spritesheet", 32, 32, 1);
 		chopper.AddComponent<cedar::AnimationComponent>(2, 10, true);
 		chopper.AddComponent<cedar::BoxColliderComponent>(20, 18, glm::vec2(4, 8));
 		chopper.AddComponent<cedar::ScriptComponent>(std::vector<std::string> { "Chopper" });

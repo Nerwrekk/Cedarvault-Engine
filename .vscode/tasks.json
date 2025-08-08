@@ -59,6 +59,24 @@
         "sudo": true,
         "command": "dotnet publish -c Release -r linux-x64 --self-contained true -o ./publish/linux"
       }
+    },
+    {
+      "type": "shell",
+      "label": "MeanScript-Build-Debug",
+      "problemMatcher": ["$gcc"],
+      "group": {
+        "kind": "build"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/Engine/include/MeanScript/MeanManaged/MeanScripting"
+      },
+      "windows": {
+        "command": "dotnet publish -c Debug -r win-x64 --self-contained true -o ./publish/win"
+      },
+      "linux": {
+        "sudo": true,
+        "command": "dotnet publish -c Debug -r linux-x64 --self-contained true -o ./publish/linux"
+      }
     }
   ]
 }
