@@ -13,7 +13,7 @@ namespace Mean
 	using SetEntityPosition_fn = void (*)(cedar::Entity, float, float);
 	using GetTranformComponent_fn = void* (*)(cedar::Entity);
 	using GetComponent_fn = void* (*)(cedar::Entity, const char*);
-	using AddComponent_fn = void (*)(cedar::Entity, const char*, const void* data, int size);
+	using AddComponent_fn = void (*)(cedar::Entity, const char*);
 
 	//log function
 	using Log_fn = void (*)(const char*, cedar::LogLevel);
@@ -56,7 +56,7 @@ namespace Mean
 
 		void* GetComponent(cedar::Entity entity, const char* typeName);
 
-		void AddComponent(cedar::Entity entity, const char* typeName, const void* data, int size);
+		void AddComponent(cedar::Entity entity, const char* typeName);
 
 		void Log(const char* msg, cedar::LogLevel level);
 	}

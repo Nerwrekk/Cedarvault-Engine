@@ -17,7 +17,7 @@ namespace MeanScriptEngine
     public unsafe delegate void* GetComponentDelegate(Entity entity, char* typeName);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void AddComponentDelegate(Entity entity, char* typeName, void* data, int size);
+    public unsafe delegate void AddComponentDelegate(Entity entity, char* typeName);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.I1)] //NOTE! By default, C# marshals bool as a 4-byte int (BOOL), but native C++ bool is a 1-byte value. This mismatch often causes the return value to be misinterpreted, typically always evaluating to true (because the nonzero 4 bytes contain garbage).
@@ -145,19 +145,14 @@ namespace MeanScriptEngine
             return (T)Activator.CreateInstance(typeof(T), nativePtr)!;
         }
 
-        public static unsafe void AddComponent<T>(Entity entity, T initComponent)
-        where T : unmanaged, IComponentInit
+        public static unsafe void AddComponent<T>(Entity entity)
+        where T : unmanaged, IComponent
         {
-            var compName = typeof(T).Name.Replace("Init", "");
-            IntPtr compNamePtr = Marshal.StringToHGlobalAnsi(compName);
+            IntPtr compNamePtr = Marshal.StringToHGlobalAnsi(typeof(T).Name);
 
-            IntPtr dataPtr = Marshal.AllocHGlobal(Marshal.SizeOf<T>());
-            Marshal.StructureToPtr(initComponent, dataPtr, false);
-
-            AddComponentFn.Invoke(entity, (char*)compNamePtr.ToPointer(), dataPtr.ToPointer(), Marshal.SizeOf<T>());
+            AddComponentFn.Invoke(entity, (char*)compNamePtr.ToPointer());
 
             Marshal.FreeHGlobal(compNamePtr);
-            Marshal.FreeHGlobal(dataPtr);
         }
 
         public static bool IsKeyPressed(Key keyCode)

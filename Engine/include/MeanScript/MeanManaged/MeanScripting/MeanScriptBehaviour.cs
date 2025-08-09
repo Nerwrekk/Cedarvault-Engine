@@ -21,16 +21,10 @@ namespace MeanScriptEngine
             return MeanNativeApi.GetComponent<T>(Entity);
         }
 
-        public T AddComponent<T, I>(I initComponent)
+        public T AddComponent<T>()
         where T : unmanaged, IComponent
-        where I : unmanaged, IComponentInit
         {
-            IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf<T>());
-            Marshal.StructureToPtr(initComponent, ptr, false);
-
-            MeanNativeApi.AddComponent(Entity, initComponent);
-
-            Marshal.FreeHGlobal(ptr);
+            MeanNativeApi.AddComponent<T>(Entity);
 
             return MeanNativeApi.GetComponent<T>(Entity);
         }

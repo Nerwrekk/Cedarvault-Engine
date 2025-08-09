@@ -188,7 +188,7 @@ namespace cedar
 			return nullptr;
 		}
 
-		using ComponentDataFn = std::function<void(Entity, const void* data)>;
+		using ComponentDataFn = std::function<void(Entity)>;
 		std::unordered_map<std::string, ComponentDataFn> ComponentFactories;
 		template <typename TComponent>
 		void RegisterComponentType(const std::string& name);
@@ -259,10 +259,9 @@ namespace cedar
 	template <typename TComponent>
 	void EntityManager::RegisterComponentType(const std::string& name)
 	{
-		ComponentFactories[name] = [this](Entity entity, const void* data)
+		ComponentFactories[name] = [this](Entity entity)
 		{
-			const TComponent* comp = reinterpret_cast<const TComponent*>(data);
-			AddComponent<TComponent>(entity, *comp);
+			AddComponent<TComponent>(entity);
 		};
 	}
 

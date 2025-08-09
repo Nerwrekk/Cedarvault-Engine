@@ -91,7 +91,7 @@ namespace Mean
 		return nullptr;
 	}
 
-	void AddComponent(cedar::Entity entity, const char* typeName, const void* data, int size)
+	void AddComponent(cedar::Entity entity, const char* typeName)
 	{
 		//Check if we have already added this component
 		if (HasComponent(entity, typeName))
@@ -102,7 +102,7 @@ namespace Mean
 		auto it = cedar::EntityManager::Instance()->ComponentFactories.find(str);
 		if (it != cedar::EntityManager::Instance()->ComponentFactories.end())
 		{
-			it->second(entity, data);
+			it->second(entity);
 		}
 
 		//TODO: Trying to see if this solution works
