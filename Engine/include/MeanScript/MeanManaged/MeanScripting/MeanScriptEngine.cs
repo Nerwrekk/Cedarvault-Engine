@@ -5,7 +5,7 @@ using System.Runtime.Loader;
 
 namespace MeanScriptEngine
 {
-    public static class MeanScriptEngine
+    internal static class MeanScriptEngine
     {
         private static List<MeanScriptBehaviour> _scripts = new();
         private static Assembly? _scriptDllAssembly;
@@ -76,7 +76,6 @@ namespace MeanScriptEngine
             string typeName = Marshal.PtrToStringAnsi(typeNamePtr)!;
 
             var type = _scriptDllAssembly.GetType(typeName);
-            Console.WriteLine($"Script type is: {type.FullName}");
             if (type == null || meanScriptBehaviourBaseType == null || !meanScriptBehaviourBaseType.IsAssignableFrom(type))
             {
                 Console.WriteLine($"[MeanScriptEngine] Invalid script type: {typeName}");

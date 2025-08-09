@@ -4,7 +4,6 @@ using MeanScriptEngine.Input;
 
 public class Chopper : MeanScriptBehaviour
 {
-
     private RigidBodyComponent _rigidBodyComponent;
     private AnimationComponent _animationComponent;
     private SpriteComponent _spriteComponent;
@@ -47,11 +46,11 @@ public class Chopper : MeanScriptBehaviour
             _spriteComponent.SrcRect.y = _spriteComponent.Height * 1;
         }
 
-        if (MeanNativeApi.IsKeyPressed(Key.P))
+        if (Input.IsKeyPressed(Key.P))
         {
             _animationComponent.FrameRateSpeed = 100;
         }
-        else if (MeanNativeApi.IsKeyReleased(Key.P))
+        else if (Input.IsKeyReleased(Key.P))
         {
             _animationComponent.FrameRateSpeed = 10;
         }

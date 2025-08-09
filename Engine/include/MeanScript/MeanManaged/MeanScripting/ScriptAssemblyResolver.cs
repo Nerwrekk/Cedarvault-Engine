@@ -3,7 +3,7 @@ using System.Runtime.Loader;
 
 namespace MeanScriptEngine
 {
-    public static class ScriptAssemblyResolver
+    internal static class ScriptAssemblyResolver
     {
         public static void SetupDependencyResolver(string[] probingPaths)
         {

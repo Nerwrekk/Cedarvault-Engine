@@ -1,5 +1,4 @@
-﻿using System;
-using MeanScriptEngine;
+﻿using MeanScriptEngine;
 using MeanScriptEngine.Components;
 using MeanScriptEngine.Input;
 
@@ -31,42 +30,42 @@ public class Tank : MeanScriptBehaviour
         var xPos = Transform.Position.X;
         var yPos = Transform.Position.Y;
 
-        if (MeanNativeApi.IsKeyRepeated(Key.A))
+        if (Input.IsKeyRepeated(Key.A))
         {
             xPos = xPos - (this.moveSpeed * deltaTime);
             spriteComponent.TextureId = "tank-panther-left";
         }
 
-        if (MeanNativeApi.IsKeyRepeated(Key.D))
+        if (Input.IsKeyRepeated(Key.D))
         {
             xPos = xPos + (this.moveSpeed * deltaTime);
             spriteComponent.TextureId = "tank-panther-right";
         }
 
-        if (MeanNativeApi.IsKeyRepeated(Key.W))
+        if (Input.IsKeyRepeated(Key.W))
         {
             yPos = yPos - (this.moveSpeed * deltaTime);
             spriteComponent.TextureId = "tank-panther-up";
         }
 
-        if (MeanNativeApi.IsKeyRepeated(Key.S))
+        if (Input.IsKeyRepeated(Key.S))
         {
             yPos = yPos + (this.moveSpeed * deltaTime);
             spriteComponent.TextureId = "tank-panther-down";
         }
 
-        if (MeanNativeApi.IsKeyReleased(Key.A))
+        if (Input.IsKeyReleased(Key.A))
         {
             Console.WriteLine("A was released");
         }
 
-        if (MeanNativeApi.IsKeyRepeated(Key.Space))
+        if (Input.IsKeyRepeated(Key.Space))
         {
             Console.WriteLine("Space is being repeated");
             Console.WriteLine($"Deltatime is: {deltaTime}");
 
         }
 
-        MeanNativeApi.SetEntityPosition(Entity, xPos, yPos);
+        SetEntityPosition(xPos, yPos);
     }
 }

@@ -1,9 +1,9 @@
-using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using MeanScriptEngine.Components;
 using MeanScriptEngine.Input;
 using MeanScriptEngine.MeanPrimitives;
 
+#nullable disable
 namespace MeanScriptEngine
 {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -32,7 +32,7 @@ namespace MeanScriptEngine
 
     //NOTE!! The order of function pointers MATTERS very much and need to match the cpp struct MeanNativeBindings 1 TO 1!!
     [StructLayout(LayoutKind.Sequential)]
-    public struct MeanNativeBindings
+    internal struct MeanNativeBindings
     {
         public nint SetEntityPositionPtr;
 
@@ -52,9 +52,9 @@ namespace MeanScriptEngine
         public nint GetMeanStringSizePtr;
     }
 
-    public static class MeanNativeApi
+    internal static class MeanNativeApi
     {
-        private static SetEntityPositionDelegate? SetEntityPositionFn;
+        private static SetEntityPositionDelegate SetEntityPositionFn;
         private static GetTransformComponentDelegate GetTransformComponentFn;
         private static IsKeyPressedDelegate IsKeyPressedFn;
         private static IsKeyReleasedDelegate IsKeyReleasedFn;
