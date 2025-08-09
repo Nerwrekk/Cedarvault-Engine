@@ -52,6 +52,12 @@ namespace cedar
 
 		virtual void AddEntityToSystem(Entity entity) override
 		{
+			if (std::find(m_entities.begin(), m_entities.end(), entity) != m_entities.end())
+			{
+				//has already been added
+				return;
+			}
+
 			m_entities.push_back(entity);
 
 			auto scriptComp = entity.GetComponent<ScriptComponent>();

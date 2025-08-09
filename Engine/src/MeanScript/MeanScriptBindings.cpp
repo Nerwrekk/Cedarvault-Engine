@@ -53,7 +53,6 @@ namespace Mean
 
 	void* GetComponent(cedar::Entity entity, const char* typeName)
 	{
-		CEDAR_INFO("[Native] Entity id is: {}", entity.GetId());
 		if (!HasComponent(entity, typeName))
 		{
 			return nullptr;
@@ -128,6 +127,9 @@ namespace Mean
 			break;
 		case cedar::LogLevel::ERROR:
 			CEDAR_ERROR(msg);
+			break;
+		default:
+			CEDAR_FATAL("Trying to log with log level that does not exist: LOG LEVEL");
 			break;
 		}
 	}

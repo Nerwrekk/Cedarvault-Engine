@@ -39,10 +39,6 @@ namespace MeanScriptEngine
                 _size = (UInt64*)nativePtr;
                 _capacity = (UInt64*)nativePtr + 1;
                 _nativeString = (char**)(((ulong*)nativePtr) + 2);
-
-                Console.WriteLine($"native string is: {ToString()}");
-                Console.WriteLine($"_size is: {*_size}");
-                Console.WriteLine($"_capacity is: {*_capacity}");
             }
 
             public override string ToString()

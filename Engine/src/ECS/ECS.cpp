@@ -134,7 +134,10 @@ namespace cedar
 {
 	void BaseSystem::AddEntityToSystem(Entity entity)
 	{
-		m_entities.push_back(entity);
+		if (std::find(m_entities.begin(), m_entities.end(), entity) == m_entities.end())
+		{
+			m_entities.push_back(entity);
+		}
 	}
 
 	void BaseSystem::RemoveEntityFromSystem(Entity entity)

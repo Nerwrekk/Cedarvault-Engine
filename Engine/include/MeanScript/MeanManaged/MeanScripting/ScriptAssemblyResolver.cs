@@ -17,7 +17,7 @@ namespace MeanScriptEngine
 
                 if (loadedAssembly != null)
                 {
-                    Console.WriteLine($"[Resolver] Returning already loaded assembly: {requestedAssembly}");
+                    Log.Info($"[Resolver] Returning already loaded assembly: {requestedAssembly}");
                     return loadedAssembly;
                 }
 
@@ -28,18 +28,18 @@ namespace MeanScriptEngine
                     {
                         try
                         {
-                            Console.WriteLine($"[Resolver] Resolved '{requestedAssembly}' from: {candidate}");
+                            Log.Info($"[Resolver] Resolved '{requestedAssembly}' from: {candidate}");
                             return AssemblyLoadContext.Default.LoadFromAssemblyPath(candidate);
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine($"[Resolver] Failed to load {candidate}: {ex}");
+                            Log.Error($"[Resolver] Failed to load {candidate}: {ex}");
                             return null;
                         }
                     }
                 }
 
-                Console.WriteLine($"[Resolver] Could not resolve: {requestedAssembly}");
+                Log.Error($"[Resolver] Could not resolve: {requestedAssembly}");
 
                 return null;
             };

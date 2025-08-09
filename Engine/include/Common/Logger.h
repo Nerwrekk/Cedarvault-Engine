@@ -2,6 +2,18 @@
 
 #include "Core.h"
 
+namespace cedar
+{
+	enum LogLevel
+	{
+		INFO,
+		TRACE,
+		DEBUG,
+		WARN,
+		ERROR
+	};
+} // namespace cedar
+
 // #############################
 // logging
 // spdlog
@@ -15,14 +27,6 @@
 // #include <spdlog/fmt/ostr.h>
 namespace cedar
 {
-	enum LogLevel
-	{
-		INFO,
-		TRACE,
-		DEBUG,
-		WARN,
-		ERROR
-	};
 	class Logger
 	{
 	public:

@@ -15,7 +15,7 @@ namespace MeanScriptEngine
         [UnmanagedCallersOnly]
         public static void Initialize(nint meanScriptingDllPath)
         {
-            Console.WriteLine("[ScriptEngine] Initializing...");
+            Log.Info("[MeanScriptEngine] Initializing...");
 
             // This ensures we get the correct base type from the already-loaded MeanScripting.dll
             meanScriptBehaviourBaseType = typeof(MeanScriptBehaviour); // This is safe because we're using the "real" one
@@ -33,15 +33,15 @@ namespace MeanScriptEngine
             string path = Marshal.PtrToStringAnsi(assemblyPath)!;
             if (string.IsNullOrEmpty(path))
             {
-                Console.WriteLine("ERROR: Script path is null or empty.");
+                Log.Error("ERROR: Script path is null or empty.");
                 return;
             }
 
             string fullPath = Path.GetFullPath(path);
-            Console.WriteLine($"[MeanScriptEngine] Requested to load: '{path}'");
+            Log.Info($"[MeanScriptEngine] Requested to load: '{path}'");
             if (!File.Exists(fullPath))
             {
-                Console.WriteLine("[Error] not found at: " + fullPath);
+                Log.Error("[Error] not found at: " + fullPath);
                 return;
             }
 
@@ -52,14 +52,14 @@ namespace MeanScriptEngine
             }
             catch (Exception ex)
             {
-                Console.WriteLine("[Error] Failed to load script assembly:");
-                Console.WriteLine(ex.ToString());
+                Log.Error("[Error] Failed to load script assembly:");
+                Log.Error(ex.ToString());
                 throw;
             }
 
             foreach (var type in _scriptDllAssembly.GetExportedTypes())
             {
-                Console.WriteLine($"[Debug] Found type: {type.FullName}");
+                Log.Info($"[Debug] Found type: {type.FullName}");
             }
         }
 
@@ -68,7 +68,7 @@ namespace MeanScriptEngine
         {
             if (_scriptDllAssembly == null)
             {
-                Console.WriteLine("ERROR: ScriptDllAssembly is NULL!");
+                Log.Error("ERROR: ScriptDllAssembly is NULL!");
 
                 return;
             }
@@ -78,7 +78,7 @@ namespace MeanScriptEngine
             var type = _scriptDllAssembly.GetType(typeName);
             if (type == null || meanScriptBehaviourBaseType == null || !meanScriptBehaviourBaseType.IsAssignableFrom(type))
             {
-                Console.WriteLine($"[MeanScriptEngine] Invalid script type: {typeName}");
+                Log.Error($"[MeanScriptEngine] Invalid script type: {typeName}");
                 return;
             }
 
