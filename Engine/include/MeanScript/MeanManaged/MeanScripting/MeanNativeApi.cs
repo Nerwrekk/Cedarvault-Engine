@@ -1,3 +1,4 @@
+using System.Net;
 using System.Runtime.InteropServices;
 using MeanScriptEngine.Components;
 using MeanScriptEngine.Input;
@@ -30,6 +31,9 @@ namespace MeanScriptEngine
     [return: MarshalAs(UnmanagedType.I1)]
     public delegate bool IsKeyRepeatedDelegate(Key keyCode);
 
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void LogDelegate(string msg, LogLevel lvl);
+
     //NOTE!! The order of function pointers MATTERS very much and need to match the cpp struct MeanNativeBindings 1 TO 1!!
     [StructLayout(LayoutKind.Sequential)]
     internal struct MeanNativeBindings
@@ -50,6 +54,9 @@ namespace MeanScriptEngine
         public nint GetMeanStringPtr;
         public nint SetMeanStringPtr;
         public nint GetMeanStringSizePtr;
+
+        //Log
+        public nint LogPtr;
     }
 
     internal static class MeanNativeApi
@@ -66,6 +73,7 @@ namespace MeanScriptEngine
 
         private static GetComponentDelegate GetComponentFn;
         private static AddComponentDelegate AddComponentFn;
+        private static LogDelegate LogFn;
 
         [UnmanagedCallersOnly]
         public static void BindNativeFunctions(MeanNativeBindings mNativeBinds)
@@ -81,6 +89,8 @@ namespace MeanScriptEngine
 
             GetComponentFn = Marshal.GetDelegateForFunctionPointer<GetComponentDelegate>(mNativeBinds.GetComponentPtr);
             AddComponentFn = Marshal.GetDelegateForFunctionPointer<AddComponentDelegate>(mNativeBinds.AddComponentPtr);
+
+            LogFn = Marshal.GetDelegateForFunctionPointer<LogDelegate>(mNativeBinds.LogPtr);
         }
 
         public static void SetMeanStringPtr(nint meanStringPtr, [MarshalAs(UnmanagedType.LPUTF8Str)] string value)
@@ -163,6 +173,11 @@ namespace MeanScriptEngine
         public static bool IsKeyRepeated(Key keyCode)
         {
             return IsKeyRepeatedFn(keyCode);
+        }
+
+        public static void LogMsg([MarshalAs(UnmanagedType.LPUTF8Str)] string msg, LogLevel lvl)
+        {
+            LogFn(msg, lvl);
         }
     }
 }

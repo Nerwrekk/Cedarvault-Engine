@@ -320,6 +320,8 @@ namespace Mean
 		nativeBindings.SetMeanStringfn = &Mean::MeanString_SetString;
 		nativeBindings.GetMeanStringSizeFn = &Mean::MeanString_GetSize;
 
+		nativeBindings.LogFn = &Mean::Log;
+
 		bindNative_fn bind = nullptr;
 		int status = load_assembly_fn(
 		    MEAN_STR("./MeanScripting.dll"),

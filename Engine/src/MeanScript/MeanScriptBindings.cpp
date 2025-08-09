@@ -109,4 +109,26 @@ namespace Mean
 		//TODO: Trying to see if this solution works
 		cedar::EntityManager::Instance()->AddEntityToSystem(entity);
 	}
+
+	void Log(const char* msg, cedar::LogLevel level)
+	{
+		switch (level)
+		{
+		case cedar::LogLevel::INFO:
+			CEDAR_INFO(msg);
+			break;
+		case cedar::LogLevel::TRACE:
+			CEDAR_TRACE(msg);
+			break;
+		case cedar::LogLevel::DEBUG:
+			CEDAR_DEBUG(msg);
+			break;
+		case cedar::LogLevel::WARN:
+			CEDAR_WARN(msg);
+			break;
+		case cedar::LogLevel::ERROR:
+			CEDAR_ERROR(msg);
+			break;
+		}
+	}
 }

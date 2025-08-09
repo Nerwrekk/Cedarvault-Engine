@@ -15,6 +15,9 @@ namespace Mean
 	using GetComponent_fn = void* (*)(cedar::Entity, const char*);
 	using AddComponent_fn = void (*)(cedar::Entity, const char*, const void* data, int size);
 
+	//log function
+	using Log_fn = void (*)(const char*, cedar::LogLevel);
+
 	//Keyboard functions:
 	using IsKeyPressed_fn = bool (*)(const cedar::KeyCode);
 	using IsKeyReleased_fn = bool (*)(const cedar::KeyCode);
@@ -38,6 +41,9 @@ namespace Mean
 		MeanString_GetString_fn GetMeanStringFn;
 		MeanString_SetString_fn SetMeanStringfn;
 		MeanString_GetSize_fn GetMeanStringSizeFn;
+
+		//Log
+		Log_fn LogFn;
 	};
 
 	extern "C"
@@ -51,6 +57,8 @@ namespace Mean
 		void* GetComponent(cedar::Entity entity, const char* typeName);
 
 		void AddComponent(cedar::Entity entity, const char* typeName, const void* data, int size);
+
+		void Log(const char* msg, cedar::LogLevel level);
 	}
 
 	// std::tuple<double, double> GetEntityPosition(Entity entity)

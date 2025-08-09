@@ -8,25 +8,25 @@ public class Tank : MeanScriptBehaviour
     private SpriteComponent spriteComponent;
     public override void OnStart()
     {
-        Console.WriteLine($"[Tank] OnStart, is bound to entity with id: {Entity.Id}");
-        Console.WriteLine($"Tank starting position is: x: {Transform.Position.X}, y:{Transform.Position.Y}");
+        Log.Warn($"[Tank] OnStart, is bound to entity with id: {Entity.Id}");
+        Log.Warn($"Tank starting position is: x: {Transform.Position.X}, y:{Transform.Position.Y}");
 
         spriteComponent = GetComponent<SpriteComponent>();
-        Console.WriteLine($"SpriteComponent width: {spriteComponent.Width}");
-        Console.WriteLine($"SpriteComponent height: {spriteComponent.Height}");
-        Console.WriteLine($"SpriteComponent zindex: {spriteComponent.Zindex}");
-        Console.WriteLine($"SpriteComponent sdl.x: {spriteComponent.SrcRect.x}");
-        Console.WriteLine($"SpriteComponent sdl.y: {spriteComponent.SrcRect.y}");
-        Console.WriteLine($"SpriteComponent sdl.w: {spriteComponent.SrcRect.w}");
-        Console.WriteLine($"SpriteComponent sdl.h: {spriteComponent.SrcRect.h}");
-        Console.WriteLine($"SpriteComponent Texture id: {spriteComponent.TextureId}");
+        Log.Warn($"SpriteComponent width: {spriteComponent.Width}");
+        Log.Warn($"SpriteComponent height: {spriteComponent.Height}");
+        Log.Warn($"SpriteComponent zindex: {spriteComponent.Zindex}");
+        Log.Warn($"SpriteComponent sdl.x: {spriteComponent.SrcRect.x}");
+        Log.Warn($"SpriteComponent sdl.y: {spriteComponent.SrcRect.y}");
+        Log.Warn($"SpriteComponent sdl.w: {spriteComponent.SrcRect.w}");
+        Log.Warn($"SpriteComponent sdl.h: {spriteComponent.SrcRect.h}");
+        Log.Warn($"SpriteComponent Texture id: {spriteComponent.TextureId}");
 
         spriteComponent.TextureId = "tank-panther-left";
     }
 
     public override void OnUpdate(float deltaTime)
     {
-        // Console.WriteLine($"Transform pos at x: {transform.Position.X} and y: {transform.Position.Y}");
+        // Log.Warn($"Transform pos at x: {transform.Position.X} and y: {transform.Position.Y}");
         var xPos = Transform.Position.X;
         var yPos = Transform.Position.Y;
 
@@ -56,13 +56,13 @@ public class Tank : MeanScriptBehaviour
 
         if (Input.IsKeyReleased(Key.A))
         {
-            Console.WriteLine("A was released");
+            Log.Warn("A was released");
         }
 
         if (Input.IsKeyRepeated(Key.Space))
         {
-            Console.WriteLine("Space is being repeated");
-            Console.WriteLine($"Deltatime is: {deltaTime}");
+            Log.Warn("Space is being repeated");
+            Log.Warn($"Deltatime is: {deltaTime}");
 
         }
 
