@@ -14,6 +14,13 @@ class CederVaultRecipe(ConanFile):
         self.requires("sdl_image/2.6.3")
         self.requires("sol2/3.3.1")
         self.requires("glm/cci.20230113")
+        self.requires("imgui/cci.20230105+1.89.2.docking")
+
+    def generate(self):
+        copy(self, "*sdl*", os.path.join(self.dependencies["imgui"].package_folder,
+            "res", "bindings"), os.path.join(f"{self.source_folder}/Engine/vendor/imgui", "bindings"))
+        copy(self, "*opengl3*", os.path.join(self.dependencies["imgui"].package_folder,
+            "res", "bindings"), os.path.join(f"{self.source_folder}/Engine/vendor/imgui", "bindings"))
 
 
     def layout(self):

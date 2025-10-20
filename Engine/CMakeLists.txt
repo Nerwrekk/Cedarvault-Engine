@@ -41,6 +41,7 @@ find_package(SDL2_image REQUIRED)
 find_package(sol2 REQUIRED)
 find_package(glm REQUIRED)
 find_package(spdlog REQUIRED)
+find_package(imgui REQUIRED)
 
 # Find nethost.lib (used to locate .NET runtime)
 if(WIN32)
@@ -63,6 +64,7 @@ endif()
 # includes directories
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor
     ${CMAKE_CURRENT_BINARY_DIR}/include
     ${CONAN_INCLUDE_DIRS}
     ${NETHOST_NATIVE_PATH}
@@ -88,4 +90,5 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     SDL2_image::SDL2_image
     sol2::sol2
     glm::glm
+    imgui::imgui
 )
