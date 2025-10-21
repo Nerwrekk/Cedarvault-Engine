@@ -75,24 +75,21 @@ namespace cedar
 		GameSetting.WindowWidth = windowInit.WindowWidth;
 		GameSetting.WindowHeight = windowInit.WindowHeight;
 
-		m_renderer = SDL_CreateRenderer(
-		    m_window,
-		    -1,                                                  //Get default one
-		    SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC //no flags
-		);
-
-		//Init the camera
-		m_camera.x = 0;
-		m_camera.y = 0;
-		m_camera.w = windowInit.WindowWidth;
-		m_camera.h = windowInit.WindowHeight;
-
+		//SDL will be smart enough to go and take advantage of accelerated graphics by whatever is avaiable on the current maching
+		//its thanks to the flag SDL_RENDERER_ACCELERATED, but it will be activated by default
+		m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 		if (!m_renderer)
 		{
 			CEDAR_FATAL("Error creating SDL renderer");
 
 			return;
 		}
+
+		//Init the camera
+		m_camera.x = 0;
+		m_camera.y = 0;
+		m_camera.w = windowInit.WindowWidth;
+		m_camera.h = windowInit.WindowHeight;
 
 		Input::InitKeyStates();
 
@@ -117,8 +114,8 @@ namespace cedar
 		ImGuiIO& io = ImGui::GetIO();
 		(void)io;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad; // Enable Gamepad Controls
-		// io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;    // Enable Docking
-		// io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;  // Enable Multi-Viewport / Platform Windows
+		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;    // Enable Docking
+		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;  // Enable Multi-Viewport / Platform Windows
 		// io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
 		// io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 

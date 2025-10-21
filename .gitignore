@@ -32,8 +32,9 @@ CMakeUserPresets.json
 # Visual Studio Code
 /.cache/
 
-# Visual Studio build directory
+# Visual Studio
 /out/
+launchSettings.json
 
 # clang-tidy output
 /clang-tidy-fixes.patch
