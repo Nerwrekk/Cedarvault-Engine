@@ -25,7 +25,7 @@ namespace Mindi
 	class json_node;
 
 	using json_object = json_node;
-	using json_array = std::vector<json_node*>;
+	using json_array  = std::vector<json_node*>;
 
 	class json_node
 	{
@@ -69,7 +69,7 @@ namespace Mindi
 		template <typename T>
 		void append_to_array(T raw_value)
 		{
-			json_node* node = new json_node();
+			json_node* node   = new json_node();
 			node->parent_node = this;
 
 			if constexpr (std::is_integral_v<T>)
@@ -100,10 +100,10 @@ namespace Mindi
 		template <typename T>
 		void append_nested_array(std::vector<T>&& arr)
 		{
-			const auto arr_type = *typeid(arr.at(0)).name();
+			// const auto arr_type = *typeid(arr.at(0)).name();
 
 			json_node nested_node(this);
-			nested_node.type = json_type::Array;
+			nested_node.type      = json_type::Array;
 			nested_node.m_content = new json_array();
 			for (T& element : arr)
 			{
