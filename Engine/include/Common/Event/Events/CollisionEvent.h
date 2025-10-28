@@ -7,6 +7,8 @@ namespace cedar
 {
 	struct CollisionEvent : public IEvent
 	{
+		DECL_TYPE_NAME(CollisionEvent);
+
 		Entity First;
 		Entity Second;
 

@@ -26,9 +26,9 @@ int main()
 	assetManager.LoadConfigurations("./assets/configurations");
 	assetManager.LoadLevel("JungleLevel", 0);
 
-	// cedar::EventBus::Inst()->Subscribe<cedar::CollisionEvent>(&::test);
-	// cedar::EventBus::Inst()->Subscribe<cedar::KeyPressEvent>(&::testKeyboard);
-	// cedar::EventBus::Inst()->Unsubscribe<cedar::CollisionEvent>(&::test);
+	cedar::EventBus::Inst()->Subscribe<cedar::CollisionEvent>(&::test);
+	cedar::EventBus::Inst()->Subscribe<cedar::KeyPressEvent>(&::testKeyboard);
+	cedar::EventBus::Inst()->Unsubscribe<cedar::CollisionEvent>(&::test);
 	app.Setup([&]()
 	{
 		auto tank = app.Manager()->CreateEntity();

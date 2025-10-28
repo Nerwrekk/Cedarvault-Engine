@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Common/Core.h"
+
 namespace cedar
 {
 	struct IEvent

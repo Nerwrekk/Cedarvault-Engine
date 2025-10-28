@@ -4,6 +4,8 @@ namespace cedar
 {
 	struct KeyRepeatEvent : IEvent
 	{
+		DECL_TYPE_NAME(KeyRepeatEvent);
+
 		KeyRepeatEvent(int key)
 		    : Key(key) {}
 
@@ -12,6 +14,8 @@ namespace cedar
 
 	struct KeyPressEvent : IEvent
 	{
+		DECL_TYPE_NAME(KeyPressEvent);
+
 		KeyPressEvent(int key)
 		    : Key(key) {}
 
@@ -20,6 +24,8 @@ namespace cedar
 
 	struct KeyReleaseEvent : IEvent
 	{
+		DECL_TYPE_NAME(KeyReleaseEvent);
+
 		KeyReleaseEvent(int key)
 		    : Key(key) {}
 

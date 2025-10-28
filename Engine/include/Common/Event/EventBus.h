@@ -2,6 +2,8 @@
 
 #include "Events/IEvent.h"
 #include "EventCallback.h"
+#include "EventRegistry.h"
+#include "CedarAssert.h"
 
 #include <typeindex>
 #include <list>
@@ -36,7 +38,10 @@ namespace cedar
 		// void EventBus::PostEvent(TEvent& event);
 
 		// template <typename TEvent>
-		// void EventBus::PostEvent(TEvent& event);
+		// void EventBus::PostEvent(TEvent&& event);
+
+		template <typename TEvent, typename... Args>
+		void PostEvent(Args&&... args);
 
 		template <typename TEvent>
 		void EmitEvent(TEvent& event);
@@ -44,77 +49,115 @@ namespace cedar
 		template <typename TEvent>
 		void EmitEvent(TEvent&& event);
 
+		template <typename Event>
+		EventRegistry<Event>* GetRegistry();
+
+		template <typename Event>
+		EventRegistry<Event>* CastRegistry(void* ptr);
+
 	private:
-		// std::unordered_map<std::type_index, std::list<std::function<void(IEvent*)>>> m_subscibedCallbacks;
-		std::unordered_map<std::type_index, std::list<std::unique_ptr<IEventCallback>>> m_subscibedCallbacks;
-		// std::queue<std::unique_ptr<Event>> m_eventQueue;
+		std::unordered_map<uint32_t, void*> m_eventRegistries;
 		static EventBus* s_EventBus;
 	};
+
+	//tries to find the registry based on the event thats passed in the template
+	template <typename Event>
+	EventRegistry<Event>* EventBus::GetRegistry()
+	{
+		CEDAR_STATIC_ASSERT(std::is_base_of<IEvent, Event>::value);
+
+		auto eventID = TypeIdOf<Event>();
+		//check if EventRegistry already exists
+		auto it = m_eventRegistries.find(eventID);
+		if (it != m_eventRegistries.end())
+		{
+			return CastRegistry<Event>(it->second);
+		}
+
+		//It does not exist so we create a new one and return it
+		auto registry              = new EventRegistry<Event>();
+		m_eventRegistries[eventID] = registry;
+
+		return registry;
+	}
+
+	template <typename Event>
+	EventRegistry<Event>* EventBus::CastRegistry(void* ptr)
+	{
+		return static_cast<EventRegistry<Event>*>(ptr);
+	}
 
 	template <typename TEvent, typename TOwner>
 	void EventBus::Subscribe(TOwner* owner, void (TOwner::*memberCallbackFunction)(TEvent&))
 	{
-		m_subscibedCallbacks[typeid(TEvent)].push_back(std::make_unique<EventCallBack<TOwner, TEvent>>(owner, memberCallbackFunction));
+		EventRegistry<TEvent>* registry = GetRegistry<TEvent>();
+		registry->Listeners.push_back(std::make_unique<EventCallBack<TOwner, TEvent>>(owner, memberCallbackFunction));
 	}
 
 	template <typename TEvent>
 	void EventBus::Subscribe(void (*freeCallbackFunction)(TEvent&))
 	{
-		m_subscibedCallbacks[typeid(TEvent)].push_back(std::make_unique<EventCallBack<EventBus, TEvent>>(freeCallbackFunction));
+		EventRegistry<TEvent>* registry = GetRegistry<TEvent>();
+		registry->Listeners.push_back(std::make_unique<EventCallBack<EventBus, TEvent>>(freeCallbackFunction));
 	}
 
 	template <typename TEvent, typename TOwner>
 	void EventBus::Unsubscribe(TOwner* owner, void (TOwner::*memberCallbackFunction)(TEvent&))
 	{
-		auto& eventCallbacks = m_subscibedCallbacks[typeid(TEvent)];
-		auto it = std::find_if(eventCallbacks.begin(), eventCallbacks.end(),
+		EventRegistry<TEvent>* registry = GetRegistry<TEvent>();
+
+		auto it = std::find_if(registry->Listeners.begin(), registry->Listeners.end(),
 		    [&](std::unique_ptr<IEventCallback>& callback)
 		{
 			auto iEventCallback = callback.get();
-			auto eventCallback = reinterpret_cast<EventCallBack<TOwner, TEvent>*>(iEventCallback);
+			auto eventCallback  = reinterpret_cast<EventCallBack<TOwner, TEvent>*>(iEventCallback);
+
 			return eventCallback->GetMemberFunc() == memberCallbackFunction;
 		});
 
-		if (it != eventCallbacks.end())
+		if (it != registry->Listeners.end())
 		{
-			eventCallbacks.erase(it); // Unique pointer gets destroyed here
+			registry->Listeners.erase(it); // Unique pointer gets destroyed here
 		}
 	}
 
 	template <typename TEvent>
 	void EventBus::Unsubscribe(void (*freeCallbackFunction)(TEvent&))
 	{
-		auto& eventCallbacks = m_subscibedCallbacks[typeid(TEvent)];
-		auto it = std::find_if(eventCallbacks.begin(), eventCallbacks.end(),
+		EventRegistry<TEvent>* registry = GetRegistry<TEvent>();
+
+		auto it = std::find_if(registry->Listeners.begin(), registry->Listeners.end(),
 		    [&](std::unique_ptr<IEventCallback>& callback)
 		{
 			auto iEventCallback = callback.get();
-			auto eventCallback = reinterpret_cast<EventCallBack<EventBus, TEvent>*>(iEventCallback);
+			auto eventCallback  = reinterpret_cast<EventCallBack<EventBus, TEvent>*>(iEventCallback);
+
 			return eventCallback->GetFreeFunc() == freeCallbackFunction;
 		});
 
-		if (it != eventCallbacks.end())
+		if (it != registry->Listeners.end())
 		{
-			eventCallbacks.erase(it); // Unique pointer gets destroyed here
+			registry->Listeners.erase(it); // Unique pointer gets destroyed here
 		}
 	}
 
-	// template <typename TEvent>
-	// void EventBus::PostEvent(TEvent& event)
-	// {
-	// 	auto& eventCallbacks = m_subscibedCallbacks[typeid(TEvent)];
-	// 	for (auto it = eventCallbacks.begin(); it != eventCallbacks.end(); it++)
-	// 	{
-	// 		auto handler = it->get();
-	// 		handler->Exectue(event);
-	// 	}
-	// }
+	template <typename TEvent, typename... Args>
+	void EventBus::PostEvent(Args&&... args)
+	{
+		EventRegistry<TEvent>* registry = GetRegistry<TEvent>();
+		if (registry->Listeners.empty())
+		{
+			return;
+		}
+
+		registry->EventQueue.push(std::make_unique<TEvent>(std::forward<Args>(args)...));
+	}
 
 	template <typename TEvent>
 	void EventBus::EmitEvent(TEvent& event)
 	{
-		auto& eventCallbacks = m_subscibedCallbacks[typeid(TEvent)];
-		for (auto it = eventCallbacks.begin(); it != eventCallbacks.end(); it++)
+		EventRegistry<TEvent>* registry = GetRegistry<TEvent>();
+		for (auto it = registry->Listeners.begin(); it != registry->Listeners.end(); it++)
 		{
 			auto handler = it->get();
 			handler->Exectue(event);
@@ -124,8 +167,8 @@ namespace cedar
 	template <typename TEvent>
 	void EventBus::EmitEvent(TEvent&& event)
 	{
-		auto& eventCallbacks = m_subscibedCallbacks[typeid(TEvent)];
-		for (auto it = eventCallbacks.begin(); it != eventCallbacks.end(); it++)
+		EventRegistry<TEvent>* registry = GetRegistry<TEvent>();
+		for (auto it = registry->Listeners.begin(); it != registry->Listeners.end(); it++)
 		{
 			auto handler = it->get();
 			handler->Exectue(event);
