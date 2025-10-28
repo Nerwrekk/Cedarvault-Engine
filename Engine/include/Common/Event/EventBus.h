@@ -32,6 +32,12 @@ namespace cedar
 		template <typename TEvent>
 		void Unsubscribe(void (*freeCallbackFunction)(TEvent&));
 
+		// template <typename TEvent>
+		// void EventBus::PostEvent(TEvent& event);
+
+		// template <typename TEvent>
+		// void EventBus::PostEvent(TEvent& event);
+
 		template <typename TEvent>
 		void EmitEvent(TEvent& event);
 
@@ -41,7 +47,7 @@ namespace cedar
 	private:
 		// std::unordered_map<std::type_index, std::list<std::function<void(IEvent*)>>> m_subscibedCallbacks;
 		std::unordered_map<std::type_index, std::list<std::unique_ptr<IEventCallback>>> m_subscibedCallbacks;
-
+		// std::queue<std::unique_ptr<Event>> m_eventQueue;
 		static EventBus* s_EventBus;
 	};
 
@@ -92,6 +98,17 @@ namespace cedar
 			eventCallbacks.erase(it); // Unique pointer gets destroyed here
 		}
 	}
+
+	// template <typename TEvent>
+	// void EventBus::PostEvent(TEvent& event)
+	// {
+	// 	auto& eventCallbacks = m_subscibedCallbacks[typeid(TEvent)];
+	// 	for (auto it = eventCallbacks.begin(); it != eventCallbacks.end(); it++)
+	// 	{
+	// 		auto handler = it->get();
+	// 		handler->Exectue(event);
+	// 	}
+	// }
 
 	template <typename TEvent>
 	void EventBus::EmitEvent(TEvent& event)

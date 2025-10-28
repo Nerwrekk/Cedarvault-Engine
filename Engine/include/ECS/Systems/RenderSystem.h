@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ECS/Components/Components.h"
-#include "Application.h"
+#include "Application/Application.h"
 #include "Common/SDL_Wrapper.h"
 #include "Common/AssetManager.h"
 

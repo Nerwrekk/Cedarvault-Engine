@@ -11,10 +11,10 @@
 
 namespace constants
 {
-	inline extern const char* const RigidBodyComponent = "RigidBodyComponent";
-	inline extern const char* const SpriteComponent = "SpriteComponent";
-	inline extern const char* const AnimationComponent = "AnimationComponent";
-	inline extern const char* const BoxColliderComponent = "BoxColliderComponent";
-	inline extern const char* const ScriptComponent = "ScriptComponent";
-	inline extern const char* const CameraFollowComponent = "CameraFollowComponent";
+	inline extern const char* const RigidBodyComponent    = GET_NAME_LITERAL(RigidBodyComponent);
+	inline extern const char* const SpriteComponent       = GET_NAME_LITERAL(SpriteComponent);
+	inline extern const char* const AnimationComponent    = GET_NAME_LITERAL(AnimationComponent);
+	inline extern const char* const BoxColliderComponent  = GET_NAME_LITERAL(BoxColliderComponent);
+	inline extern const char* const ScriptComponent       = GET_NAME_LITERAL(ScriptComponent);
+	inline extern const char* const CameraFollowComponent = GET_NAME_LITERAL(CameraFollowComponent);
 }

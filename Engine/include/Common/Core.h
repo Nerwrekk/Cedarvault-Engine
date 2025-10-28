@@ -14,3 +14,12 @@
 		#define CEDAR_API
 	#endif
 #endif
+
+//This macro is required for types that needs a unique ID during runtime through TypeRegistry
+#define DECL_TYPE_NAME(Type)                   \
+	static constexpr const char* GetTypeName() \
+	{                                          \
+		return #Type;                          \
+	}
+
+#define GET_NAME_LITERAL(T) #T

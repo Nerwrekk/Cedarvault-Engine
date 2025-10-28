@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Common/Core.h"
-#include "ECS/Components/Component.h"
 #include "ECS/Pool.h"
 #include "Common/Logger.h"
+#include "Registry/TypeRegistry.h"
 
 #include <vector>
 #include <cstdint>
@@ -83,7 +83,7 @@ namespace cedar
 		template <typename T>
 		void RequireComponent()
 		{
-			const auto componentId = Component<T>::GetId();
+			const auto componentId = TypeIdOf<T>();
 			m_ComponentSignature.set(componentId);
 		}
 
@@ -112,8 +112,8 @@ namespace cedar
 		template <typename TComponent>
 		void RemoveComponent(Entity entity)
 		{
-			const auto componentId = Component<TComponent>::GetId();
-			const auto entityId = entity.GetId();
+			const auto componentId = TypeIdOf<TComponent>();
+			const auto entityId    = entity.GetId();
 
 			m_entityComponentSignatures[entityId].set(componentId, false);
 		}
@@ -121,8 +121,8 @@ namespace cedar
 		template <typename TComponent>
 		bool HasComponent(Entity entity) const
 		{
-			const auto componentId = Component<TComponent>::GetId();
-			const auto entityId = entity.GetId();
+			const auto componentId = TypeIdOf<TComponent>();
+			const auto entityId    = entity.GetId();
 
 			return m_entityComponentSignatures[entityId].test(componentId);
 		}
@@ -130,8 +130,8 @@ namespace cedar
 		template <typename TComponent>
 		TComponent* GetComponent(Entity entity) const
 		{
-			const auto componentId = Component<TComponent>::GetId();
-			const auto entityId = entity.GetId();
+			const auto componentId = TypeIdOf<TComponent>();
+			const auto entityId    = entity.GetId();
 			if (HasComponent<TComponent>(entity))
 			{
 				auto component = std::static_pointer_cast<Pool<TComponent>>(m_ComponentPools[componentId]);
@@ -227,8 +227,9 @@ namespace cedar
 	template <typename TComponent, typename... TArgs>
 	void EntityManager::AddComponent(Entity entity, TArgs&&... args)
 	{
-		auto componentId = Component<TComponent>::GetId();
-		const auto entityId = entity.GetId();
+		// auto componentId    = Component<TComponent>::GetId();
+		const auto componentId = TypeIdOf<TComponent>();
+		const auto entityId    = entity.GetId();
 
 		if (componentId >= m_ComponentPools.size())
 		{
@@ -238,7 +239,7 @@ namespace cedar
 		//If we don't have a pool yet for this component type
 		if (!m_ComponentPools[componentId])
 		{
-			auto newComponentPool = std::make_shared<Pool<TComponent>>();
+			auto newComponentPool         = std::make_shared<Pool<TComponent>>();
 			m_ComponentPools[componentId] = newComponentPool;
 		}
 

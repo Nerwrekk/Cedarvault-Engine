@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Application.h"
+#include "Application/Application.h"
 #include "Common/Logger.h"
 #include "ECS/ECS.h"
 #include "ECS/Components/Components.h"

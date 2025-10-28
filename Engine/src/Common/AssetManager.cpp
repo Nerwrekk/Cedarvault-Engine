@@ -2,7 +2,7 @@
 #include "Common/Logger.h"
 #include "Common/Utils.h"
 #include "Common/Mindi/Mindi.h"
-#include "Application.h"
+#include "Application/Application.h"
 
 #include <iostream>
 #include <fstream>
@@ -160,7 +160,7 @@ namespace cedar
 					Mindi::json_node currentConfigNode {};
 					if (!Mindi::json_reader::read(dirEntry.path().string(), &currentConfigNode))
 					{
-						CEDAR_FATAL("Failed to load in config gile: {}", fileName);
+						CEDAR_FATAL("Failed to load in config file: {}", fileName);
 					}
 					//Config section
 					auto tileLevelMap = new TileLevelMap();

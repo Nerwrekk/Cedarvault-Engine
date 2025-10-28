@@ -1,11 +1,14 @@
 #pragma once
 
+#include "Common/Core.h"
 #include "Common/SDL_Wrapper.h"
 
 namespace cedar
 {
 	struct AnimationComponent
 	{
+		DECL_TYPE_NAME(AnimationComponent);
+
 		int NumOfFrames;
 		int CurrentFrame;
 		int FrameRateSpeed;
@@ -14,11 +17,11 @@ namespace cedar
 
 		AnimationComponent(int numOfFrames = 1, int frameRateSpeed = 1, bool shouldLoop = false)
 		{
-			this->NumOfFrames = numOfFrames;
-			this->CurrentFrame = 1;
+			this->NumOfFrames    = numOfFrames;
+			this->CurrentFrame   = 1;
 			this->FrameRateSpeed = frameRateSpeed;
-			this->ShouldLoop = shouldLoop;
-			this->StartTime = SDL_GetTicks();
+			this->ShouldLoop     = shouldLoop;
+			this->StartTime      = SDL_GetTicks();
 		}
 	};
 } // namespace cedar
