@@ -8,6 +8,8 @@ namespace cedar
 	class MovementSystem : public BaseSystem
 	{
 	public:
+		DECL_TYPE_NAME(MovementSystem);
+
 		MovementSystem()
 		{
 			RequireComponent<TransformComponent>();

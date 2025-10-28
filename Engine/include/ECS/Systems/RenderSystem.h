@@ -12,6 +12,8 @@ namespace cedar
 	class RenderSystem : public BaseSystem
 	{
 	public:
+		DECL_TYPE_NAME(RenderSystem);
+
 		RenderSystem()
 		{
 			RequireComponent<TransformComponent>();
@@ -29,10 +31,10 @@ namespace cedar
 			//Sort all entities based on ZIndex and Y transformPosition
 			std::sort(entities.begin(), entities.end(), [](const Entity& first, const Entity& second)
 			{
-				auto firstEntityTransform = first.GetComponent<TransformComponent>();
+				auto firstEntityTransform       = first.GetComponent<TransformComponent>();
 				auto firstEntitySpriteComponent = first.GetComponent<SpriteComponent>();
 
-				auto secondEntityTransform = second.GetComponent<TransformComponent>();
+				auto secondEntityTransform       = second.GetComponent<TransformComponent>();
 				auto secondEntitySpriteComponent = second.GetComponent<SpriteComponent>();
 
 				//first check if they have the same Zindex
@@ -55,7 +57,7 @@ namespace cedar
 			auto camera = Application::Get().Camera();
 			for (auto& entity : GetSystemEntities())
 			{
-				auto transform = entity.GetComponent<TransformComponent>();
+				auto transform       = entity.GetComponent<TransformComponent>();
 				auto spriteComponent = entity.GetComponent<SpriteComponent>();
 
 				SDL_Texture* texture = AssetManager::Inst()->GetTexture(spriteComponent->TextureId.GetString());

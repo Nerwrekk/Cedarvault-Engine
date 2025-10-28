@@ -13,6 +13,8 @@ namespace cedar
 	class ScriptSystem : public BaseSystem
 	{
 	public:
+		DECL_TYPE_NAME(ScriptSystem);
+
 		ScriptSystem(Luie::ScriptEngine* scriptEngine)
 		{
 			p_luieEngine = scriptEngine;
@@ -64,8 +66,8 @@ namespace cedar
 
 			for (auto& script : scriptComp->Scripts)
 			{
-				auto& lua = p_luieEngine->GetLuaState();
-				sol::table scriptClass = lua[script];
+				auto& lua                 = p_luieEngine->GetLuaState();
+				sol::table scriptClass    = lua[script];
 				sol::function constructor = scriptClass["new"];
 
 				if (!constructor.valid())

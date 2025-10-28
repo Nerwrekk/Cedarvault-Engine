@@ -10,6 +10,8 @@ namespace cedar
 	class CameraFollowSystem : public BaseSystem
 	{
 	public:
+		DECL_TYPE_NAME(CameraFollowSystem);
+
 		CameraFollowSystem()
 		{
 			RequireComponent<CameraFollowComponent>();
@@ -18,7 +20,7 @@ namespace cedar
 
 		virtual void Update() override
 		{
-			auto camera = Application::Get().Camera();
+			auto camera      = Application::Get().Camera();
 			auto gameSetting = &Application::Get().GameSetting;
 			for (auto entity : GetSystemEntities())
 			{

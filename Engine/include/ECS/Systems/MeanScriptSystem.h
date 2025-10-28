@@ -11,6 +11,8 @@ namespace cedar
 	class MeanScriptSystem : public BaseSystem
 	{
 	public:
+		DECL_TYPE_NAME(MeanScriptSystem);
+
 		MeanScriptSystem()
 		{
 			RequireComponent<ScriptComponent>();

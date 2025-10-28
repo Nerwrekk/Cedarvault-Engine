@@ -145,7 +145,7 @@ namespace cedar
 		template <typename TSystem, typename... TArgs>
 		void AddSystem(TArgs&&... args)
 		{
-			auto system = m_systems.find(std::type_index(typeid(TSystem)));
+			auto system = m_systems.find(TypeIdOf<TSystem>());
 			if (system != m_systems.end())
 			{
 				//System already added so we can return
@@ -155,14 +155,14 @@ namespace cedar
 			else
 			{
 				auto newSystem = std::make_shared<TSystem>(std::forward<TArgs>(args)...);
-				m_systems.insert(std::make_pair(std::type_index(typeid(TSystem)), newSystem));
+				m_systems.insert(std::make_pair(TypeIdOf<TSystem>(), newSystem));
 			}
 		}
 
 		template <typename TSystem>
 		void RemoveSystem()
 		{
-			auto system = m_systems.find(std::type_index(typeid(TSystem)));
+			auto system = m_systems.find(TypeIdOf<TSystem>());
 			if (system != m_systems.end())
 			{
 				m_systems.erase(system);
@@ -172,14 +172,14 @@ namespace cedar
 		template <typename TSystem>
 		bool HasSystem() const
 		{
-			auto system = m_systems.find(std::type_index(typeid(TSystem)));
+			auto system = m_systems.find(TypeIdOf<TSystem>());
 			return (system != m_systems.end());
 		}
 
 		template <typename TSystem>
 		std::shared_ptr<TSystem> GetSystem() const
 		{
-			auto system = m_systems.find(std::type_index(typeid(TSystem)));
+			auto system = m_systems.find(TypeIdOf<TSystem>());
 			if (system != m_systems.end())
 			{
 				return std::static_pointer_cast<TSystem>(system->second);
@@ -219,7 +219,7 @@ namespace cedar
 		//Vector index == entity id
 		std::vector<Signature> m_entityComponentSignatures;
 
-		std::unordered_map<std::type_index, std::shared_ptr<BaseSystem>> m_systems;
+		std::unordered_map<uint32_t, std::shared_ptr<BaseSystem>> m_systems;
 
 		static EntityManager* s_EntityManager;
 	};

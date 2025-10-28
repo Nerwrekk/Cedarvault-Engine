@@ -10,6 +10,8 @@ namespace cedar
 	class CollisionSystem : public BaseSystem
 	{
 	public:
+		DECL_TYPE_NAME(CollisionSystem);
+
 		CollisionSystem()
 		{
 			RequireComponent<TransformComponent>();
@@ -30,13 +32,13 @@ namespace cedar
 			auto entities = GetSystemEntities();
 			for (auto it = entities.begin(); it != entities.end(); it++)
 			{
-				auto entity1 = *it;
-				auto transComp1 = entity1.GetComponent<TransformComponent>();
+				auto entity1      = *it;
+				auto transComp1   = entity1.GetComponent<TransformComponent>();
 				auto boxCollComp1 = entity1.GetComponent<BoxColliderComponent>();
 				for (auto jt = (it + 1); jt != entities.end(); jt++)
 				{
-					auto entity2 = *jt;
-					auto transComp2 = entity2.GetComponent<TransformComponent>();
+					auto entity2      = *jt;
+					auto transComp2   = entity2.GetComponent<TransformComponent>();
 					auto boxCollComp2 = entity2.GetComponent<BoxColliderComponent>();
 
 					auto entity1PosX = transComp1->Position.x + boxCollComp1->Offset.x;
