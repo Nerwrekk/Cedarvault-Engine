@@ -43,7 +43,7 @@ int main()
 		truck.GetComponent<cedar::TransformComponent>()->Position = { 0, 10 };
 		truck.AddComponent<cedar::BoxColliderComponent>(32, 32, glm::vec2(0, 0));
 		truck.AddComponent<cedar::ScriptComponent>(std::vector<std::string> { "Tank" });
-		// truck.AddComponent<cedar::CameraFollowComponent>();
+		truck.AddComponent<cedar::CameraFollowComponent>();
 
 		for (int i = 0; i < 10; i++)
 		{

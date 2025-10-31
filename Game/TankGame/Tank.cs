@@ -30,25 +30,27 @@ public class Tank : MeanScriptBehaviour
         var xPos = Transform.Position.X;
         var yPos = Transform.Position.Y;
 
-        UpdateSprite();
-
         if (Input.IsKeyRepeated(Key.A))
         {
+            spriteComponent.TextureId = "tank-panther-left";
             xPos = xPos - (this.moveSpeed * deltaTime);
         }
 
         if (Input.IsKeyRepeated(Key.D))
         {
+            spriteComponent.TextureId = "tank-panther-right";
             xPos = xPos + (this.moveSpeed * deltaTime);
         }
 
         if (Input.IsKeyRepeated(Key.W))
         {
+            spriteComponent.TextureId = "tank-panther-up";
             yPos = yPos - (this.moveSpeed * deltaTime);
         }
 
         if (Input.IsKeyRepeated(Key.S))
         {
+            spriteComponent.TextureId = "tank-panther-down";
             yPos = yPos + (this.moveSpeed * deltaTime);
         }
 
@@ -62,31 +64,9 @@ public class Tank : MeanScriptBehaviour
             Log.Warn("Space is being repeated");
             Log.Warn($"Deltatime is: {deltaTime}");
 
+            Log.Warn($"Transform pos at x: {Transform.Position.X} and y: {Transform.Position.Y}");
         }
 
         SetEntityPosition(xPos, yPos);
-    }
-
-    private void UpdateSprite()
-    {
-        if (Input.IsKeyPressed(Key.A))
-        {
-            spriteComponent.TextureId = "tank-panther-left";
-        }
-
-        if (Input.IsKeyPressed(Key.D))
-        {
-            spriteComponent.TextureId = "tank-panther-right";
-        }
-
-        if (Input.IsKeyPressed(Key.W))
-        {
-            spriteComponent.TextureId = "tank-panther-up";
-        }
-
-        if (Input.IsKeyPressed(Key.S))
-        {
-            spriteComponent.TextureId = "tank-panther-down";
-        }
     }
 }
