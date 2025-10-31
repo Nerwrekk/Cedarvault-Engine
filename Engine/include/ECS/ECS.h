@@ -88,6 +88,7 @@ namespace cedar
 		}
 
 		virtual void Update() {};
+		virtual void LateUpdate() {};
 
 	protected:
 		Signature m_ComponentSignature;
@@ -198,6 +199,14 @@ namespace cedar
 			for (auto& [key, system] : m_systems)
 			{
 				system->Update();
+			}
+		}
+
+		void LateUpdateAllSystems()
+		{
+			for (auto& [key, system] : m_systems)
+			{
+				system->LateUpdate();
 			}
 		}
 

@@ -128,13 +128,41 @@ namespace cedar
 		// m_renderSystem.reset(renderSystem);
 	}
 
+	void Application::SleepIfNeeded()
+	{
+		//Locks execution until we meet out milliseconds criteria
+		int timeToWait = MILLISECS_PER_FRAME - (SDL_GetTicks() - previousMilliFrame);
+		if (timeToWait > 0 && timeToWait <= MILLISECS_PER_FRAME)
+		{
+			SDL_Delay(timeToWait);
+		}
+
+		// Note: if you use vsync, prefer to let the driver handle the cap and avoid SDL_Delay.
+	}
+
 	void Application::Run()
 	{
+		uint32_t next_game_tick = SDL_GetTicks();
+		int loops;
+		float interpolation;
+
 		while (m_isRunning)
 		{
 			ProccessInput();
-			Update();
-			Render();
+
+			loops = 0;
+			while (SDL_GetTicks() > next_game_tick && loops < MAX_FRAMESKIP)
+			{
+				Update();
+
+				next_game_tick += MILLISECS_PER_FRAME;
+				loops++;
+			}
+
+			interpolation = float(SDL_GetTicks() + MILLISECS_PER_FRAME - next_game_tick) / float(MILLISECS_PER_FRAME);
+			Render(interpolation);
+
+			SleepIfNeeded();
 		}
 	}
 
@@ -195,14 +223,17 @@ namespace cedar
 		m_eventBus->PollEvents();
 
 		m_entityManager->UpdateAllSystems();
+
+		m_entityManager->LateUpdateAllSystems();
+
 		m_entityManager->Update();
 
 		//Locks execution until we meet out milliseconds criteria
-		int timeToWait = MILLISECS_PER_FRAME - (SDL_GetTicks() - now);
-		if (timeToWait > 0 && timeToWait <= MILLISECS_PER_FRAME)
-		{
-			SDL_Delay(timeToWait);
-		}
+		// int timeToWait = MILLISECS_PER_FRAME - (SDL_GetTicks() - now);
+		// if (timeToWait > 0 && timeToWait <= MILLISECS_PER_FRAME)
+		// {
+		// 	SDL_Delay(timeToWait);
+		// }
 	}
 
 	void Application::RenderCurrentLevel(const std::string& tileLevelMapId, int levelIndex)
@@ -241,14 +272,14 @@ namespace cedar
 		}
 	}
 
-	void Application::Render()
+	void Application::Render(float interpolation)
 	{
 		SDL_SetRenderDrawColor(m_renderer, 21, 21, 21, 255);
 		SDL_RenderClear(m_renderer);
 
 		RenderCurrentLevel(GameSetting.CurrentLevel, GameSetting.CurrentLevelIndex);
 
-		m_renderSystem->RenderEntites(m_renderer);
+		m_renderSystem->RenderEntites(m_renderer, interpolation);
 
 		//TODO: fix proper imgui rendering
 		ImGui_ImplSDLRenderer_NewFrame();

@@ -72,7 +72,8 @@ namespace cedar
 		void ProccessInput();
 		void Update();
 		void RenderCurrentLevel(const std::string& tileLevelMapId, int levelIndex);
-		void Render();
+		void Render(float interpolation);
+		void SleepIfNeeded();
 
 	private:
 		std::unique_ptr<EntityManager> m_entityManager;

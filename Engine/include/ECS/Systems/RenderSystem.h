@@ -50,7 +50,7 @@ namespace cedar
 		}
 
 	public:
-		void RenderEntites(SDL_Renderer* renderer)
+		void RenderEntites(SDL_Renderer* renderer, float interpolation)
 		{
 			//Note to self, cant sort a const vector! ;)
 			SortEntities(GetSystemEntities());
