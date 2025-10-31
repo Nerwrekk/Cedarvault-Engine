@@ -26,7 +26,7 @@ namespace cedar
 	Application::Application()
 	{
 		m_entityManager = std::make_unique<EntityManager>();
-		m_eventBus = std::make_unique<EventBus>();
+		m_eventBus      = std::make_unique<EventBus>();
 		// m_luieScriptEngine = std::make_unique<Luie::ScriptEngine>();
 
 		s_Application = this;
@@ -61,7 +61,7 @@ namespace cedar
 
 		SDL_DisplayMode displayMode;
 		SDL_GetCurrentDisplayMode(0, &displayMode);
-		windowInit.WindowWidth = 800;
+		windowInit.WindowWidth  = 800;
 		windowInit.WindowHeight = 600;
 
 		m_window = SDL_CreateWindow(
@@ -72,7 +72,7 @@ namespace cedar
 		    windowInit.WindowHeight,
 		    0);
 
-		GameSetting.WindowWidth = windowInit.WindowWidth;
+		GameSetting.WindowWidth  = windowInit.WindowWidth;
 		GameSetting.WindowHeight = windowInit.WindowHeight;
 
 		//SDL will be smart enough to go and take advantage of accelerated graphics by whatever is avaiable on the current maching
@@ -168,8 +168,8 @@ namespace cedar
 				break;
 			//===== KEYBOARD EVENTS =====
 			case SDL_KEYDOWN: // A key was pressed.
-				sdlEvent.key.repeat ? m_eventBus->EmitEvent<KeyRepeatEvent>(KeyRepeatEvent(sdlEvent.key.keysym.sym)) :
-				                      m_eventBus->EmitEvent<KeyPressEvent>(KeyPressEvent(sdlEvent.key.keysym.sym));
+				sdlEvent.key.repeat ? m_eventBus->PostEvent<KeyRepeatEvent>(KeyRepeatEvent(sdlEvent.key.keysym.sym)) :
+				                      m_eventBus->PostEvent<KeyPressEvent>(KeyPressEvent(sdlEvent.key.keysym.sym));
 
 				if (sdlEvent.key.keysym.sym == SDLK_ESCAPE)
 				{
@@ -177,7 +177,7 @@ namespace cedar
 				}
 				break;
 			case SDL_KEYUP: // A key was released.
-				m_eventBus->EmitEvent<KeyReleaseEvent>(KeyReleaseEvent(sdlEvent.key.keysym.sym));
+				m_eventBus->PostEvent<KeyReleaseEvent>(KeyReleaseEvent(sdlEvent.key.keysym.sym));
 				break;
 			}
 		}
@@ -186,23 +186,23 @@ namespace cedar
 	//Update game objects
 	void Application::Update()
 	{
+		uint32_t now = SDL_GetTicks();
+		//difference in ticks from last frame, converted to seconds
+		float deltaTime    = (now - previousMilliFrame) / 1000.f;
+		Time::DeltaTime    = deltaTime;
+		previousMilliFrame = now;
+
+		m_eventBus->PollEvents();
+
+		m_entityManager->UpdateAllSystems();
+		m_entityManager->Update();
+
 		//Locks execution until we meet out milliseconds criteria
-		int timeToWait = MILLISECS_PER_FRAME - (SDL_GetTicks() - previousMilliFrame);
+		int timeToWait = MILLISECS_PER_FRAME - (SDL_GetTicks() - now);
 		if (timeToWait > 0 && timeToWait <= MILLISECS_PER_FRAME)
 		{
 			SDL_Delay(timeToWait);
 		}
-
-		//difference in ticks from last frame, converted to seconds
-		float deltaTime = (SDL_GetTicks() - previousMilliFrame) / 1000.f;
-
-		Time::DeltaTime = deltaTime;
-
-		previousMilliFrame = SDL_GetTicks();
-
-		m_entityManager->UpdateAllSystems();
-
-		m_entityManager->Update();
 	}
 
 	void Application::RenderCurrentLevel(const std::string& tileLevelMapId, int levelIndex)
@@ -216,9 +216,9 @@ namespace cedar
 			auto& colums = map.at(y);
 			for (int x = 0; x < colums.size(); x++)
 			{
-				int positionXY = colums.at(x);
-				int yPos = positionXY / 10;
-				int xPos = positionXY % 10;
+				int positionXY   = colums.at(x);
+				int yPos         = positionXY / 10;
+				int xPos         = positionXY % 10;
 				SDL_Rect srcRect = {
 					tileLevelMap->TileSize * xPos,
 					tileLevelMap->TileSize * yPos,

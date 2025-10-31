@@ -11,6 +11,7 @@
 #include <memory>
 #include <type_traits>
 #include <functional>
+#include <queue>
 
 namespace cedar
 {
@@ -43,6 +44,9 @@ namespace cedar
 		template <typename TEvent, typename... Args>
 		void PostEvent(Args&&... args);
 
+		template <typename Task>
+		void PostTask(Task&& task);
+
 		template <typename TEvent>
 		void EmitEvent(TEvent& event);
 
@@ -55,8 +59,11 @@ namespace cedar
 		template <typename Event>
 		EventRegistry<Event>* CastRegistry(void* ptr);
 
+		void PollEvents();
+
 	private:
 		std::unordered_map<uint32_t, void*> m_eventRegistries;
+		std::queue<std::function<void()>> m_task;
 		static EventBus* s_EventBus;
 	};
 
@@ -151,6 +158,13 @@ namespace cedar
 		}
 
 		registry->EventQueue.push(std::make_unique<TEvent>(std::forward<Args>(args)...));
+	}
+
+	//Task is a lambda function
+	template <typename Task>
+	void EventBus::PostTask(Task&& task)
+	{
+		m_task.push(std::move(task));
 	}
 
 	template <typename TEvent>

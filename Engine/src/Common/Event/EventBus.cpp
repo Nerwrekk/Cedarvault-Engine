@@ -16,5 +16,30 @@ namespace cedar
 	{
 		return s_EventBus;
 	}
+
+	void EventBus::PollEvents()
+	{
+		for (auto& [_, ptr] : m_eventRegistries)
+		{
+			auto registry = CastRegistry<uint8_t>(ptr);
+			while (!registry->EventQueue.empty())
+			{
+				for (auto& listener : registry->Listeners)
+				{
+					listener->Exectue(reinterpret_cast<IEvent&>(*registry->EventQueue.front()));
+				}
+
+				registry->EventQueue.pop();
+			}
+		}
+
+		//frame callbacks
+		while (!m_task.empty())
+		{
+			//Get first task function ptr and then call it directly!
+			m_task.front()();
+			m_task.pop();
+		}
+	}
 }
 // namespace cedar

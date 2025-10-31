@@ -27,7 +27,7 @@ namespace cedar
 
 		EventCallBack(TOwner* owner, MemberCallbackFunction callbackFunction)
 		{
-			this->m_ownerInst = owner;
+			this->m_ownerInst              = owner;
 			this->m_memberCallbackfunction = callbackFunction;
 
 			this->m_freeCallbackFunction = nullptr;
@@ -37,7 +37,7 @@ namespace cedar
 		{
 			this->m_freeCallbackFunction = freeCallbackFunction;
 
-			this->m_ownerInst = nullptr;
+			this->m_ownerInst              = nullptr;
 			this->m_memberCallbackfunction = nullptr;
 		}
 

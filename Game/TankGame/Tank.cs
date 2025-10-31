@@ -30,28 +30,26 @@ public class Tank : MeanScriptBehaviour
         var xPos = Transform.Position.X;
         var yPos = Transform.Position.Y;
 
+        UpdateSprite();
+
         if (Input.IsKeyRepeated(Key.A))
         {
             xPos = xPos - (this.moveSpeed * deltaTime);
-            spriteComponent.TextureId = "tank-panther-left";
         }
 
         if (Input.IsKeyRepeated(Key.D))
         {
             xPos = xPos + (this.moveSpeed * deltaTime);
-            spriteComponent.TextureId = "tank-panther-right";
         }
 
         if (Input.IsKeyRepeated(Key.W))
         {
             yPos = yPos - (this.moveSpeed * deltaTime);
-            spriteComponent.TextureId = "tank-panther-up";
         }
 
         if (Input.IsKeyRepeated(Key.S))
         {
             yPos = yPos + (this.moveSpeed * deltaTime);
-            spriteComponent.TextureId = "tank-panther-down";
         }
 
         if (Input.IsKeyReleased(Key.A))
@@ -67,5 +65,28 @@ public class Tank : MeanScriptBehaviour
         }
 
         SetEntityPosition(xPos, yPos);
+    }
+
+    private void UpdateSprite()
+    {
+        if (Input.IsKeyPressed(Key.A))
+        {
+            spriteComponent.TextureId = "tank-panther-left";
+        }
+
+        if (Input.IsKeyPressed(Key.D))
+        {
+            spriteComponent.TextureId = "tank-panther-right";
+        }
+
+        if (Input.IsKeyPressed(Key.W))
+        {
+            spriteComponent.TextureId = "tank-panther-up";
+        }
+
+        if (Input.IsKeyPressed(Key.S))
+        {
+            spriteComponent.TextureId = "tank-panther-down";
+        }
     }
 }
