@@ -11,7 +11,7 @@
 #include <memory>
 #include <typeindex>
 #include <typeinfo>
-#include <unordered_map>
+#include <map>
 #include <set>
 #include <deque>
 #include <functional>
@@ -212,6 +212,8 @@ namespace cedar
 
 		void RemoveEntityFromSystem(Entity entity);
 
+		void SnapshotPreviousState();
+
 	private:
 		std::set<Entity> m_entitiesToBeAdded;
 		std::set<Entity> m_entitiesToBeRemoved;
@@ -228,7 +230,7 @@ namespace cedar
 		//Vector index == entity id
 		std::vector<Signature> m_entityComponentSignatures;
 
-		std::unordered_map<uint32_t, std::shared_ptr<BaseSystem>> m_systems;
+		std::map<uint32_t, std::shared_ptr<BaseSystem>> m_systems;
 
 		static EntityManager* s_EntityManager;
 	};

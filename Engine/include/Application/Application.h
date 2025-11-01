@@ -4,6 +4,7 @@
 #include "ECS/ECS.h"
 #include "Common/Event/EventBus.h"
 #include "Luie/Luie.h"
+#include "Camera.h"
 #include "Common/SDL_Wrapper.h"
 
 #include <functional>
@@ -63,17 +64,16 @@ namespace cedar
 			return m_luieScriptEngine.get();
 		}
 
-		SDL_Rect* Camera();
+		Camera* GetMainCamera();
 
 	public:
 		GameSettings GameSetting;
 
 	private:
 		void ProccessInput();
-		void Update();
+		void Update(float dt);
 		void RenderCurrentLevel(const std::string& tileLevelMapId, int levelIndex);
 		void Render(float interpolation);
-		void SleepIfNeeded();
 
 	private:
 		std::unique_ptr<EntityManager> m_entityManager;
@@ -86,7 +86,7 @@ namespace cedar
 		bool m_isRunning = false;
 		//Note to self to remember to always pre-initialize fields in a class!
 		int previousMilliFrame = 0;
-		SDL_Rect m_camera;
+		Camera m_camera;
 
 		static Application* s_Application;
 	};

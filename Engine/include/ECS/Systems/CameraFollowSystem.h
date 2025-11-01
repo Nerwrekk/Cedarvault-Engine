@@ -17,43 +17,38 @@ namespace cedar
 			RequireComponent<CameraFollowComponent>();
 			RequireComponent<TransformComponent>();
 		}
-		const float followSpeed = 1.0f; // tweak as needed
+		const int followSpeed = 6; // tweak as needed
 
 		virtual void LateUpdate() override
 		{
-			auto camera         = Application::Get().Camera();
-			auto gameSetting    = &Application::Get().GameSetting;
-			const float EPSILON = 0.25f; // tweak: half a pixel-ish
+			Camera* camera   = Application::Get().GetMainCamera(); // ensure this returns pointer/ref to actual camera
+			auto gameSetting = &Application::Get().GameSetting;
+
+			// smoothing params
+			const float followSpeed = 8.0f; // tweak: higher = snappier, lower = looser
+			// compute exponential smoothing factor from dt (recommended)
+			float k = 1.0f - std::expf(-followSpeed * Time::DeltaTime); // in (0,1)
+
 			for (auto entity : GetSystemEntities())
 			{
 				auto transform = entity.GetComponent<TransformComponent>();
-				// compute target from transform (use interpolated transform if available)
+				if (!transform) continue;
+
+				// target camera center (float)
 				float targetX = transform->Position.x - (gameSetting->WindowWidth * 0.5f);
 				float targetY = transform->Position.y - (gameSetting->WindowHeight * 0.5f);
 
-				// Smooth follow (exponential smoothing)
-				camera->x += (targetX - camera->x) * followSpeed * Time::DeltaTime;
-				camera->y += (targetY - camera->y) * followSpeed * Time::DeltaTime;
+				// Smooth follow using damping (frame-rate independent)
+				camera->X += (targetX - camera->X); // * k;
+				camera->Y += (targetY - camera->Y); // * k;
 
-				// Snap when very close to avoid flip-flop around integer boundary
-				if (std::fabs(targetX - camera->x) < EPSILON)
-				{
-					camera->x = targetX;
-				}
-				if (std::fabs(targetY - camera->y) < EPSILON)
-				{
-					camera->y = targetY;
-				}
+				// clamp camera floats to map bounds
+				int maxCamX = static_cast<int>(gameSetting->MapWidth) - camera->Rect.w;
+				int maxCamY = static_cast<int>(gameSetting->MapHeight) - camera->Rect.h;
+				camera->X   = std::clamp(camera->X, 0.0f, float(std::max(0, maxCamX)));
+				camera->Y   = std::clamp(camera->Y, 0.0f, float(std::max(0, maxCamY)));
 
-				// Clamp
-				int maxCamX = static_cast<int>(gameSetting->MapWidth) - camera->w;
-				int maxCamY = static_cast<int>(gameSetting->MapHeight) - camera->h;
-				camera->x   = std::clamp(camera->x, 0, std::max(0, maxCamX));
-				camera->y   = std::clamp(camera->y, 0, std::max(0, maxCamY));
-
-				// only at the end, convert to integers for the SDL_Rect used by renderer
-				camera->x = static_cast<int>(std::lround(camera->x));
-				camera->y = static_cast<int>(std::lround(camera->y));
+				// DO NOT round / assign camera->Rect.x/y here
 			}
 		}
 	};

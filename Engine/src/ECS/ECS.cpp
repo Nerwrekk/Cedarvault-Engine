@@ -1,6 +1,7 @@
 #include "ECS/ECS.h"
 
 #include "Common/Logger.h"
+#include "Application/Application.h"
 #include "ECS/Components/Components.h"
 
 namespace cedar
@@ -119,6 +120,25 @@ namespace cedar
 		{
 			system->RemoveEntityFromSystem(entity);
 		}
+	}
+
+	void EntityManager::SnapshotPreviousState()
+	{
+		const auto componentId = TypeIdOf<TransformComponent>();
+		auto component         = std::static_pointer_cast<Pool<TransformComponent>>(m_ComponentPools[componentId]);
+
+		for (int i = 0; i < component->Size(); i++)
+		{
+			auto& transform = component->Get(i);
+
+			transform.PrevPosition = transform.Position;
+			transform.PrevRotation = transform.Rotation;
+		}
+
+		// snapshot camera (assuming Application::Get().Camera() returns a reference)
+		auto cam   = Application::Get().GetMainCamera();
+		cam->PrevX = cam->X;
+		cam->PrevY = cam->Y;
 	}
 
 	EntityManager* EntityManager::Instance()

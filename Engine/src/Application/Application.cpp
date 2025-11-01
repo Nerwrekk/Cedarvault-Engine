@@ -86,10 +86,12 @@ namespace cedar
 		}
 
 		//Init the camera
-		m_camera.x = 0;
-		m_camera.y = 0;
-		m_camera.w = windowInit.WindowWidth;
-		m_camera.h = windowInit.WindowHeight;
+		m_camera.PrevX  = 0;
+		m_camera.PrevY  = 0;
+		m_camera.Rect.x = 0;
+		m_camera.Rect.y = 0;
+		m_camera.Rect.w = windowInit.WindowWidth;
+		m_camera.Rect.h = windowInit.WindowHeight;
 
 		Input::InitKeyStates();
 
@@ -100,12 +102,14 @@ namespace cedar
 		// m_luieScriptEngine->Initialize();
 
 		m_entityManager->AddSystem<MovementSystem>();
-		m_entityManager->AddSystem<RenderSystem>();
 		m_entityManager->AddSystem<AnimationSystem>();
-		m_entityManager->AddSystem<CollisionSystem>();
-		// m_entityManager->AddSystem<ScriptSystem>(m_luieScriptEngine.get());
 		m_entityManager->AddSystem<MeanScriptSystem>();
+		m_entityManager->AddSystem<CollisionSystem>();
 		m_entityManager->AddSystem<CameraFollowSystem>();
+		m_entityManager->AddSystem<RenderSystem>();
+
+		//m_entityManager->AddSystem<ScriptSystem>(m_luieScriptEngine.get());
+
 		auto renderSystem = m_entityManager->GetSystem<RenderSystem>().get();
 		m_renderSystem.reset(renderSystem);
 
@@ -128,41 +132,57 @@ namespace cedar
 		// m_renderSystem.reset(renderSystem);
 	}
 
-	void Application::SleepIfNeeded()
-	{
-		//Locks execution until we meet out milliseconds criteria
-		int timeToWait = MILLISECS_PER_FRAME - (SDL_GetTicks() - previousMilliFrame);
-		if (timeToWait > 0 && timeToWait <= MILLISECS_PER_FRAME)
-		{
-			SDL_Delay(timeToWait);
-		}
-
-		// Note: if you use vsync, prefer to let the driver handle the cap and avoid SDL_Delay.
-	}
-
 	void Application::Run()
 	{
-		uint32_t next_game_tick = SDL_GetTicks();
-		int loops;
-		float interpolation;
+		uint64_t prevCounter = SDL_GetPerformanceCounter();
+		double accumulator   = 0.0;
 
 		while (m_isRunning)
 		{
+			// time
+			uint64_t nowCounter = SDL_GetPerformanceCounter();
+			double frameTime    = double(nowCounter - prevCounter) / double(SDL_GetPerformanceFrequency());
+			prevCounter         = nowCounter;
+
+			if (frameTime > MAX_ACCUM)
+			{
+				frameTime = MAX_ACCUM;
+			}
+			accumulator += frameTime;
+
 			ProccessInput();
 
-			loops = 0;
-			while (SDL_GetTicks() > next_game_tick && loops < MAX_FRAMESKIP)
+			// --- fixed update step ---
+			int updates = 0;
+			while (accumulator >= FIXED_DT && updates < MAX_UPDATES_PER_FRAME)
 			{
-				Update();
+				// Tell components/systems to snapshot previous state for interpolation.
+				m_entityManager->SnapshotPreviousState();
 
-				next_game_tick += MILLISECS_PER_FRAME;
-				loops++;
+				// Run game logic with fixed dt
+				Update(static_cast<float>(FIXED_DT));
+
+				m_entityManager->Update(); //treat it as FlushCommandBuffers
+
+				accumulator -= FIXED_DT;
+				updates++;
 			}
 
-			interpolation = float(SDL_GetTicks() + MILLISECS_PER_FRAME - next_game_tick) / float(MILLISECS_PER_FRAME);
-			Render(interpolation);
+			// If we've hit the cap, drop remaining accumulator to avoid spiraling
+			if (updates == MAX_UPDATES_PER_FRAME)
+			{
+				accumulator = 0.0;
+			}
 
-			SleepIfNeeded();
+			// interpolation factor [0,1)
+			float alpha = static_cast<float>(accumulator / FIXED_DT);
+
+			// Render using interpolation
+			Render(alpha);
+
+			// Present is in Render(); you can delay here if you prefer
+			// Optional: small sleep to avoid busy loop if not using vsync
+			// SDL_Delay(1); // tiny yield — optional
 		}
 	}
 
@@ -176,7 +196,7 @@ namespace cedar
 		SDL_Quit();
 	}
 
-	SDL_Rect* Application::Camera()
+	Camera* Application::GetMainCamera()
 	{
 		return &m_camera;
 	}
@@ -212,28 +232,16 @@ namespace cedar
 	}
 
 	//Update game objects
-	void Application::Update()
+	void Application::Update(float dt)
 	{
-		uint32_t now = SDL_GetTicks();
-		//difference in ticks from last frame, converted to seconds
-		float deltaTime    = (now - previousMilliFrame) / 1000.f;
-		Time::DeltaTime    = deltaTime;
-		previousMilliFrame = now;
+		Time::DeltaTime = dt;
 
+		// process queued events (from input -> event bus)
 		m_eventBus->PollEvents();
 
 		m_entityManager->UpdateAllSystems();
 
 		m_entityManager->LateUpdateAllSystems();
-
-		m_entityManager->Update();
-
-		//Locks execution until we meet out milliseconds criteria
-		// int timeToWait = MILLISECS_PER_FRAME - (SDL_GetTicks() - now);
-		// if (timeToWait > 0 && timeToWait <= MILLISECS_PER_FRAME)
-		// {
-		// 	SDL_Delay(timeToWait);
-		// }
 	}
 
 	void Application::RenderCurrentLevel(const std::string& tileLevelMapId, int levelIndex)
@@ -260,8 +268,8 @@ namespace cedar
 				//Destination rectangle that we want to place our texture.
 				//in order to scale the tilemap both the position and size must be multiplied by the scale
 				SDL_Rect dstRect = {
-					(tileLevelMap->TileSize * static_cast<int>(tileLevelMap->TileScale)) * x - m_camera.x,
-					(tileLevelMap->TileSize * static_cast<int>(tileLevelMap->TileScale)) * y - m_camera.y,
+					(tileLevelMap->TileSize * static_cast<int>(tileLevelMap->TileScale)) * x - static_cast<int>(m_camera.Rect.x),
+					(tileLevelMap->TileSize * static_cast<int>(tileLevelMap->TileScale)) * y - static_cast<int>(m_camera.Rect.y),
 					tileLevelMap->TileSize * static_cast<int>(tileLevelMap->TileScale),
 					tileLevelMap->TileSize * static_cast<int>(tileLevelMap->TileScale)
 
@@ -272,14 +280,14 @@ namespace cedar
 		}
 	}
 
-	void Application::Render(float interpolation)
+	void Application::Render(float alpha)
 	{
 		SDL_SetRenderDrawColor(m_renderer, 21, 21, 21, 255);
 		SDL_RenderClear(m_renderer);
 
 		RenderCurrentLevel(GameSetting.CurrentLevel, GameSetting.CurrentLevelIndex);
 
-		m_renderSystem->RenderEntites(m_renderer, interpolation);
+		m_renderSystem->RenderEntites(m_renderer, alpha);
 
 		//TODO: fix proper imgui rendering
 		ImGui_ImplSDLRenderer_NewFrame();

@@ -50,45 +50,60 @@ namespace cedar
 		}
 
 	public:
-		void RenderEntites(SDL_Renderer* renderer, float interpolation)
+		void RenderEntites(SDL_Renderer* renderer, float alpha)
 		{
-			//Note to self, cant sort a const vector! ;)
 			SortEntities(GetSystemEntities());
-			auto camera = Application::Get().Camera();
+
+			// Interpolate camera position (assume Camera() returns current camera with x,y and prevX, prevY set)
+			auto camera = Application::Get().GetMainCamera();
+			float camX  = camera->PrevX + alpha * (camera->X - camera->PrevX);
+			float camY  = camera->PrevY + alpha * (camera->Y - camera->PrevY);
+
+			// only here: update integer rect for SDL rendering
+			camera->Rect.x = static_cast<int>(std::lround(camX));
+			camera->Rect.y = static_cast<int>(std::lround(camY));
+
+			// Iterate the actual entity list once
 			for (auto& entity : GetSystemEntities())
 			{
 				auto transform       = entity.GetComponent<TransformComponent>();
 				auto spriteComponent = entity.GetComponent<SpriteComponent>();
 
 				SDL_Texture* texture = AssetManager::Inst()->GetTexture(spriteComponent->TextureId.GetString());
+				SDL_Rect srcRect     = spriteComponent->SrcRect;
 
-				SDL_Rect srcRect = spriteComponent->SrcRect;
+				// Interpolate transform position and rotation
+				glm::vec2 renderPos   = glm::mix(transform->PrevPosition, transform->Position, alpha);
+				double renderRot      = transform->Rotation + alpha * (transform->Rotation - transform->PrevRotation);
+				glm::vec2 renderScale = transform->Scale; // scale rarely needs interpolation, but you can if required
 
-				//Destination rectangle that we want to place our texture.
-				SDL_Rect dstRect = {
-					static_cast<int>(transform->Position.x - camera->x),
-					static_cast<int>(transform->Position.y - camera->y),
-					static_cast<int>(spriteComponent->Width * transform->Scale.x),
-					static_cast<int>(spriteComponent->Height * transform->Scale.y)
-				};
+				// Build destination rect using interpolated values and camera
+				// Use float -> int conversion consistently (round or floor as you prefer)
+				int dstX = static_cast<int>(std::round(renderPos.x - camX));
+				int dstY = static_cast<int>(std::round(renderPos.y - camY));
+				int dstW = static_cast<int>(std::round(spriteComponent->Width * renderScale.x));
+				int dstH = static_cast<int>(std::round(spriteComponent->Height * renderScale.y));
 
-				SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRect, transform->Rotation, nullptr, SDL_FLIP_NONE);
+				SDL_Rect dstRect { dstX, dstY, dstW, dstH };
 
+				// Render (rotation in degrees). Do NOT mutate transform here.
+				SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRect, renderRot, nullptr, SDL_FLIP_NONE);
+
+				// Debug collider draw (interpolate collider offset too if needed)
 				auto boxCollider = entity.GetComponent<BoxColliderComponent>();
 				if (boxCollider)
 				{
-					float xPos = transform->Position.x;
-					float yPos = transform->Position.y;
-					xPos += boxCollider->Offset.x;
-					yPos += boxCollider->Offset.y;
+					float xPos = renderPos.x + boxCollider->Offset.x;
+					float yPos = renderPos.y + boxCollider->Offset.y;
 
-					SDL_Rect colliderRect = {
-						static_cast<int>(xPos - camera->x),
-						static_cast<int>(yPos - camera->y),
-						static_cast<int>(boxCollider->Width),
-						static_cast<int>(boxCollider->Height),
+					SDL_Rect colliderRect {
+						static_cast<int>(std::round(xPos - camX)),
+						static_cast<int>(std::round(yPos - camY)),
+						static_cast<int>(std::round(boxCollider->Width)),
+						static_cast<int>(std::round(boxCollider->Height))
 					};
-					SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255); // green color
+
+					SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
 					SDL_RenderDrawRect(renderer, &colliderRect);
 				}
 			}
