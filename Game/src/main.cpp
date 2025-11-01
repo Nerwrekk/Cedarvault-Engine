@@ -50,7 +50,7 @@ int main()
 			for (int j = 0; j < 10; j++)
 			{
 				auto tree = app.Manager()->CreateEntity();
-				tree.AddComponent<cedar::RigidBodyComponent>(glm::vec2(-5.f, 0.f));
+				tree.AddComponent<cedar::RigidBodyComponent>(glm::vec2(-5.f * (i * 0.5), 0.f));
 				tree.AddComponent<cedar::SpriteComponent>("tree", 32, 32, 0);
 				tree.GetComponent<cedar::TransformComponent>()->Position = { 100 * (1 + i), 60 * (1 + j) };
 				tree.AddComponent<cedar::BoxColliderComponent>(32, 32, glm::vec2(0, 0));

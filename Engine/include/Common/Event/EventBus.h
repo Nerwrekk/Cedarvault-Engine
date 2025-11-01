@@ -7,7 +7,7 @@
 
 #include <typeindex>
 #include <list>
-#include <unordered_map>
+#include <map>
 #include <memory>
 #include <type_traits>
 #include <functional>
@@ -62,8 +62,9 @@ namespace cedar
 		void PollEvents();
 
 	private:
-		std::unordered_map<uint32_t, void*> m_eventRegistries;
+		std::map<uint32_t, void*> m_eventRegistries;
 		std::queue<std::function<void()>> m_task;
+
 		static EventBus* s_EventBus;
 	};
 

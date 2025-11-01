@@ -163,10 +163,10 @@ namespace cedar
 						CEDAR_FATAL("Failed to load in config file: {}", fileName);
 					}
 					//Config section
-					auto tileLevelMap = new TileLevelMap();
-					tileLevelMap->TileSize = currentConfigNode["tileSize"].get_int();
+					auto tileLevelMap       = new TileLevelMap();
+					tileLevelMap->TileSize  = currentConfigNode["tileSize"].get_int();
 					tileLevelMap->TileScale = currentConfigNode["tileScale"].get_float();
-					tileLevelMap->tilemap = GetTileMap(currentConfigNode["textureId"].get_string());
+					tileLevelMap->tilemap   = GetTileMap(currentConfigNode["textureId"].get_string());
 					//load in width and height of the tilemap
 					SDL_QueryTexture(tileLevelMap->tilemap, nullptr, nullptr, &tileLevelMap->Width, &tileLevelMap->Height);
 					auto& levels = currentConfigNode["levelMaps"].get_array();
@@ -188,16 +188,16 @@ namespace cedar
 	void AssetManager::LoadLevel(const std::string& levelMapId, int level)
 	{
 		TileLevelMap* tileLevelMap = GetTileLevelMap(levelMapId);
-		auto& map = GetLevelMap(tileLevelMap->levelMapIds.at(level));
+		auto& map                  = GetLevelMap(tileLevelMap->levelMapIds.at(level));
 
 		// const auto& map = m_levelMaps.at(levelMapId);
 		int mapNumRows = map.size();
 		int mapNumCols = map.at(0).size();
 
 		Application::Get().GameSetting.MapHeight = mapNumRows * tileLevelMap->TileSize * tileLevelMap->TileScale;
-		Application::Get().GameSetting.MapWidth = mapNumCols * tileLevelMap->TileSize * tileLevelMap->TileScale;
+		Application::Get().GameSetting.MapWidth  = mapNumCols * tileLevelMap->TileSize * tileLevelMap->TileScale;
 
-		Application::Get().GameSetting.CurrentLevel = levelMapId;
+		Application::Get().GameSetting.CurrentLevel      = levelMapId;
 		Application::Get().GameSetting.CurrentLevelIndex = level;
 	}
 
