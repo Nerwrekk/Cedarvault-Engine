@@ -5,6 +5,8 @@
 #include "Common/Event/Events/Events.h"
 #include "Common/Event/EventBus.h"
 
+#include <map>
+
 namespace cedar
 {
 	class CollisionSystem : public BaseSystem
@@ -17,19 +19,28 @@ namespace cedar
 			RequireComponent<TransformComponent>();
 			RequireComponent<BoxColliderComponent>();
 
-			// EventBus::Inst()->Subscribe<CollisionEvent>(this, &CollisionSystem::OnCollisionEvent);
+			EventBus::Inst()->Subscribe<CollisionEnterEvent>(this, &CollisionSystem::TestingCollisionEnterEvent);
+			EventBus::Inst()->Subscribe<CollisionExitEvent>(this, &CollisionSystem::TestingCollisionExitEvent);
 		}
 
-		void OnCollisionEvent(CollisionEvent& e)
+		void TestingCollisionEnterEvent(CollisionEnterEvent& e)
 		{
-			static int timesCalled = 0;
-			CEDAR_INFO("Times called: {}", ++timesCalled);
-			CEDAR_INFO("Collision Detected, entity id: {} with entity id {}", e.First.GetId(), e.Second.GetId());
+			CEDAR_INFO("Collision Enter triggerd with entity: {} and entity: {}", e.First.GetId(), e.Second.GetId());
+		}
+
+		void TestingCollisionExitEvent(CollisionExitEvent& e)
+		{
+			CEDAR_INFO("Collision Exit triggerd with entity: {} and entity: {}", e.First.GetId(), e.Second.GetId());
 		}
 
 		virtual void Update() override
 		{
 			auto entities = GetSystemEntities();
+			for (auto& entity : entities)
+			{
+				m_onCollisionEnterMap[entity.GetId()] = false;
+			}
+
 			for (auto it = entities.begin(); it != entities.end(); it++)
 			{
 				auto entity1      = *it;
@@ -52,16 +63,35 @@ namespace cedar
 					    entity1PosY < entity2PosY + boxCollComp2->Height &&
 					    entity1PosY + boxCollComp1->Height > entity2PosY)
 					{
-						// entity2.Kill();
-						CollisionEvent e(entity1, entity2);
-						if (entity1.GetId() == 5 || entity2.GetId() == 5)
+						m_onCollisionEnterMap[entity1.GetId()] = true;
+						m_onCollisionEnterMap[entity2.GetId()] = true;
+
+						if (m_prevOnCollisionEnterMap[entity1.GetId()] == false &&
+						    m_prevOnCollisionEnterMap[entity2.GetId()] == false)
 						{
-							EventBus::Inst()->Unsubscribe(this, &CollisionSystem::OnCollisionEvent);
+							EventBus::Inst()->PostEvent<CollisionEnterEvent>(entity1, entity2);
 						}
-						EventBus::Inst()->EmitEvent<CollisionEvent>(e);
+
+						// entity2.Kill();
+						EventBus::Inst()->PostEvent<CollisionEvent>(entity1, entity2);
+					}
+					else
+					{
+						if (m_onCollisionEnterMap[entity1.GetId()] == false && m_prevOnCollisionEnterMap[entity1.GetId()] == true &&
+						    m_onCollisionEnterMap[entity2.GetId()] == false && m_prevOnCollisionEnterMap[entity2.GetId()] == true)
+						{
+							EventBus::Inst()->PostEvent<CollisionExitEvent>(entity1, entity2);
+						}
 					}
 				}
 			}
+
+			m_prevOnCollisionEnterMap = m_onCollisionEnterMap;
+			m_onCollisionEnterMap.clear();
 		}
+
+	private:
+		std::map<uint32_t, bool> m_onCollisionEnterMap;
+		std::map<uint32_t, bool> m_prevOnCollisionEnterMap;
 	};
 } // namespace cedar

@@ -7,10 +7,11 @@
 #include "ECS/Systems/CollisionSystem.h"
 #include "ECS/Systems/ScriptSystem.h"
 #include "ECS/Systems/MeanScriptSystem.h"
+#include "ECS/Systems/RenderBoxColliderSystem.h"
 #include "ECS/Systems/CameraFollowSystem.h"
 #include "ECS/Systems/RenderSystem.h"
 #include "Common/Input.h"
-#include "Common/Time.h"
+#include "Common/CedarTime.h"
 #include "Common/AssetManager.h"
 
 #include "imgui.h"
@@ -106,6 +107,7 @@ namespace cedar
 		m_entityManager->AddSystem<MeanScriptSystem>();
 		m_entityManager->AddSystem<CollisionSystem>();
 		m_entityManager->AddSystem<CameraFollowSystem>();
+		m_entityManager->AddSystem<RenderBoxColliderSystem>();
 		m_entityManager->AddSystem<RenderSystem>();
 
 		//m_entityManager->AddSystem<ScriptSystem>(m_luieScriptEngine.get());
@@ -282,10 +284,14 @@ namespace cedar
 
 	void Application::Render(float alpha)
 	{
+		Time::AlphaTime = alpha;
+
 		SDL_SetRenderDrawColor(m_renderer, 21, 21, 21, 255);
 		SDL_RenderClear(m_renderer);
 
 		RenderCurrentLevel(GameSetting.CurrentLevel, GameSetting.CurrentLevelIndex);
+
+		m_entityManager->RenderUpdateAllSystems(m_renderer);
 
 		m_renderSystem->RenderEntites(m_renderer, alpha);
 

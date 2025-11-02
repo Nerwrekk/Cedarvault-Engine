@@ -4,6 +4,7 @@
 #include "ECS/Pool.h"
 #include "Common/Logger.h"
 #include "Registry/TypeRegistry.h"
+#include "Common/SDL_Wrapper.h"
 
 #include <vector>
 #include <cstdint>
@@ -89,6 +90,7 @@ namespace cedar
 
 		virtual void Update() {};
 		virtual void LateUpdate() {};
+		virtual void RenderUpdate(SDL_Renderer* renderer) {};
 
 	protected:
 		Signature m_ComponentSignature;
@@ -207,6 +209,14 @@ namespace cedar
 			for (auto& [key, system] : m_systems)
 			{
 				system->LateUpdate();
+			}
+		}
+
+		void RenderUpdateAllSystems(SDL_Renderer* renderer)
+		{
+			for (auto& [key, system] : m_systems)
+			{
+				system->RenderUpdate(renderer);
 			}
 		}
 

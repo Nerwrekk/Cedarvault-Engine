@@ -26,9 +26,9 @@ int main()
 	assetManager.LoadConfigurations("./assets/configurations");
 	assetManager.LoadLevel("JungleLevel", 0);
 
-	cedar::EventBus::Inst()->Subscribe<cedar::CollisionEvent>(&::test);
-	cedar::EventBus::Inst()->Subscribe<cedar::KeyPressEvent>(&::testKeyboard);
-	cedar::EventBus::Inst()->Unsubscribe<cedar::CollisionEvent>(&::test);
+	// cedar::EventBus::Inst()->Subscribe<cedar::CollisionEvent>(&::test);
+	// cedar::EventBus::Inst()->Subscribe<cedar::KeyPressEvent>(&::testKeyboard);
+	// cedar::EventBus::Inst()->Unsubscribe<cedar::CollisionEvent>(&::test);
 	app.Setup([&]()
 	{
 		auto tank = app.Manager()->CreateEntity();
@@ -45,17 +45,17 @@ int main()
 		truck.AddComponent<cedar::ScriptComponent>(std::vector<std::string> { "Tank" });
 		truck.AddComponent<cedar::CameraFollowComponent>();
 
-		for (int i = 0; i < 10; i++)
-		{
-			for (int j = 0; j < 10; j++)
-			{
-				auto tree = app.Manager()->CreateEntity();
-				tree.AddComponent<cedar::RigidBodyComponent>(glm::vec2(-5.f * (i * 0.5), 0.f));
-				tree.AddComponent<cedar::SpriteComponent>("tree", 32, 32, 0);
-				tree.GetComponent<cedar::TransformComponent>()->Position = { 100 * (1 + i), 60 * (1 + j) };
-				tree.AddComponent<cedar::BoxColliderComponent>(32, 32, glm::vec2(0, 0));
-			}
-		}
+		// for (int i = 0; i < 10; i++)
+		// {
+		// 	for (int j = 0; j < 10; j++)
+		// 	{
+		// 		auto tree = app.Manager()->CreateEntity();
+		// 		tree.AddComponent<cedar::RigidBodyComponent>(glm::vec2(-5.f * (i * 0.5), 0.f));
+		// 		tree.AddComponent<cedar::SpriteComponent>("tree", 32, 32, 0);
+		// 		tree.GetComponent<cedar::TransformComponent>()->Position = { 100 * (1 + i), 60 * (1 + j) };
+		// 		tree.AddComponent<cedar::BoxColliderComponent>(32, 32, glm::vec2(0, 0));
+		// 	}
+		// }
 
 		auto chopper = app.Manager()->CreateEntity();
 		chopper.AddComponent<cedar::SpriteComponent>("chopper-spritesheet", 32, 32, 1);

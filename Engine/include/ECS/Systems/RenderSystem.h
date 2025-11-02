@@ -88,24 +88,6 @@ namespace cedar
 
 				// Render (rotation in degrees). Do NOT mutate transform here.
 				SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRect, renderRot, nullptr, SDL_FLIP_NONE);
-
-				// Debug collider draw (interpolate collider offset too if needed)
-				auto boxCollider = entity.GetComponent<BoxColliderComponent>();
-				if (boxCollider)
-				{
-					float xPos = renderPos.x + boxCollider->Offset.x;
-					float yPos = renderPos.y + boxCollider->Offset.y;
-
-					SDL_Rect colliderRect {
-						static_cast<int>(std::round(xPos - camX)),
-						static_cast<int>(std::round(yPos - camY)),
-						static_cast<int>(std::round(boxCollider->Width)),
-						static_cast<int>(std::round(boxCollider->Height))
-					};
-
-					SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-					SDL_RenderDrawRect(renderer, &colliderRect);
-				}
 			}
 		}
 	};

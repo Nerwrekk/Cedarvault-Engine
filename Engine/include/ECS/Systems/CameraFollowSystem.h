@@ -17,15 +17,14 @@ namespace cedar
 			RequireComponent<CameraFollowComponent>();
 			RequireComponent<TransformComponent>();
 		}
-		const int followSpeed = 6; // tweak as needed
+		// smoothing params
+		const float followSpeed = 8.0f; // tweak: higher = snappier, lower = looser
 
 		virtual void LateUpdate() override
 		{
 			Camera* camera   = Application::Get().GetMainCamera(); // ensure this returns pointer/ref to actual camera
 			auto gameSetting = &Application::Get().GameSetting;
 
-			// smoothing params
-			const float followSpeed = 8.0f; // tweak: higher = snappier, lower = looser
 			// compute exponential smoothing factor from dt (recommended)
 			float k = 1.0f - std::expf(-followSpeed * Time::DeltaTime); // in (0,1)
 
