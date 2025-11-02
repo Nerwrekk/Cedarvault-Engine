@@ -93,64 +93,12 @@ namespace
 	}
 #endif
 
-	// <SnippetLoadHostFxr>
-	// Using the nethost library, discover the location of hostfxr and get exports
-	bool load_hostfxr(const char_t* assembly_path)
-	{
-		get_hostfxr_parameters params { sizeof(get_hostfxr_parameters), assembly_path, nullptr };
-		// Pre-allocate a large buffer for the path to hostfxr
-		char_t buffer[MAX_PATH];
-		size_t buffer_size = sizeof(buffer) / sizeof(char_t);
-		int rc = get_hostfxr_path(buffer, &buffer_size, &params);
-		if (rc != 0)
-			return false;
-
-		// Load hostfxr and get desired exports
-		// NOTE: The .NET Runtime does not support unloading any of its native libraries. Running
-		// dlclose/FreeLibrary on any .NET libraries produces undefined behavior.
-		void* lib = load_library(buffer);
-		init_for_cmd_line_fptr = (hostfxr_initialize_for_dotnet_command_line_fn)get_export(lib, "hostfxr_initialize_for_dotnet_command_line");
-		init_for_config_fptr = (hostfxr_initialize_for_runtime_config_fn)get_export(lib, "hostfxr_initialize_for_runtime_config");
-		get_delegate_fptr = (hostfxr_get_runtime_delegate_fn)get_export(lib, "hostfxr_get_runtime_delegate");
-		run_app_fptr = (hostfxr_run_app_fn)get_export(lib, "hostfxr_run_app");
-		close_fptr = (hostfxr_close_fn)get_export(lib, "hostfxr_close");
-
-		return (init_for_config_fptr && get_delegate_fptr && close_fptr);
-	}
-	// </SnippetLoadHostFxr>
-
-	// <SnippetInitialize>
-	// Load and initialize .NET Core and get desired function pointer for scenario
-	load_assembly_and_get_function_pointer_fn get_dotnet_load_assembly(const char_t* config_path)
-	{
-		// Load .NET Core
-		void* load_assembly_and_get_function_pointer = nullptr;
-		hostfxr_handle cxt = nullptr;
-		int rc = init_for_config_fptr(config_path, nullptr, &cxt);
-		if (rc != 0 || cxt == nullptr)
-		{
-			std::cerr << "Init failed: " << std::hex << std::showbase << rc << std::endl;
-			close_fptr(cxt);
-			return nullptr;
-		}
-
-		// Get the load assembly function pointer
-		rc = get_delegate_fptr(
-		    cxt,
-		    hdt_load_assembly_and_get_function_pointer,
-		    &load_assembly_and_get_function_pointer);
-		if (rc != 0 || load_assembly_and_get_function_pointer == nullptr)
-			std::cerr << "Get delegate failed: " << std::hex << std::showbase << rc << std::endl;
-
-		close_fptr(cxt);
-		return (load_assembly_and_get_function_pointer_fn)load_assembly_and_get_function_pointer;
-	}
-	// </SnippetInitialize>
 }
-using initialize_fn = void (*)(const char* scriptDllPath);
+
+using initialize_fn         = void (*)(const char* scriptDllPath);
 using loadScriptAssembly_fn = void (*)(const char* scriptDllPath);
-using instantiate_fn = void (*)(const char* typeName, cedar::Entity entity);
-using update_fn = void (*)(float);
+using instantiate_fn        = void (*)(const char* typeName, cedar::Entity entity);
+using update_fn             = void (*)(float);
 namespace Mean
 {
 #ifdef _WIN32
@@ -200,10 +148,6 @@ namespace Mean
 
 	// Globals to hold hostfxr exports
 	hostfxr_set_error_writer_fn SetHostFXRErrorWriter = nullptr;
-	hostfxr_initialize_for_runtime_config_fn InitHostFXRForRuntimeConfig = nullptr;
-	hostfxr_get_runtime_delegate_fn GetRuntimeDelegate = nullptr;
-	hostfxr_close_fn CloseHostFXR = nullptr;
-
 	// ErrorCallbackFn ErrorCallback = nullptr;
 
 	hostfxr_initialize_for_runtime_config_fn init_for_config;
@@ -213,10 +157,11 @@ namespace Mean
 	get_function_pointer_fn get_fn_pointer;
 	void* runtimeContext;
 
-	initialize_fn initialize = nullptr;
+	//Unmanaged MeanScript functions that only the Engine can call
+	initialize_fn initialize                   = nullptr;
 	loadScriptAssembly_fn load_script_assembly = nullptr;
-	instantiate_fn instantiate_script = nullptr;
-	update_fn update_scripts = nullptr;
+	instantiate_fn instantiate_script          = nullptr;
+	update_fn update_scripts                   = nullptr;
 
 	bool MeanScript::Init()
 	{
@@ -224,20 +169,21 @@ namespace Mean
 		// Pre-allocate a large buffer for the path to hostfxr
 		char_t buffer[MAX_PATH];
 		size_t buffer_size = sizeof(buffer) / sizeof(char_t);
-		int rc = get_hostfxr_path(buffer, &buffer_size, nullptr);
+		int rc             = get_hostfxr_path(buffer, &buffer_size, nullptr);
 		if (rc != 0)
+		{
 			return false;
+		}
 
 		// Load hostfxr and get desired exports
 		void* hostfxr = ::load_library(buffer);
 
 		// Get function pointers
-		init_for_config = (hostfxr_initialize_for_runtime_config_fn)get_export(hostfxr, "hostfxr_initialize_for_runtime_config");
-		get_delegate = (hostfxr_get_runtime_delegate_fn)get_export(hostfxr, "hostfxr_get_runtime_delegate");
-		close_fn = (hostfxr_close_fn)get_export(hostfxr, "hostfxr_close");
+		init_for_config = LoadFunctionPtr<hostfxr_initialize_for_runtime_config_fn>(hostfxr, "hostfxr_initialize_for_runtime_config");
+		get_delegate    = LoadFunctionPtr<hostfxr_get_runtime_delegate_fn>(hostfxr, "hostfxr_get_runtime_delegate");
+		close_fn        = LoadFunctionPtr<hostfxr_close_fn>(hostfxr, "hostfxr_close");
 
 		// Initialize runtime with .NET 5+ configuration
-
 		const char_t* configPath = MEAN_STR("./meanscript.runtimeconfig.json");
 		if (init_for_config(configPath, nullptr, &runtimeContext) != 0)
 		{
@@ -307,29 +253,29 @@ namespace Mean
 
 		//Component bindings
 		nativeBindings.GetTranformComponentFn = &Mean::GetTransformComponent;
-		nativeBindings.GetComponentFn = &Mean::GetComponent;
-		nativeBindings.AddComponentFn = &Mean::AddComponent;
+		nativeBindings.GetComponentFn         = &Mean::GetComponent;
+		nativeBindings.AddComponentFn         = &Mean::AddComponent;
 
 		//Keyboard bindings
-		nativeBindings.IsKeyPressedFn = cedar::Input::IsKeyPressed;
-		nativeBindings.IsKeyReleasedFn = cedar::Input::IsKeyReleased;
-		nativeBindings.IsKeyRepeatedFn = cedar::Input::IsKeyRepeated;
+		nativeBindings.IsKeyPressedFn  = &cedar::Input::IsKeyPressed;
+		nativeBindings.IsKeyReleasedFn = &cedar::Input::IsKeyReleased;
+		nativeBindings.IsKeyRepeatedFn = &cedar::Input::IsKeyRepeated;
 
 		//MeanString bindings
-		nativeBindings.GetMeanStringFn = &Mean::MeanString_GetString;
-		nativeBindings.SetMeanStringfn = &Mean::MeanString_SetString;
+		nativeBindings.GetMeanStringFn     = &Mean::MeanString_GetString;
+		nativeBindings.SetMeanStringfn     = &Mean::MeanString_SetString;
 		nativeBindings.GetMeanStringSizeFn = &Mean::MeanString_GetSize;
 
 		nativeBindings.LogFn = &Mean::Log;
 
 		bindNative_fn bind = nullptr;
-		int status = load_assembly_fn(
-		    MEAN_STR("./MeanScripting.dll"),
-		    MEAN_STR("MeanScriptEngine.MeanNativeApi, MeanScripting"),
-		    MEAN_STR("BindNativeFunctions"),
-		    UNMANAGEDCALLERSONLY_METHOD,
-		    nullptr,
-		    (void**)&bind);
+		int status         = load_assembly_fn(
+            MEAN_STR("./MeanScripting.dll"),
+            MEAN_STR("MeanScriptEngine.MeanNativeApi, MeanScripting"),
+            MEAN_STR("BindNativeFunctions"),
+            UNMANAGEDCALLERSONLY_METHOD,
+            nullptr,
+            (void**)&bind);
 
 		if (status != 0)
 		{
@@ -355,6 +301,7 @@ namespace Mean
 	{
 		instantiate_script(scriptName, entity);
 	}
+
 	void MeanScript::OnUpdateAllScripts(float deltaTime)
 	{
 		update_scripts(deltaTime);
