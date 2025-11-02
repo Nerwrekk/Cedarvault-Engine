@@ -6,6 +6,7 @@
 #include "Common/Event/EventBus.h"
 
 #include <map>
+#include <utility>
 
 namespace cedar
 {
@@ -30,16 +31,12 @@ namespace cedar
 
 		void TestingCollisionExitEvent(CollisionExitEvent& e)
 		{
-			CEDAR_INFO("Collision Exit triggerd with entity: {} and entity: {}", e.First.GetId(), e.Second.GetId());
+			CEDAR_WARN("Collision Exit triggerd with entity: {} and entity: {}", e.First.GetId(), e.Second.GetId());
 		}
 
 		virtual void Update() override
 		{
 			auto entities = GetSystemEntities();
-			for (auto& entity : entities)
-			{
-				m_onCollisionEnterMap[entity.GetId()] = false;
-			}
 
 			for (auto it = entities.begin(); it != entities.end(); it++)
 			{
@@ -48,7 +45,10 @@ namespace cedar
 				auto boxCollComp1 = entity1.GetComponent<BoxColliderComponent>();
 				for (auto jt = (it + 1); jt != entities.end(); jt++)
 				{
-					auto entity2      = *jt;
+					auto entity2 = *jt;
+
+					auto collidedPair = std::make_pair(entity1.GetId(), entity2.GetId());
+
 					auto transComp2   = entity2.GetComponent<TransformComponent>();
 					auto boxCollComp2 = entity2.GetComponent<BoxColliderComponent>();
 
@@ -63,11 +63,10 @@ namespace cedar
 					    entity1PosY < entity2PosY + boxCollComp2->Height &&
 					    entity1PosY + boxCollComp1->Height > entity2PosY)
 					{
-						m_onCollisionEnterMap[entity1.GetId()] = true;
-						m_onCollisionEnterMap[entity2.GetId()] = true;
+						m_onCollisionEnterMap[collidedPair] = true;
 
-						if (m_prevOnCollisionEnterMap[entity1.GetId()] == false &&
-						    m_prevOnCollisionEnterMap[entity2.GetId()] == false)
+						//Check if they were not colliding previous frame
+						if (m_prevOnCollisionEnterMap[collidedPair] == false)
 						{
 							EventBus::Inst()->PostEvent<CollisionEnterEvent>(entity1, entity2);
 						}
@@ -77,8 +76,8 @@ namespace cedar
 					}
 					else
 					{
-						if (m_onCollisionEnterMap[entity1.GetId()] == false && m_prevOnCollisionEnterMap[entity1.GetId()] == true &&
-						    m_onCollisionEnterMap[entity2.GetId()] == false && m_prevOnCollisionEnterMap[entity2.GetId()] == true)
+						//Check if they were colliding previous frame
+						if (m_onCollisionEnterMap[collidedPair] == false && m_prevOnCollisionEnterMap[collidedPair] == true)
 						{
 							EventBus::Inst()->PostEvent<CollisionExitEvent>(entity1, entity2);
 						}
@@ -91,7 +90,9 @@ namespace cedar
 		}
 
 	private:
-		std::map<uint32_t, bool> m_onCollisionEnterMap;
-		std::map<uint32_t, bool> m_prevOnCollisionEnterMap;
+		//using pair so i can check specifically if two entieties had collided the previous turn
+		//<<Entity id, Entity id>, hasCollided>
+		std::map<std::pair<uint32_t, uint32_t>, bool> m_onCollisionEnterMap;
+		std::map<std::pair<uint32_t, uint32_t>, bool> m_prevOnCollisionEnterMap;
 	};
 } // namespace cedar

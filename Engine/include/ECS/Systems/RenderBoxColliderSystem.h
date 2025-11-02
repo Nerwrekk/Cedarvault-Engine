@@ -31,7 +31,8 @@ namespace cedar
 
 			boxColour = GreenColour;
 
-			EventBus::Inst()->Subscribe<CollisionEvent>(this, &RenderBoxColliderSystem::OnColliding);
+			EventBus::Inst()->Subscribe<CollisionEnterEvent>(this, &RenderBoxColliderSystem::OnCollidingEnter);
+			EventBus::Inst()->Subscribe<CollisionExitEvent>(this, &RenderBoxColliderSystem::OnCollidingExit);
 		}
 
 		virtual void RenderUpdate(SDL_Renderer* renderer) override
@@ -70,9 +71,6 @@ namespace cedar
 					SDL_RenderDrawRect(renderer, &colliderRect);
 				}
 			}
-
-			//Clearing the list every
-			// m_hasCollidedMap.clear();
 		}
 
 	private:
@@ -80,10 +78,16 @@ namespace cedar
 		SDL_Colour RedColour   = { 0 };
 		SDL_Colour GreenColour = { 0 };
 
-		void OnColliding(CollisionEvent& e)
+		void OnCollidingEnter(CollisionEnterEvent& e)
 		{
 			m_hasCollidedMap[e.First.GetId()]  = true;
 			m_hasCollidedMap[e.Second.GetId()] = true;
+		}
+
+		void OnCollidingExit(CollisionExitEvent& e)
+		{
+			m_hasCollidedMap[e.First.GetId()]  = false;
+			m_hasCollidedMap[e.Second.GetId()] = false;
 		}
 
 		std::map<uint32_t, bool> m_hasCollidedMap;
