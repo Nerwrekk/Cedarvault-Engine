@@ -23,3 +23,21 @@
 	}
 
 #define GET_NAME_LITERAL(T) #T
+
+// free memory
+// Ensure safe memory management
+#define CEDAR_DELETE(ptr)  \
+	do                     \
+	{                      \
+		auto* tmp = (ptr); \
+		delete tmp;        \
+		(ptr) = nullptr;   \
+	} while (0)
+
+#define CEDAR_DELETE_ARRAY(ptr) \
+	do                          \
+	{                           \
+		auto* tmp = (ptr);      \
+		delete[] tmp;           \
+		(ptr) = nullptr;        \
+	} while (0)

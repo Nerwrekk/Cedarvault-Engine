@@ -19,6 +19,9 @@ namespace cedar
 	//Note! If you need to forward declare a class or a struct thats within a namespace,
 	//you need to make sure that you include that namespace or declare it within that namespace!
 	class RenderSystem;
+	class LayerStack;
+	class ImGuiLayer;
+
 	struct WindowInit
 	{
 		int WindowWidth;
@@ -59,6 +62,8 @@ namespace cedar
 
 		SDL_Renderer* GetRenderer() const;
 
+		SDL_Window* GetWindow() const;
+
 		Luie::ScriptEngine* GetScriptEngine() const
 		{
 			return m_luieScriptEngine.get();
@@ -80,6 +85,8 @@ namespace cedar
 		std::unique_ptr<EventBus> m_eventBus;
 		std::unique_ptr<Luie::ScriptEngine> m_luieScriptEngine;
 		std::shared_ptr<RenderSystem> m_renderSystem;
+		std::unique_ptr<LayerStack> m_layerStack;
+		std::unique_ptr<ImGuiLayer> m_imGuiLayer;
 		SDL_Window* m_window;
 		SDL_Renderer* m_renderer;
 		WindowInit windowInit;

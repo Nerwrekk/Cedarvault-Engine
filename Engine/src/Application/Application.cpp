@@ -13,10 +13,10 @@
 #include "Common/Input.h"
 #include "Common/CedarTime.h"
 #include "Common/AssetManager.h"
+#include "Common/LayerStack.h"
+#include "imgui/ImGuiLayer.h"
 
 #include "imgui.h"
-#include "imgui/bindings/imgui_impl_opengl3.h"
-#include "imgui/bindings/imgui_impl_sdlrenderer.h"
 #include <imgui/bindings/imgui_impl_sdl.h>
 #include <glm/glm.hpp>
 #include <iostream>
@@ -28,6 +28,8 @@ namespace cedar
 	{
 		m_entityManager = std::make_unique<EntityManager>();
 		m_eventBus      = std::make_unique<EventBus>();
+		m_layerStack    = std::make_unique<LayerStack>();
+		m_imGuiLayer    = std::make_unique<ImGuiLayer>();
 		// m_luieScriptEngine = std::make_unique<Luie::ScriptEngine>();
 
 		s_Application = this;
@@ -47,6 +49,11 @@ namespace cedar
 	SDL_Renderer* Application::GetRenderer() const
 	{
 		return m_renderer;
+	}
+
+	SDL_Window* Application::GetWindow() const
+	{
+		return m_window;
 	}
 
 	void Application::Initialize()
@@ -115,23 +122,7 @@ namespace cedar
 		auto renderSystem = m_entityManager->GetSystem<RenderSystem>().get();
 		m_renderSystem.reset(renderSystem);
 
-		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO();
-		(void)io;
-		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad; // Enable Gamepad Controls
-		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;    // Enable Docking
-		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;  // Enable Multi-Viewport / Platform Windows
-		// io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
-		// io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
-
-		ImGui::StyleColorsDark();
-
-		ImGui_ImplSDL2_InitForSDLRenderer(m_window, m_renderer);
-		ImGui_ImplSDLRenderer_Init(m_renderer);
-		// auto res = ImGui_sdl2(m_window, SDL_GL_GetCurrentContext());
-		// ImGui_ImplOpenGL3_Init("#version 410");
-		// m_renderSystem.reset(renderSystem);
+		m_imGuiLayer->OnAttach();
 	}
 
 	void Application::Run()
@@ -164,6 +155,8 @@ namespace cedar
 				// Run game logic with fixed dt
 				Update(static_cast<float>(FIXED_DT));
 
+				m_layerStack->OnUpdateAllLayers();
+
 				m_entityManager->Update(); //treat it as FlushCommandBuffers
 
 				accumulator -= FIXED_DT;
@@ -192,8 +185,6 @@ namespace cedar
 	{
 		SDL_DestroyWindow(m_window);
 		SDL_DestroyRenderer(m_renderer);
-		ImGui::DestroyContext();
-		ImGui_ImplSDL2_Shutdown();
 
 		SDL_Quit();
 	}
@@ -291,20 +282,15 @@ namespace cedar
 
 		RenderCurrentLevel(GameSetting.CurrentLevel, GameSetting.CurrentLevelIndex);
 
-		m_entityManager->RenderUpdateAllSystems(m_renderer);
-
 		m_renderSystem->RenderEntites(m_renderer, alpha);
 
-		//TODO: fix proper imgui rendering
-		ImGui_ImplSDLRenderer_NewFrame();
-		ImGui_ImplSDL2_NewFrame();
-		ImGui::NewFrame();
+		m_entityManager->RenderUpdateAllSystems(m_renderer);
 
-		static bool show = true;
-		ImGui::ShowDemoWindow(&show);
-
-		ImGui::Render();
-		ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
+		//Imgui call stack
+		m_imGuiLayer->OnBeginRender();
+		m_imGuiLayer->OnImGuiRender();
+		m_layerStack->OnImGuiRenderAllLayers();
+		m_imGuiLayer->OnEndRender();
 
 		SDL_RenderPresent(m_renderer);
 		// ImGui::EndFrame();

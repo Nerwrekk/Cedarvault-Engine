@@ -9,7 +9,6 @@
 
 namespace Mindi
 {
-
 	enum class json_type
 	{
 		Int,
