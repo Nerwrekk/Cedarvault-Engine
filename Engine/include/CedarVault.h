@@ -10,6 +10,14 @@
 #include "Common/Event/Events/Events.h"
 #include "Common/Event/EventBus.h"
 #include "MeanScript/MeanScript.h"
+#include "Common/SDL_Wrapper.h"
+#include "Common/Core.h"
+#include "Registry/TypeRegistry.h"
+#include "imgui.h"
+#include "imgui/bindings/imgui_impl_opengl3.h"
+#include "imgui/bindings/imgui_impl_sdlrenderer.h"
+#include "imgui/bindings/imgui_impl_sdl.h"
+#include "imgui/ImGuiLayer.h"
 
 #include <glm/glm.hpp>
 

@@ -13,7 +13,6 @@
 #include "Common/Input.h"
 #include "Common/CedarTime.h"
 #include "Common/AssetManager.h"
-#include "Common/LayerStack.h"
 #include "imgui/ImGuiLayer.h"
 
 #include "imgui.h"

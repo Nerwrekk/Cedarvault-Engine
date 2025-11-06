@@ -2,6 +2,10 @@
 
 #include "Application/Layer.h"
 #include "Common/Core.h"
+#include "imgui.h"
+#include "imgui/bindings/imgui_impl_opengl3.h"
+#include "imgui/bindings/imgui_impl_sdlrenderer.h"
+#include "imgui/bindings/imgui_impl_sdl.h"
 
 struct ImGuiContext;
 

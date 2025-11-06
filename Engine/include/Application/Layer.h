@@ -61,6 +61,8 @@ namespace cedar
 		virtual void OnImGuiRender() {};
 
 	protected:
+		friend class LayerStack;
 		uint32_t m_layerID;
 	};
+
 }

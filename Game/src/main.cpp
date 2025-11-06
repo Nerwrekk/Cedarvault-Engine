@@ -12,6 +12,95 @@ void testKeyboard(cedar::KeyPressEvent& e)
 	CEDAR_WARN("Key pressed: {}", e.Key);
 }
 
+class FirstLayer : public cedar::Layer
+{
+public:
+	DECL_TYPE_NAME(FirstLayer);
+
+	void OnUpdate() override
+	{
+		// if (Mean::Input::IsMouseButtonPressed(Mean::Mouse::ButtonLeft))
+		// {
+		// 	MEAN_TRACE("Left mouse button pressed!");
+		// }
+
+		// auto mousePos = Mean::Input::GetMousePosition();
+		// if (Mean::Input::IsMouseButtonPressed(Mean::Mouse::ButtonRight))
+		// {
+		// 	MEAN_TRACE("Mouse x:{} y:{}", mousePos.x, mousePos.y);
+		// }
+
+		// if (Mean::Input::IsMouseButtonPressed(Mean::Mouse::ButtonMiddle))
+		// {
+		// 	MEAN_TRACE("Mouse x:{} y:{}", Mean::Input::GetMouseX(), Mean::Input::GetMouseY());
+		// }
+
+		// if (Mean::Input::IsKeyPressed(Mean::Key::A))
+		// {
+		// 	MEAN_TRACE("A button pressed!");
+		// }
+	}
+
+	// void OnAttach() override
+	// {
+	// 	AttachCallback<Mean::MouseMoveEvent>([this](Mean::MouseMoveEvent e)
+	// 	{
+	// 		MEAN_TRACE("Mouse x:{} y:{}", e.TargetX, e.TargetY);
+	// 	});
+
+	// 	AttachCallback<Mean::MouseDownEvent>([this](Mean::MouseDownEvent e)
+	// 	{
+	// 		MEAN_TRACE("Event: {}  Key: {}", e.GetName(), e.Button);
+	// 	});
+
+	// 	AttachCallback<Mean::MouseReleaseEvent>([this](Mean::MouseReleaseEvent e)
+	// 	{
+	// 		MEAN_TRACE("Event: {}  Key: {}", e.GetName(), e.Button);
+	// 	});
+
+	// 	AttachCallback<Mean::MouseMoveEvent>([this](Mean::MouseMoveEvent e)
+	// 	{
+	// 		MEAN_TRACE("Mouse x:{} y:{}", e.TargetX, e.TargetY);
+	// 	});
+
+	// 	AttachCallback<Mean::KeyPressEvent>([this](Mean::KeyPressEvent e)
+	// 	{
+	// 		MEAN_TRACE("Event: {}  Key: {}", e.GetName(), e.Key);
+	// 	});
+
+	// 	AttachCallback<Mean::KeyReleaseEvent>([this](Mean::KeyReleaseEvent e)
+	// 	{
+	// 		MEAN_TRACE("Event: {}  Key: {}", e.GetName(), e.Key);
+	// 	});
+
+	// 	AttachCallback<Mean::KeyRepeatEvent>([this](Mean::KeyRepeatEvent e)
+	// 	{
+	// 		MEAN_TRACE("Event: {}  Key: {}", e.GetName(), e.Key);
+	// 	});
+	// }
+
+	void OnDetach() override
+	{
+	}
+
+	void OnImGuiRender() override
+	{
+		ImGui::Begin("MyWindow");
+		ImGui::Checkbox("Boolean property", &this->someBool);
+		if (ImGui::Button("Reset Speed"))
+		{
+			// This code is executed when the user clicks the button
+			this->speed = 0;
+		}
+		ImGui::SliderFloat("Speed", &this->speed, 0.0f, 10.0f);
+		ImGui::End();
+	}
+
+private:
+	float speed;
+	bool someBool;
+};
+
 int main()
 {
 	cedar::Application app;
@@ -65,6 +154,8 @@ int main()
 		// chopper.AddComponent<cedar::RigidBodyComponent>(glm::vec2(50.f, 0.f));
 		// chopper.GetComponent<cedar::TransformComponent>()->Position = { 100, 440 };
 	});
+
+	app.PushLayer<FirstLayer>();
 
 	app.Run();
 

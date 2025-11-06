@@ -6,6 +6,8 @@
 #include "Luie/Luie.h"
 #include "Camera.h"
 #include "Common/SDL_Wrapper.h"
+#include "Common/LayerStack.h"
+#include "imgui.h"
 
 #include <functional>
 #include <memory>
@@ -69,6 +71,9 @@ namespace cedar
 			return m_luieScriptEngine.get();
 		}
 
+		template <typename TLayer, typename... Args>
+		TLayer* PushLayer(Args&&... args);
+
 		Camera* GetMainCamera();
 
 	public:
@@ -97,5 +102,11 @@ namespace cedar
 
 		static Application* s_Application;
 	};
+
+	template <typename TLayer, typename... Args>
+	TLayer* Application::PushLayer(Args&&... args)
+	{
+		return m_layerStack->PushLayer<TLayer>(std::forward<Args>(args)...);
+	}
 
 } // namespace cedar

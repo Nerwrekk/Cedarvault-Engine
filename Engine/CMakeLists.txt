@@ -9,7 +9,7 @@ include(../cmake/MeanScriptDotnetSetup.cmake)
 file(GLOB_RECURSE CPP_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 file(GLOB_RECURSE HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
 
-add_library(${PROJECT_NAME} SHARED ${CPP_FILES} ${HEADER_FILES})
+add_library(${PROJECT_NAME} STATIC ${CPP_FILES} ${HEADER_FILES})
 # Apply compiler options to targets
 setup_compile_options(${PROJECT_NAME})
 
@@ -49,18 +49,22 @@ if(WIN32)
         NAMES nethost.lib
         PATHS ${NETHOST_NATIVE_PATH}
     )
+
 else()
     find_library(NETHOST_LIB 
         NAMES libnethost.a  
         PATHS ${NETHOST_NATIVE_PATH}
     )
-endif()
 
+endif()
+    
 # Ensure the library was found
 if(NOT NETHOST_LIB)
-    message(FATAL_ERROR "nethost.lib not found! Install .NET Hosting Bundle.")
+message(FATAL_ERROR "nethost.lib not found! Install .NET Hosting Bundle.")
 endif()
 
+file(COPY ${NETHOST_DLL} DESTINATION ${CMAKE_BINARY_DIR}/bin)
+    
 # includes directories
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -84,7 +88,6 @@ target_link_directories(${PROJECT_NAME} PUBLIC
 # link libraries 
 target_link_libraries(${PROJECT_NAME} PUBLIC 
     ${NETHOST_LIB}
-    ${CONAN_LIBS}
     spdlog::spdlog
     SDL2::SDL2main
     SDL2_image::SDL2_image
