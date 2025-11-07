@@ -25,12 +25,6 @@ namespace cedar
 			EventBus::Inst()->Subscribe<TEvent>(freeCallbackFunction);
 		}
 
-		template <typename Event>
-		void DetachCallback()
-		{
-			EventBus::Inst()->DetachCallback<Event>(this->m_layerID);
-		}
-
 		template <typename TEvent, typename TOwner>
 		void Unsubscribe(TOwner* owner, void (TOwner::*memberCallbackFunction)(TEvent&))
 		{

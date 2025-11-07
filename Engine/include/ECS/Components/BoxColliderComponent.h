@@ -6,7 +6,7 @@
 
 namespace cedar
 {
-	struct BoxColliderComponent
+	struct CEDAR_API BoxColliderComponent
 	{
 		DECL_TYPE_NAME(BoxColliderComponent);
 
@@ -14,7 +14,7 @@ namespace cedar
 		int Height;
 		glm::vec2 Offset;
 
-		CEDAR_API BoxColliderComponent(int width = 0, int height = 0, glm::vec2 offset = glm::vec2(0))
+		BoxColliderComponent(int width = 0, int height = 0, glm::vec2 offset = glm::vec2(0))
 		{
 			this->Width  = width;
 			this->Height = height;

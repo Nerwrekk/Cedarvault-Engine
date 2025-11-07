@@ -6,7 +6,7 @@
 
 namespace cedar
 {
-	struct TransformComponent
+	struct CEDAR_API TransformComponent
 	{
 		DECL_TYPE_NAME(TransformComponent)
 

@@ -9,7 +9,7 @@
 
 namespace cedar
 {
-	struct SpriteComponent
+	struct CEDAR_API SpriteComponent
 	{
 		DECL_TYPE_NAME(SpriteComponent)
 

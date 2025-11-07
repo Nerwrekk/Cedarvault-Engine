@@ -19,7 +19,7 @@ setup_compile_options(${PROJECT_NAME})
 # PUBLIC: The definition will apply to the target being built and to any targets that link against this target. This means if another target links against your shared library, it will inherit these preprocessor definitions.
 # Use PRIVATE when the definition is only relevant for the target itself and not for targets that link against it.
 # Use PUBLIC when you need the definition to be shared with other targets that link against your target. This is often the case with headers that require specific macros to work properly when used by other code.
-target_compile_definitions(${PROJECT_NAME} PRIVATE CEDAR_EXPORT) 
+target_compile_definitions(${PROJECT_NAME} PUBLIC CEDAR_STATIC) 
 
 #copy nethost.dll
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

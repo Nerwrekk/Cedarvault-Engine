@@ -3,7 +3,7 @@
 #include "Common/Core.h"
 namespace cedar
 {
-	struct CameraFollowComponent
+	struct CEDAR_API CameraFollowComponent
 	{
 		DECL_TYPE_NAME(CameraFollowComponent)
 

@@ -5,7 +5,7 @@
 
 namespace cedar
 {
-	struct AnimationComponent
+	struct CEDAR_API AnimationComponent
 	{
 		DECL_TYPE_NAME(AnimationComponent);
 

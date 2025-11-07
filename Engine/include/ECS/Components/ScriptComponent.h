@@ -7,7 +7,7 @@
 
 namespace cedar
 {
-	struct ScriptComponent
+	struct CEDAR_API ScriptComponent
 	{
 		DECL_TYPE_NAME(ScriptComponent)
 

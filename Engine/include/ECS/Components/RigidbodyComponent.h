@@ -6,7 +6,7 @@
 
 namespace cedar
 {
-	struct RigidBodyComponent
+	struct CEDAR_API RigidBodyComponent
 	{
 		DECL_TYPE_NAME(RigidBodyComponent)
 
