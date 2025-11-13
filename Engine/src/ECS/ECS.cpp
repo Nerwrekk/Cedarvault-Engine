@@ -91,6 +91,7 @@ namespace cedar
 		CEDAR_INFO("Entity created with id: {}", entityId);
 		//All entities shall have transform components
 		entity.AddComponent<TransformComponent>();
+		entity.AddComponent<IDComponent>();
 
 		m_entitiesToBeAdded.insert(entity);
 		return entity;
