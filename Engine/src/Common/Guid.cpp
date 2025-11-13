@@ -37,6 +37,10 @@ namespace cedar
 		return m_high == other.m_high &&
 		       m_low == other.m_low;
 	}
+	bool Guid::operator!=(const Guid& other) const
+	{
+		return !(*this == other);
+	}
 
 	std::string Guid::ToString()
 	{
@@ -47,7 +51,7 @@ namespace cedar
 	}
 
 #if defined(_WIN32)
-	inline std::pair<uint64_t, uint64_t> GuidGenerator::WindowsGenerateGuid()
+	static inline std::pair<uint64_t, uint64_t> WindowsGenerateGuid()
 	{
 		GUID sysGuid;
 		CoCreateGuid(&sysGuid);
@@ -64,7 +68,7 @@ namespace cedar
 		return std::make_pair(high, low);
 	}
 #else
-	inline std::pair<uint64_t, uint64_t> GuidGenerator::LinuxGenerateGuid()
+	static inline std::pair<uint64_t, uint64_t> LinuxGenerateGuid()
 	{
 		uuid_t sysUuid;
 		uuid_generate(sysUuid);

@@ -18,6 +18,7 @@ namespace cedar
 		inline uint64_t GetLowData();
 
 		bool operator==(const Guid& other) const;
+		bool operator!=(const Guid& other) const;
 
 		std::string ToString();
 
@@ -32,12 +33,5 @@ namespace cedar
 	public:
 		static std::pair<uint64_t, uint64_t> GenerateGuid();
 		static std::pair<uint64_t, uint64_t> GenerateGuidFromString(const std::string& guidString);
-
-	private:
-#if defined(_WIN32)
-		static inline std::pair<uint64_t, uint64_t> WindowsGenerateGuid();
-#else
-		static inline std::pair<uint64_t, uint64_t> LinuxGenerateGuid();
-#endif
 	};
 } // namespace cedar

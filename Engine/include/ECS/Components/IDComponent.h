@@ -16,7 +16,7 @@ namespace cedar
 			auto [high, low] = GuidGenerator::GenerateGuid();
 			guid             = Guid(high, low);
 
-			CEDAR_INFO("IDComponent: {}", guid.ToString());
+			CEDAR_WARN("IDComponent: {}", guid.ToString());
 		}
 
 		IDComponent(uint64_t high, uint64_t low)
