@@ -164,18 +164,18 @@ namespace cedar
 					}
 					//Config section
 					auto tileLevelMap       = new TileLevelMap();
-					tileLevelMap->TileSize  = currentConfigNode["tileSize"].get_int();
-					tileLevelMap->TileScale = currentConfigNode["tileScale"].get_float();
-					tileLevelMap->tilemap   = GetTileMap(currentConfigNode["textureId"].get_string());
+					tileLevelMap->TileSize  = currentConfigNode["tileSize"].get_as<int32_t>();
+					tileLevelMap->TileScale = currentConfigNode["tileScale"].get_as<double>();
+					tileLevelMap->tilemap   = GetTileMap(currentConfigNode["textureId"].get_as<std::string>());
 					//load in width and height of the tilemap
 					SDL_QueryTexture(tileLevelMap->tilemap, nullptr, nullptr, &tileLevelMap->Width, &tileLevelMap->Height);
 					auto& levels = currentConfigNode["levelMaps"].get_array();
 					for (Mindi::json_node* levelId : levels)
 					{
-						tileLevelMap->levelMapIds.push_back(levelId->get_string());
+						tileLevelMap->levelMapIds.push_back(levelId->get_as<std::string>());
 					}
 					//Add new TileLevelMap
-					m_allLevels.emplace(currentConfigNode["name"].get_string(), tileLevelMap);
+					m_allLevels.emplace(currentConfigNode["name"].get_as<std::string>(), tileLevelMap);
 				}
 			}
 		}

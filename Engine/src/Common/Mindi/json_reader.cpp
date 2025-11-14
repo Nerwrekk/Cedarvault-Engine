@@ -29,9 +29,9 @@ namespace Mindi
 			//skipping first curly brace
 			if (line.find_first_of('{') != std::string::npos && !is_first_curly)
 			{
-				is_first_curly = true;
+				is_first_curly                  = true;
 				const auto first_curly_iterator = std::find(line.begin(), line.end(), '{');
-				const size_t char_index = std::distance(line.begin(), first_curly_iterator);
+				const size_t char_index         = std::distance(line.begin(), first_curly_iterator);
 
 				if (line.length() - char_index == 0)
 				{
@@ -100,8 +100,8 @@ namespace Mindi
 				if (!token.empty())
 				{
 					const auto type = get_json_type(token);
-					json.type = type;
-					json.value = &token;
+					json.type       = type;
+					json.value      = &token;
 					clean_json_value(*json.value);
 					process_json_type(json);
 					token.clear();
@@ -162,7 +162,7 @@ namespace Mindi
 		//old way
 		//prop.erase(std::remove(prop.begin(), prop.end(), '\"'), prop.end());
 
-		auto tabIt = std::remove(prop.begin(), prop.end(), '\t');
+		auto tabIt   = std::remove(prop.begin(), prop.end(), '\t');
 		auto colonIt = std::remove(prop.begin(), prop.end(), '\"');
 		prop.erase(tabIt, prop.end());
 		prop.erase(colonIt, prop.end());
@@ -176,7 +176,7 @@ namespace Mindi
 
 	void json_reader::clean_json_value(std::string& value)
 	{
-		auto tabIt = std::remove(value.begin(), value.end(), '\t');
+		auto tabIt   = std::remove(value.begin(), value.end(), '\t');
 		auto colonIt = std::remove(value.begin(), value.end(), '\"');
 		value.erase(tabIt, value.end());
 		value.erase(colonIt, value.end());
@@ -235,8 +235,8 @@ namespace Mindi
 
 	std::pair<std::string, std::string> json_reader::get_prop_and_value(const std::string& line)
 	{
-		const auto vec = utils::string::split(line, ':');
-		std::string prop = vec.at(0);
+		const auto vec    = utils::string::split(line, ':');
+		std::string prop  = vec.at(0);
 		std::string value = vec.at(1);
 
 		clean_json_prop(prop);
@@ -294,9 +294,9 @@ namespace Mindi
 		else
 			json_arr = new json_node {};
 
-		json_arr->type = type;
+		json_arr->type        = type;
 		json_arr->parent_node = parent_node;
-		json_values.out_node = json_arr;
+		json_values.out_node  = json_arr;
 	}
 
 	void json_reader::process_float(const json_values& json_values)
