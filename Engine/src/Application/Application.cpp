@@ -197,6 +197,8 @@ namespace cedar
 			}
 			m_imGuiLayer->OnEndRender();
 
+			SDL_RenderPresent(m_renderer);
+
 			// Render using interpolation
 			// Render(Time::AlphaTime);
 

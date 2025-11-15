@@ -24,6 +24,6 @@ private:
 	cedar::RenderSystem* p_renderSystem;
 	cedar::EntityManager* p_entityManager;
 
-	float speed;
-	bool someBool;
+	float speed   = 0;
+	bool someBool = false;
 };

@@ -73,8 +73,6 @@ void GameLayer::OnRender(float alpha)
 	p_renderSystem->RenderEntites(p_renderer, alpha);
 
 	p_entityManager->RenderUpdateAllSystems(p_renderer, alpha);
-
-	SDL_RenderPresent(p_renderer);
 }
 
 void GameLayer::OnImGuiRender()
