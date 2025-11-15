@@ -189,6 +189,7 @@ namespace cedar
 			// ImGui / GUI
 			m_imGuiLayer->OnBeginRender();
 			{
+				m_imGuiLayer->OnImGuiRender();
 				for (auto& layer : m_layerStack)
 				{
 					layer->OnImGuiRender();

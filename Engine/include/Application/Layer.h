@@ -59,10 +59,10 @@ namespace cedar
 		{
 			UNREFERENCED_PARAMETER(deltaTime);
 		};
-		virtual void OnRender(float alpha)
+		virtual void OnRender(float alpha) // for interpolation
 		{
 			UNREFERENCED_PARAMETER(alpha);
-		}; // for interpolation
+		};
 		virtual void OnImGuiRender() {};
 
 	protected:
