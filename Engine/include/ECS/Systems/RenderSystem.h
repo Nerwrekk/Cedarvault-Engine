@@ -20,11 +20,6 @@ namespace cedar
 			RequireComponent<SpriteComponent>();
 		}
 
-		virtual void Update() override
-		{
-			//RenderSystem is a bit special and do not need this
-		}
-
 	private:
 		void SortEntities(std::vector<Entity>& entities)
 		{

@@ -18,9 +18,9 @@ namespace cedar
 			RequireComponent<ScriptComponent>();
 		}
 
-		virtual void Update() override
+		virtual void FixedUpdate(float fixedDeltaTime) override
 		{
-			Mean::MeanScript::OnUpdateAllScripts(Time::DeltaTime);
+			Mean::MeanScript::OnUpdateAllScripts(fixedDeltaTime);
 		}
 
 		virtual void AddEntityToSystem(Entity entity) override

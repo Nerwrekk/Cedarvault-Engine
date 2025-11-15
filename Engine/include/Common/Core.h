@@ -19,6 +19,8 @@
 	#endif
 #endif
 
+#define UNREFERENCED_PARAMETER(P) (void)(P)
+
 //This macro is required for types that needs a unique ID during runtime through TypeRegistry
 #define DECL_TYPE_NAME(Type)                   \
 	static constexpr const char* GetTypeName() \

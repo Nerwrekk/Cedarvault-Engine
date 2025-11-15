@@ -3,6 +3,7 @@
 #include "Common/Core.h"
 #include "ECS/ECS.h"
 #include "Common/Event/EventBus.h"
+#include "Common/AssetManager.h"
 #include "Luie/Luie.h"
 #include "Camera.h"
 #include "Common/SDL_Wrapper.h"
@@ -43,15 +44,9 @@ namespace cedar
 	class Application
 	{
 	public:
-		CEDAR_API Application();
-		CEDAR_API ~Application();
+		Application();
+		virtual ~Application();
 		void Initialize();
-		//Use setup to initialize entities before the game runs
-		template <typename TCallable>
-		void Setup(TCallable func)
-		{
-			func();
-		}
 		void Run();
 		void Destroy();
 
@@ -76,24 +71,28 @@ namespace cedar
 
 		Camera* GetMainCamera();
 
+		void RenderCurrentLevel(const std::string& tileLevelMapId, int levelIndex);
+
 	public:
 		GameSettings GameSetting;
 
 	private:
 		void ProccessInput();
 		void Update(float dt);
-		void RenderCurrentLevel(const std::string& tileLevelMapId, int levelIndex);
 		void Render(float interpolation);
 
-	private:
+	protected:
 		std::unique_ptr<EntityManager> m_entityManager;
 		std::unique_ptr<EventBus> m_eventBus;
-		std::unique_ptr<Luie::ScriptEngine> m_luieScriptEngine;
+		std::unique_ptr<AssetManager> m_assetManager;
 		std::shared_ptr<RenderSystem> m_renderSystem;
-		std::unique_ptr<LayerStack> m_layerStack;
+		SDL_Renderer* m_renderer;
+
+	private:
+		std::unique_ptr<Luie::ScriptEngine> m_luieScriptEngine;
+		LayerStack m_layerStack;
 		std::unique_ptr<ImGuiLayer> m_imGuiLayer;
 		SDL_Window* m_window;
-		SDL_Renderer* m_renderer;
 		WindowInit windowInit;
 		bool m_isRunning = false;
 		//Note to self to remember to always pre-initialize fields in a class!
@@ -106,7 +105,10 @@ namespace cedar
 	template <typename TLayer, typename... Args>
 	TLayer* Application::PushLayer(Args&&... args)
 	{
-		return m_layerStack->PushLayer<TLayer>(std::forward<Args>(args)...);
+		return m_layerStack.PushLayer<TLayer>(std::forward<Args>(args)...);
 	}
+
+	// To be defined in CLIENT
+	Application* CreateApplication(); //TODO Add args later
 
 } // namespace cedar

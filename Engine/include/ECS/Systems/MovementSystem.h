@@ -16,7 +16,7 @@ namespace cedar
 			RequireComponent<RigidBodyComponent>();
 		}
 
-		virtual void Update() override
+		virtual void FixedUpdate(float fixedDeltaTime) override
 		{
 			for (auto& entity : GetSystemEntities())
 			{
@@ -24,8 +24,8 @@ namespace cedar
 				auto rigidBody = entity.GetComponent<RigidBodyComponent>();
 
 				// CEDAR_INFO("Entity id: {} has velocity: [x: {}, y: {}]", entity.GetId(), rigidBody->Velocity.x, rigidBody->Velocity.y);
-				transform->Position.x += rigidBody->Velocity.x * static_cast<float>(Time::DeltaTime);
-				transform->Position.y += rigidBody->Velocity.y * static_cast<float>(Time::DeltaTime);
+				transform->Position.x += rigidBody->Velocity.x * static_cast<float>(fixedDeltaTime);
+				transform->Position.y += rigidBody->Velocity.y * static_cast<float>(fixedDeltaTime);
 
 				// CEDAR_INFO("entity with id: {} transform positions: x: {}, y: {}", entity.GetId(), transform->Position.x, transform->Position.y);
 			}

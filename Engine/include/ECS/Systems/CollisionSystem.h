@@ -34,8 +34,10 @@ namespace cedar
 			CEDAR_WARN("Collision Exit triggerd with entity: {} and entity: {}", e.First.GetId(), e.Second.GetId());
 		}
 
-		virtual void Update() override
+		virtual void FixedUpdate(float fixedDeltaTime) override
 		{
+			UNREFERENCED_PARAMETER(fixedDeltaTime);
+
 			auto entities = GetSystemEntities();
 
 			for (auto it = entities.begin(); it != entities.end(); it++)

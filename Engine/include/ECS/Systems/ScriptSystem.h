@@ -21,8 +21,10 @@ namespace cedar
 			RequireComponent<ScriptComponent>();
 		}
 
-		virtual void Update() override
+		virtual void FixedUpdate(float fixedDeltaTime) override
 		{
+			UNREFERENCED_PARAMETER(fixedDeltaTime);
+
 			for (auto& entity : GetSystemEntities())
 			{
 				auto scriptComp = entity.GetComponent<ScriptComponent>();
@@ -46,7 +48,7 @@ namespace cedar
 					sol::function onUpdateFunc = scriptInstance["OnUpdate"];
 					if (onUpdateFunc.valid())
 					{
-						onUpdateFunc(scriptInstance, Time::DeltaTime);
+						onUpdateFunc(scriptInstance, fixedDeltaTime);
 					}
 				}
 			}

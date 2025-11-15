@@ -27,7 +27,6 @@ namespace cedar
 	{
 		m_entityManager = std::make_unique<EntityManager>();
 		m_eventBus      = std::make_unique<EventBus>();
-		m_layerStack    = std::make_unique<LayerStack>();
 		m_imGuiLayer    = std::make_unique<ImGuiLayer>();
 		// m_luieScriptEngine = std::make_unique<Luie::ScriptEngine>();
 
@@ -92,6 +91,8 @@ namespace cedar
 			return;
 		}
 
+		m_assetManager = std::make_unique<AssetManager>(m_renderer);
+
 		//Init the camera
 		m_camera.PrevX  = 0;
 		m_camera.PrevY  = 0;
@@ -144,19 +145,21 @@ namespace cedar
 
 			ProccessInput();
 
+			// process queued events (from input -> event bus)
+			m_eventBus->PollEvents();
+
+			//TODO: Dispatch events to layers
+
 			// --- fixed update step ---
 			int updates = 0;
 			while (accumulator >= FIXED_DT && updates < MAX_UPDATES_PER_FRAME)
 			{
-				// Tell components/systems to snapshot previous state for interpolation.
-				m_entityManager->SnapshotPreviousState();
-
-				// Run game logic with fixed dt
-				Update(static_cast<float>(FIXED_DT));
-
-				m_layerStack->OnUpdateAllLayers();
-
-				m_entityManager->Update(); //treat it as FlushCommandBuffers
+				// Let layers know there's a fixed update tick.
+				// Important: snapshot before fixed updates so systems can interpolate later.
+				for (auto& layer : m_layerStack)
+				{
+					layer->OnFixedUpdate(static_cast<float>(FIXED_DT));
+				}
 
 				accumulator -= FIXED_DT;
 				updates++;
@@ -168,11 +171,33 @@ namespace cedar
 				accumulator = 0.0;
 			}
 
+			// Variable (per-frame) updates. Pass the variable dt (frameTime).
+			Time::DeltaTime = static_cast<float>(frameTime);
+			for (auto& layer : m_layerStack)
+			{
+				layer->OnUpdate(Time::DeltaTime);
+			}
+
 			// interpolation factor [0,1)
-			float alpha = static_cast<float>(accumulator / FIXED_DT);
+			Time::AlphaTime = static_cast<float>(accumulator / FIXED_DT);
+			// Rendering with interpolation factor
+			for (auto& layer : m_layerStack)
+			{
+				layer->OnRender(Time::AlphaTime);
+			}
+
+			// ImGui / GUI
+			m_imGuiLayer->OnBeginRender();
+			{
+				for (auto& layer : m_layerStack)
+				{
+					layer->OnImGuiRender();
+				}
+			}
+			m_imGuiLayer->OnEndRender();
 
 			// Render using interpolation
-			Render(alpha);
+			// Render(Time::AlphaTime);
 
 			// Present is in Render(); you can delay here if you prefer
 			// Optional: small sleep to avoid busy loop if not using vsync
@@ -228,10 +253,7 @@ namespace cedar
 	{
 		Time::DeltaTime = dt;
 
-		// process queued events (from input -> event bus)
-		m_eventBus->PollEvents();
-
-		m_entityManager->UpdateAllSystems();
+		m_entityManager->UpdateAllSystems(Time::DeltaTime);
 
 		m_entityManager->LateUpdateAllSystems();
 	}
@@ -283,13 +305,7 @@ namespace cedar
 
 		m_renderSystem->RenderEntites(m_renderer, alpha);
 
-		m_entityManager->RenderUpdateAllSystems(m_renderer);
-
-		//Imgui call stack
-		m_imGuiLayer->OnBeginRender();
-		m_imGuiLayer->OnImGuiRender();
-		m_layerStack->OnImGuiRenderAllLayers();
-		m_imGuiLayer->OnEndRender();
+		m_entityManager->RenderUpdateAllSystems(m_renderer, alpha);
 
 		SDL_RenderPresent(m_renderer);
 		// ImGui::EndFrame();

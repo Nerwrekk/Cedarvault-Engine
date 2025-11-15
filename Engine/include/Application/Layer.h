@@ -51,7 +51,18 @@ namespace cedar
 
 		virtual void OnAttach() {};
 		virtual void OnDetach() {};
-		virtual void OnUpdate() {};
+		virtual void OnFixedUpdate(float fixedeltaTime)
+		{
+			UNREFERENCED_PARAMETER(fixedeltaTime);
+		};
+		virtual void OnUpdate(float deltaTime)
+		{
+			UNREFERENCED_PARAMETER(deltaTime);
+		};
+		virtual void OnRender(float alpha)
+		{
+			UNREFERENCED_PARAMETER(alpha);
+		}; // for interpolation
 		virtual void OnImGuiRender() {};
 
 	protected:

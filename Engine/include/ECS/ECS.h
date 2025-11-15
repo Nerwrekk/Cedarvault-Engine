@@ -88,9 +88,20 @@ namespace cedar
 			m_ComponentSignature.set(componentId);
 		}
 
-		virtual void Update() {};
+		virtual void FixedUpdate(float fixedDeltaTime)
+		{
+			UNREFERENCED_PARAMETER(fixedDeltaTime);
+		};
+		virtual void Update(float deltatime)
+		{
+			UNREFERENCED_PARAMETER(deltatime);
+		};
 		virtual void LateUpdate() {};
-		virtual void RenderUpdate(SDL_Renderer* renderer) {};
+		virtual void RenderUpdate(SDL_Renderer* renderer, float alpha)
+		{
+			UNREFERENCED_PARAMETER(renderer);
+			UNREFERENCED_PARAMETER(alpha);
+		};
 
 	protected:
 		Signature m_ComponentSignature;
@@ -196,11 +207,19 @@ namespace cedar
 		template <typename TComponent>
 		void RegisterComponentType(const std::string& name);
 
-		void UpdateAllSystems()
+		void FixedUpdateAllSystems(float fixedDeltaTime)
 		{
 			for (auto& [key, system] : m_systems)
 			{
-				system->Update();
+				system->FixedUpdate(fixedDeltaTime);
+			}
+		}
+
+		void UpdateAllSystems(float deltaTime)
+		{
+			for (auto& [key, system] : m_systems)
+			{
+				system->Update(deltaTime);
 			}
 		}
 
@@ -212,11 +231,11 @@ namespace cedar
 			}
 		}
 
-		void RenderUpdateAllSystems(SDL_Renderer* renderer)
+		void RenderUpdateAllSystems(SDL_Renderer* renderer, float alpha)
 		{
 			for (auto& [key, system] : m_systems)
 			{
-				system->RenderUpdate(renderer);
+				system->RenderUpdate(renderer, alpha);
 			}
 		}
 

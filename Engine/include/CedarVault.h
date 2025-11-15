@@ -4,6 +4,7 @@
 #include "Common/Logger.h"
 #include "ECS/ECS.h"
 #include "ECS/Components/Components.h"
+#include "ECS/Systems/RenderSystem.h"
 #include "ECS/Systems/MovementSystem.h"
 #include "Common/AssetManager.h"
 #include "Common/Mindi/Mindi.h"

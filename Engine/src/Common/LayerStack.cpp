@@ -12,22 +12,6 @@ namespace cedar
 		Clear();
 	}
 
-	void LayerStack::OnUpdateAllLayers()
-	{
-		for (auto layer : m_layers)
-		{
-			layer->OnUpdate();
-		}
-	}
-
-	void LayerStack::OnImGuiRenderAllLayers()
-	{
-		for (auto layer : m_layers)
-		{
-			layer->OnImGuiRender();
-		}
-	}
-
 	void LayerStack::Clear()
 	{
 		for (auto layer : m_layers)

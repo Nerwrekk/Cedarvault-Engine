@@ -16,8 +16,10 @@ namespace cedar
 			RequireComponent<AnimationComponent>();
 		}
 
-		virtual void Update() override
+		virtual void FixedUpdate(float fixedDeltaTime) override
 		{
+			UNREFERENCED_PARAMETER(fixedDeltaTime);
+
 			for (auto& entity : GetSystemEntities())
 			{
 				auto spriteComp = entity.GetComponent<SpriteComponent>();

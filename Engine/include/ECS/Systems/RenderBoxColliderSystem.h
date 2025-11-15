@@ -35,7 +35,7 @@ namespace cedar
 			EventBus::Inst()->Subscribe<CollisionExitEvent>(this, &RenderBoxColliderSystem::OnCollidingExit);
 		}
 
-		virtual void RenderUpdate(SDL_Renderer* renderer) override
+		virtual void RenderUpdate(SDL_Renderer* renderer, float alpha) override
 		{
 			for (auto& entity : GetSystemEntities())
 			{
@@ -43,12 +43,12 @@ namespace cedar
 				auto boxCollider = entity.GetComponent<BoxColliderComponent>();
 
 				// Interpolate transform position and rotation
-				glm::vec2 renderPos = glm::mix(transform->PrevPosition, transform->Position, Time::AlphaTime);
+				glm::vec2 renderPos = glm::mix(transform->PrevPosition, transform->Position, alpha);
 
 				// Interpolate camera position (assume Camera() returns current camera with x,y and prevX, prevY set)
 				auto camera = Application::Get().GetMainCamera();
-				float camX  = camera->PrevX + Time::AlphaTime * (camera->X - camera->PrevX);
-				float camY  = camera->PrevY + Time::AlphaTime * (camera->Y - camera->PrevY);
+				float camX  = camera->PrevX + alpha * (camera->X - camera->PrevX);
+				float camY  = camera->PrevY + alpha * (camera->Y - camera->PrevY);
 
 				float xPos = renderPos.x + boxCollider->Offset.x;
 				float yPos = renderPos.y + boxCollider->Offset.y;
