@@ -12,9 +12,21 @@ static void testMouse(cedar::MouseMoveEvent& e)
 	CEDAR_WARN("Mouse moved, X: {}, Y: {}", e.TargetX, e.TargetY);
 }
 
+static void testMouseClick(cedar::MouseDownEvent& e)
+{
+	CEDAR_WARN("Mouse button clicked: {}", e.Button);
+}
+
+static void testMouseRelease(cedar::MouseReleaseEvent& e)
+{
+	CEDAR_WARN("Mouse button released: {}", e.Button);
+}
+
 void GameLayer::OnAttach()
 {
-	cedar::EventBus::Inst()->Subscribe<cedar::MouseMoveEvent>(&::testMouse);
+	// cedar::EventBus::Inst()->Subscribe<cedar::MouseMoveEvent>(&::testMouse);
+	cedar::EventBus::Inst()->Subscribe<cedar::MouseDownEvent>(&::testMouseClick);
+	cedar::EventBus::Inst()->Subscribe<cedar::MouseReleaseEvent>(&::testMouseRelease);
 
 	auto tank = p_entityManager->CreateEntity();
 	tank.AddComponent<cedar::RigidBodyComponent>(glm::vec2(0.f, -5.f));
@@ -55,6 +67,23 @@ void GameLayer::OnDetach()
 
 void GameLayer::OnFixedUpdate(float fixedeltaTime)
 {
+	if (cedar::Input::IsMouseButtonPressed(cedar::Mouse::MB_Left))
+	{
+		CEDAR_INFO("Left mouse button clicked");
+	}
+
+	if (cedar::Input::IsMouseButtonReleased(cedar::Mouse::MB_Left))
+	{
+		CEDAR_INFO("Left mouse button released");
+	}
+
+	if (cedar::Input::IsMouseButtonDown(cedar::Mouse::MB_Right))
+	{
+		CEDAR_INFO("Right mouse button held down");
+	}
+
+	// auto mousePos = cedar::Input::GetMousePosition();
+	// CEDAR_ERROR("Mouse pos: X: {}, Y: {}", mousePos.x, mousePos.y);
 	// process queued events (from input -> event bus)
 	// m_eventBus->PollEvents();
 	//TODO: maybe look into putting this into the main game loop instead

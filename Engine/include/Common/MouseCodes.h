@@ -29,19 +29,19 @@ namespace cedar
 		// From sdl
 		enum : MouseCode
 		{
-			Button0 = 1,
-			Button1 = 2,
-			Button2 = 3,
-			Button3 = 4,
-			Button4 = 5,
-			Button5 = 6,
-			Button6 = 7,
-			Button7 = 8,
+			MB_Left   = 1,
+			MB_Middle = 2,
+			MB_Right  = 3,
+			MB_X1     = 4,
+			MB_X2     = 5,
+			Button5   = 6,
+			Button6   = 7,
+			Button7   = 8,
 
-			ButtonLast = Button7,
-			ButtonLeft = Button0,
-			ButtonRight = Button3,
-			ButtonMiddle = Button2
+			ButtonLast   = Button7,
+			ButtonLeft   = MB_Left,
+			ButtonRight  = MB_Right,
+			ButtonMiddle = MB_Middle
 		};
 	}
 }

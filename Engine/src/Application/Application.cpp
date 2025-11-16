@@ -162,6 +162,7 @@ namespace cedar
 				// Let layers know there's a fixed update tick.
 				// Important: snapshot before fixed updates so systems can interpolate later.
 				Input::ComputeFixedUpdateKeyEdges();
+				Input::ComputeFixedUpdateMouseEdges();
 
 				m_entityManager->SnapshotPreviousState();
 
@@ -296,6 +297,7 @@ namespace cedar
 	void Application::ProccessInputAndPollOsEvents()
 	{
 		Input::UpdateKeyStates();
+		Input::UpdateMouseState();
 
 		// SDL_Event sdlEvent;
 		// while (SDL_PollEvent(&sdlEvent))
