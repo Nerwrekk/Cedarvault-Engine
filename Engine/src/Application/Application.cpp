@@ -161,6 +161,8 @@ namespace cedar
 			{
 				// Let layers know there's a fixed update tick.
 				// Important: snapshot before fixed updates so systems can interpolate later.
+				Input::ComputeFixedUpdateKeyEdges();
+
 				m_entityManager->SnapshotPreviousState();
 
 				for (auto& layer : m_layerStack)

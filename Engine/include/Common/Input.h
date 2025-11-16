@@ -14,6 +14,8 @@ namespace cedar
 		static bool IsKeyReleased(const KeyCode key);
 		static bool IsKeyRepeated(const KeyCode key);
 
+		static void ComputeFixedUpdateKeyEdges();
+
 		static bool IsMouseButtonPressed(const MouseCode button);
 		static glm::vec2 GetMousePosition();
 		static float GetMouseX();

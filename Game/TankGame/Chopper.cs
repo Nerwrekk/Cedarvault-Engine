@@ -52,11 +52,13 @@ public class Chopper : MeanScriptBehaviour
 
         if (Input.IsKeyPressed(Key.P))
         {
+            Log.Error("P is pressed");
             _animationComponent.FrameRateSpeed = 100;
-            _movespeed += 100;
+            // _movespeed += 100;
         }
         else if (Input.IsKeyReleased(Key.P))
         {
+            Log.Error("P is released");
             _animationComponent.FrameRateSpeed = 10;
         }
     }
