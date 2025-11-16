@@ -148,7 +148,7 @@ namespace cedar
 			}
 			accumulator += frameTime;
 
-			ProccessInput();
+			ProccessInputAndPollOsEvents();
 
 			// process queued events (from input -> event bus)
 			m_eventBus->PollEvents();
@@ -233,31 +233,230 @@ namespace cedar
 		return &m_camera;
 	}
 
-	void Application::ProccessInput()
+	static inline void HandleWindowEvent(SDL_WindowEvent windowEvent)
+	{
+		switch (windowEvent.event)
+		{
+		case SDL_WINDOWEVENT_SHOWN:
+			// std::cout << "Window shown\n";
+			break;
+		case SDL_WINDOWEVENT_HIDDEN:
+			// std::cout << "Window hidden\n";
+			break;
+		case SDL_WINDOWEVENT_EXPOSED:
+			// std::cout << "Window exposed\n";
+			break;
+		case SDL_WINDOWEVENT_MOVED:
+			// std::cout << "Window moved to (" << windowEvent.data1 << ", " << windowEvent.data2 << ")\n";
+			break;
+		case SDL_WINDOWEVENT_RESIZED:
+			// m_data.Width  = windowEvent.data1;
+			// m_data.Height = windowEvent.data2;
+			// m_dispatcher->PostEvent<WindowResizeEvent>(m_data.Width, m_data.Height);
+			break;
+		case SDL_WINDOWEVENT_SIZE_CHANGED:
+			// std::cout << "Window size changed\n";
+			break;
+		case SDL_WINDOWEVENT_MINIMIZED:
+			// std::cout << "Window minimized\n";
+			break;
+		case SDL_WINDOWEVENT_MAXIMIZED:
+			// std::cout << "Window maximized\n";
+			break;
+		case SDL_WINDOWEVENT_RESTORED:
+			// std::cout << "Window restored\n";
+			break;
+		case SDL_WINDOWEVENT_ENTER:
+			// std::cout << "Mouse entered window\n";
+			break;
+		case SDL_WINDOWEVENT_LEAVE:
+			// std::cout << "Mouse left window\n";
+			break;
+		case SDL_WINDOWEVENT_FOCUS_GAINED:
+			// std::cout << "Window gained focus\n";
+			break;
+		case SDL_WINDOWEVENT_FOCUS_LOST:
+			// std::cout << "Window lost focus\n";
+			break;
+		case SDL_WINDOWEVENT_CLOSE:
+			// m_dispatcher->PostEvent<WindowCloseEvent>();
+			break;
+		case SDL_WINDOWEVENT_TAKE_FOCUS:
+			// std::cout << "Window offered focus\n";
+			break;
+		case SDL_WINDOWEVENT_HIT_TEST:
+			// std::cout << "Hit test triggered\n";
+			break;
+		default:
+			CEDAR_WARN("Unknown event: {}", windowEvent.type);
+			break;
+		}
+	}
+
+	void Application::ProccessInputAndPollOsEvents()
 	{
 		Input::UpdateKeyStates();
 
-		SDL_Event sdlEvent;
-		while (SDL_PollEvent(&sdlEvent))
+		// SDL_Event sdlEvent;
+		// while (SDL_PollEvent(&sdlEvent))
+		// {
+		// 	ImGui_ImplSDL2_ProcessEvent(&sdlEvent);
+		// 	switch (sdlEvent.type)
+		// 	{
+		// 	case SDL_QUIT:
+		// 		m_isRunning = false;
+		// 		break;
+		// 	//===== KEYBOARD EVENTS =====
+		// 	case SDL_KEYDOWN: // A key was pressed.
+		// 		sdlEvent.key.repeat ? m_eventBus->PostEvent<KeyRepeatEvent>(KeyRepeatEvent(sdlEvent.key.keysym.sym)) :
+		// 		                      m_eventBus->PostEvent<KeyPressEvent>(KeyPressEvent(sdlEvent.key.keysym.sym));
+
+		// 		if (sdlEvent.key.keysym.sym == SDLK_ESCAPE)
+		// 		{
+		// 			m_isRunning = false;
+		// 		}
+		// 		break;
+		// 	case SDL_KEYUP: // A key was released.
+		// 		m_eventBus->PostEvent<KeyReleaseEvent>(KeyReleaseEvent(sdlEvent.key.keysym.sym));
+		// 		break;
+		// 	}
+		// }
+
+		SDL_Event event;
+		while (SDL_PollEvent(&event))
 		{
-			ImGui_ImplSDL2_ProcessEvent(&sdlEvent);
-			switch (sdlEvent.type)
+			ImGui_ImplSDL2_ProcessEvent(&event);
+			switch (event.type)
 			{
-			case SDL_QUIT:
-				m_isRunning = false;
+			case SDL_WINDOWEVENT:
+				HandleWindowEvent(event.window);
 				break;
+
+			case SDL_SYSWMEVENT:
+				//TODO: handle syswmevent
+				break;
+
+			//===== MOUSE EVENTS =====
+			case SDL_MOUSEMOTION:
+				// static f64 mousePosX {}, mousePosY {};
+				m_eventBus->PostEvent<MouseMoveEvent>(event.motion.x, event.motion.y);
+
+				// if (Input::IsMouseButtonPressed(Mouse::ButtonLeft))
+				// {
+				// 	 m_eventBus->PostEvent<MouseDragEvent>(
+				// 	    (mousePosX - event.motion.x),
+				// 	    (mousePosY - event.motion.y));
+
+				// 	mousePosX = (f64)event.motion.x;
+				// 	mousePosY = (f64)event.motion.y;
+				// }
+				break;
+
+			case SDL_MOUSEBUTTONDOWN:
+				m_eventBus->PostEvent<MouseDownEvent>(event.motion.state);
+				break;
+
+			case SDL_MOUSEBUTTONUP:
+				m_eventBus->PostEvent<MouseReleaseEvent>(event.motion.state);
+				break;
+
+			case SDL_MOUSEWHEEL:
+				m_eventBus->PostEvent<MouseWheelEvent>(event.wheel.preciseX, event.wheel.preciseY);
+				break;
+				//===== END MOUSE EVENTS =====
+
 			//===== KEYBOARD EVENTS =====
 			case SDL_KEYDOWN: // A key was pressed.
-				sdlEvent.key.repeat ? m_eventBus->PostEvent<KeyRepeatEvent>(KeyRepeatEvent(sdlEvent.key.keysym.sym)) :
-				                      m_eventBus->PostEvent<KeyPressEvent>(KeyPressEvent(sdlEvent.key.keysym.sym));
+				event.key.repeat ? m_eventBus->PostEvent<KeyRepeatEvent>(event.key.keysym.sym) :
+				                   m_eventBus->PostEvent<KeyPressEvent>(event.key.keysym.sym);
 
-				if (sdlEvent.key.keysym.sym == SDLK_ESCAPE)
+				if (event.key.keysym.sym == SDLK_ESCAPE)
 				{
 					m_isRunning = false;
 				}
 				break;
+
 			case SDL_KEYUP: // A key was released.
-				m_eventBus->PostEvent<KeyReleaseEvent>(KeyReleaseEvent(sdlEvent.key.keysym.sym));
+				m_eventBus->PostEvent<KeyReleaseEvent>(event.key.keysym.sym);
+				break;
+
+			case SDL_TEXTEDITING: // Text editing in progress (e.g., for IME).
+				                  //TODO: implement when needed
+				break;
+
+			case SDL_TEXTINPUT: // Text input (finalized text entered).
+				                //TODO: implement when needed
+				break;
+
+			case SDL_KEYMAPCHANGED: // The keyboard layout has changed.
+				                    //TODO: implement when needed
+				break;
+			//===== END KEYBOARD EVENTS =====
+
+			//===== Drag-and-Drop EVENTS =====
+			case SDL_DROPFILE:
+				break;
+
+			case SDL_DROPTEXT:
+				break;
+
+			case SDL_DROPBEGIN:
+				CEDAR_TRACE("Drag begin");
+				break;
+
+			case SDL_DROPCOMPLETE:
+				break;
+				//===== END Drag-and-Drop EVENTS =====
+
+			//===== Joystick EVENTS =====
+			case SDL_JOYAXISMOTION:
+				break;
+
+			case SDL_JOYBALLMOTION:
+				break;
+
+			case SDL_JOYHATMOTION:
+				break;
+
+			case SDL_JOYBUTTONDOWN:
+				break;
+
+			case SDL_JOYBUTTONUP:
+				break;
+
+			case SDL_JOYDEVICEADDED:
+				break;
+
+			case SDL_JOYDEVICEREMOVED:
+				break;
+			//===== END Joystick EVENTS =====
+
+			//===== Game Controller EVENTS =====
+			case SDL_CONTROLLERAXISMOTION:
+				break;
+
+			case SDL_CONTROLLERBUTTONDOWN:
+				break;
+
+			case SDL_CONTROLLERBUTTONUP:
+				break;
+
+			case SDL_CONTROLLERDEVICEADDED:
+				break;
+
+			case SDL_CONTROLLERDEVICEREMOVED:
+				break;
+
+			case SDL_CONTROLLERDEVICEREMAPPED:
+				break;
+				//===== END Game Controller EVENTS =====
+
+			case SDL_USEREVENT: //Custom events created by us
+				break;
+
+			case SDL_QUIT:
+				m_isRunning = false;
+				// m_eventBus->PostEvent<WindowCloseEvent>();
 				break;
 			}
 		}

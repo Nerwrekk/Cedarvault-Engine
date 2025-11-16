@@ -7,8 +7,15 @@ GameLayer::GameLayer(SDL_Renderer* renderer, cedar::RenderSystem* renderSystem, 
 	p_entityManager = entityManager;
 }
 
+static void testMouse(cedar::MouseMoveEvent& e)
+{
+	CEDAR_WARN("Mouse moved, X: {}, Y: {}", e.TargetX, e.TargetY);
+}
+
 void GameLayer::OnAttach()
 {
+	cedar::EventBus::Inst()->Subscribe<cedar::MouseMoveEvent>(&::testMouse);
+
 	auto tank = p_entityManager->CreateEntity();
 	tank.AddComponent<cedar::RigidBodyComponent>(glm::vec2(0.f, -5.f));
 	tank.AddComponent<cedar::SpriteComponent>("tank-panther-right", 32, 32, 0);

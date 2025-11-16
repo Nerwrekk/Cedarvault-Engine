@@ -77,7 +77,7 @@ namespace cedar
 		GameSettings GameSetting;
 
 	private:
-		void ProccessInput();
+		void ProccessInputAndPollOsEvents();
 		void Update(float dt);
 		void Render(float interpolation);
 
