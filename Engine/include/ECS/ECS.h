@@ -108,12 +108,13 @@ namespace cedar
 		std::vector<Entity> m_entities;
 	};
 
-	class EntityManager
+	class CEDAR_API EntityManager
 	{
 	public:
 		static EntityManager* Instance();
 
-		CEDAR_API EntityManager();
+		EntityManager();
+		~EntityManager();
 		void Update();
 
 		Entity CreateEntity();
@@ -148,7 +149,7 @@ namespace cedar
 			const auto entityId    = entity.GetId();
 			if (HasComponent<TComponent>(entity))
 			{
-				auto component = std::static_pointer_cast<Pool<TComponent>>(m_ComponentPools[componentId]);
+				auto component = static_cast<Pool<TComponent>*>(m_ComponentPools[componentId]);
 
 				return &component->Get(entityId);
 			}
@@ -253,7 +254,7 @@ namespace cedar
 		//Vector of component pools
 		//Vector index == component type id
 		//Pool index == entity id
-		std::vector<std::shared_ptr<IPool>> m_ComponentPools;
+		std::vector<IPool*> m_ComponentPools;
 
 		//Vector of component signatures per entity, saying which component is turned of for that entity
 		//Vector index == entity id
@@ -279,11 +280,11 @@ namespace cedar
 		//If we don't have a pool yet for this component type
 		if (!m_ComponentPools[componentId])
 		{
-			auto newComponentPool         = std::make_shared<Pool<TComponent>>();
+			auto newComponentPool         = new Pool<TComponent>();
 			m_ComponentPools[componentId] = newComponentPool;
 		}
 
-		std::shared_ptr<Pool<TComponent>> componentPool = std::static_pointer_cast<Pool<TComponent>>(m_ComponentPools[componentId]);
+		auto componentPool = static_cast<Pool<TComponent>*>(m_ComponentPools[componentId]);
 		if (m_totalNumOfEntities >= componentPool->Size())
 		{
 			componentPool->Resize(m_totalNumOfEntities);

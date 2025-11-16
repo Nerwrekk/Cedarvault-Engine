@@ -56,7 +56,12 @@ namespace cedar
 
 	void Application::Initialize()
 	{
-		Mean::MeanScript::Init();
+		if (!Mean::MeanScript::Init())
+		{
+			CEDAR_FATAL("Error init MeanScript");
+
+			return;
+		}
 
 		if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 		{
@@ -156,10 +161,14 @@ namespace cedar
 			{
 				// Let layers know there's a fixed update tick.
 				// Important: snapshot before fixed updates so systems can interpolate later.
+				m_entityManager->SnapshotPreviousState();
+
 				for (auto& layer : m_layerStack)
 				{
 					layer->OnFixedUpdate(static_cast<float>(FIXED_DT));
 				}
+
+				m_entityManager->Update(); //treat it as FlushCommandBuffers
 
 				accumulator -= FIXED_DT;
 				updates++;
@@ -206,6 +215,7 @@ namespace cedar
 			// Optional: small sleep to avoid busy loop if not using vsync
 			// SDL_Delay(1); // tiny yield — optional
 		}
+		CEDAR_INFO("shutting down");
 	}
 
 	void Application::Destroy()

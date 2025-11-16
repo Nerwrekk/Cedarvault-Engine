@@ -28,15 +28,25 @@ namespace cedar
 		m_ComponentPools.reserve(32);
 		m_entityComponentSignatures.reserve(32);
 
-		RegisterComponentType<RigidBodyComponent>(constants::RigidBodyComponent);
-		RegisterComponentType<AnimationComponent>(constants::AnimationComponent);
-		RegisterComponentType<BoxColliderComponent>(constants::BoxColliderComponent);
-		RegisterComponentType<CameraFollowComponent>(constants::CameraFollowComponent);
-		RegisterComponentType<ScriptComponent>(constants::ScriptComponent);
-		RegisterComponentType<SpriteComponent>(constants::SpriteComponent);
+		RegisterComponentType<RigidBodyComponent>(RigidBodyComponent::GetTypeName());
+		RegisterComponentType<AnimationComponent>(AnimationComponent::GetTypeName());
+		RegisterComponentType<BoxColliderComponent>(BoxColliderComponent::GetTypeName());
+		RegisterComponentType<CameraFollowComponent>(CameraFollowComponent::GetTypeName());
+		RegisterComponentType<ScriptComponent>(ScriptComponent::GetTypeName());
+		RegisterComponentType<SpriteComponent>(SpriteComponent::GetTypeName());
 
 		//TODO: add assert here!
 		s_EntityManager = this;
+	}
+
+	EntityManager::~EntityManager()
+	{
+		for (auto pool : m_ComponentPools)
+		{
+			CEDAR_DELETE(pool);
+		}
+
+		m_ComponentPools.clear();
 	}
 
 	void EntityManager::Update()
@@ -126,8 +136,12 @@ namespace cedar
 	void EntityManager::SnapshotPreviousState()
 	{
 		const auto componentId = TypeIdOf<TransformComponent>();
-		auto component         = std::static_pointer_cast<Pool<TransformComponent>>(m_ComponentPools[componentId]);
+		if (componentId > m_ComponentPools.size() || m_ComponentPools[componentId] == nullptr)
+		{
+			return;
+		}
 
+		auto component = static_cast<Pool<TransformComponent>*>(m_ComponentPools[componentId]);
 		for (int i = 0; i < component->Size(); i++)
 		{
 			auto& transform = component->Get(i);

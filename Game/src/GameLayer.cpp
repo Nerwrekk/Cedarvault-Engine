@@ -51,14 +51,14 @@ void GameLayer::OnFixedUpdate(float fixedeltaTime)
 	// process queued events (from input -> event bus)
 	// m_eventBus->PollEvents();
 	//TODO: maybe look into putting this into the main game loop instead
-	p_entityManager->SnapshotPreviousState();
+	// p_entityManager->SnapshotPreviousState();
 
 	p_entityManager->FixedUpdateAllSystems(fixedeltaTime);
 
 	p_entityManager->LateUpdateAllSystems();
 
 	//TODO: maybe look into putting this into the main game loop instead
-	p_entityManager->Update(); //treat it as FlushCommandBuffers
+	// p_entityManager->Update(); //treat it as FlushCommandBuffers
 }
 
 void GameLayer::OnRender(float alpha)

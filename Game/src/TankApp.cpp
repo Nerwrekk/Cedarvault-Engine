@@ -10,7 +10,6 @@ public:
 		Mean::MeanScript::InitManagedScriptEngine("");
 		Mean::MeanScript::LoadScriptAssembly("./TankGame.dll");
 		// GetScriptEngine()->LoadScripts("./assets/scripts");
-		// GetScriptEngine()->CallFunction("", "");
 
 		m_assetManager->LoadAssets("./assets/images");
 		m_assetManager->LoadTilemaps("./assets/tilemaps");
