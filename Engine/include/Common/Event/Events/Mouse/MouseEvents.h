@@ -4,58 +4,57 @@
 
 namespace cedar
 {
-	//Mouse events
 	struct MouseReleaseEvent : public IEvent
 	{
 		DECL_TYPE_NAME(MouseReleaseEvent);
 
+		uint32_t Button;
+
 		MouseReleaseEvent(uint32_t button)
 		    : Button(button) {}
-
-		uint32_t Button = -1;
 	};
 
 	struct MouseDownEvent : public IEvent
 	{
 		DECL_TYPE_NAME(MouseDownEvent);
 
+		uint32_t Button;
+
 		MouseDownEvent(uint32_t button)
 		    : Button(button) {}
-
-		uint32_t Button = -1;
 	};
 
 	struct MouseDragEvent : public IEvent
 	{
 		DECL_TYPE_NAME(MouseDragEvent);
 
-		MouseDragEvent(double deltaX, double deltaY)
-		    : DeltaX(deltaX), DeltaY(deltaY) {}
-
 		double DeltaX {};
 		double DeltaY {};
+
+		MouseDragEvent(double deltaX, double deltaY)
+		    : DeltaX(deltaX), DeltaY(deltaY) {}
 	};
 
 	struct MouseMoveEvent : public IEvent
 	{
 		DECL_TYPE_NAME(MouseMoveEvent);
 
-		MouseMoveEvent(double x, double y)
-		    : TargetX(x), TargetY(y) {}
-
 		double TargetX {};
 		double TargetY {};
+
+		MouseMoveEvent(double x, double y)
+		    : TargetX(x), TargetY(y) {}
 	};
 
 	struct MouseWheelEvent : public IEvent
 	{
 		DECL_TYPE_NAME(MouseWheelEvent);
 
-		MouseWheelEvent(double sx, double sy)
-		    : ScrollX(sx), ScrollY(sy) {}
-
 		double ScrollX {};
 		double ScrollY {};
+
+		MouseWheelEvent(double sx, double sy)
+		    : ScrollX(sx), ScrollY(sy) {}
 	};
 
 }
