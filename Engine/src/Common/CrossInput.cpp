@@ -10,7 +10,7 @@ namespace cedar
 	constexpr int NUM_KEYS = SDL_NUM_SCANCODES;
 
 	inline std::array<bool, NUM_KEYS> currentKeyState {};
-	inline std::array<bool, NUM_KEYS> previousKeyState {}; // Snapshot from last tick
+	inline std::array<bool, NUM_KEYS> previousKeyState {};
 
 	inline std::array<bool, NUM_KEYS> keysPressed {};
 	inline std::array<bool, NUM_KEYS> keysReleased {};
@@ -21,7 +21,6 @@ namespace cedar
 	inline std::array<bool, MB_Count> mousePressed {};
 	inline std::array<bool, MB_Count> mouseReleased {};
 
-	// Position/delta/wheel (frame-based)
 	inline int mouseX = 0, mouseY = 0;
 	inline int prevMouseX = 0, prevMouseY = 0;
 	inline int mouseDeltaX = 0, mouseDeltaY = 0;
@@ -56,7 +55,6 @@ namespace cedar
 			keysReleased[i] = !currentKeyState[i] && previousKeyState[i];
 		}
 
-		// Snapshot for next tick
 		memcpy(previousKeyState.data(), currentKeyState.data(), NUM_KEYS);
 	}
 
@@ -69,32 +67,19 @@ namespace cedar
 
 	void Input::UpdateMouseState()
 	{
-		// Get absolute mouse position & button mask
+		//Get button staten and mouse pos
 		Uint32 buttons = SDL_GetMouseState(&mouseX, &mouseY);
 
-		// map SDL_BUTTON(n) into 0..MB_Count-1 index
-		auto buttonPressed = [&](int sdlButton, int idx)
-		{
-			return (buttons & SDL_BUTTON(sdlButton)) != 0;
-		};
-
-		// compute held state (current frame) into mouseDownTemp
 		std::array<bool, MB_Count> current {};
-		current[0] = buttonPressed(SDL_BUTTON_LEFT, 0);
-		current[1] = buttonPressed(SDL_BUTTON_MIDDLE, 1);
-		current[2] = buttonPressed(SDL_BUTTON_RIGHT, 2);
-		current[3] = buttonPressed(SDL_BUTTON_X1, 3);
-		current[4] = buttonPressed(SDL_BUTTON_X2, 4);
+		mouseDown[0] = (buttons & SDL_BUTTON(SDL_BUTTON_LEFT));
+		mouseDown[1] = (buttons & SDL_BUTTON(SDL_BUTTON_MIDDLE));
+		mouseDown[2] = (buttons & SDL_BUTTON(SDL_BUTTON_RIGHT));
+		mouseDown[3] = (buttons & SDL_BUTTON(SDL_BUTTON_X1));
+		mouseDown[4] = (buttons & SDL_BUTTON(SDL_BUTTON_X2));
 
-		// compute per-frame delta position (window coords)
+		//Update mouse delta positoon
 		mouseDeltaX = mouseX - prevMouseX;
 		mouseDeltaY = mouseY - prevMouseY;
-
-		// store current into mouseDown (we don't compute edges here)
-		for (int i = 0; i < MB_Count; ++i)
-		{
-			mouseDown[i] = current[i];
-		}
 	}
 
 	void Input::ComputeFixedUpdateMouseEdges()
@@ -103,7 +88,7 @@ namespace cedar
 		{
 			mousePressed[i]  = mouseDown[i] && !prevMouseDown[i];
 			mouseReleased[i] = !mouseDown[i] && prevMouseDown[i];
-			prevMouseDown[i] = mouseDown[i]; // snapshot for next tick
+			prevMouseDown[i] = mouseDown[i];
 		}
 
 		// For position interpolation: we keep prevMouseX/Y updated here too
