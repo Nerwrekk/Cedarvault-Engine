@@ -229,6 +229,18 @@ namespace cedar
 		SDL_Quit();
 	}
 
+	void Application::RaiseEvent(IEvent& event)
+	{
+		for (auto it = m_layerStack.rbegin(); it != m_layerStack.rend(); ++it)
+		{
+			(*it)->OnEvent(event);
+			if (event.Handled)
+			{
+				break;
+			}
+		}
+	}
+
 	Camera* Application::GetMainCamera()
 	{
 		return &m_camera;

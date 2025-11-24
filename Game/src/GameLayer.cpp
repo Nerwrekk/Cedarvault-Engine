@@ -65,6 +65,12 @@ void GameLayer::OnDetach()
 {
 }
 
+void GameLayer::OnEvent(cedar::IEvent& event)
+{
+	//TODO: REMOVE THIS WHEN DONE TESTING
+	event.Handled = true;
+}
+
 void GameLayer::OnFixedUpdate(float fixedeltaTime)
 {
 	if (cedar::Input::IsMouseButtonPressed(cedar::Mouse::MB_Left))

@@ -69,6 +69,8 @@ namespace cedar
 		template <typename TLayer, typename... Args>
 		TLayer* PushLayer(Args&&... args);
 
+		void RaiseEvent(IEvent& event);
+
 		Camera* GetMainCamera();
 
 		void RenderCurrentLevel(const std::string& tileLevelMapId, int levelIndex);

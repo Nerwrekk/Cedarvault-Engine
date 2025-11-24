@@ -51,6 +51,10 @@ namespace cedar
 
 		virtual void OnAttach() {};
 		virtual void OnDetach() {};
+		virtual void OnEvent(IEvent& event)
+		{
+			UNREFERENCED_PARAMETER(event);
+		};
 		virtual void OnFixedUpdate(float fixedeltaTime)
 		{
 			UNREFERENCED_PARAMETER(fixedeltaTime);

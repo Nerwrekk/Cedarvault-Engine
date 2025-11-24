@@ -4,8 +4,9 @@
 
 namespace cedar
 {
+	//Wrapper for all events
 	struct IEvent
 	{
-		//Wrapper for all events
+		bool Handled;
 	};
 } // namespace cedar

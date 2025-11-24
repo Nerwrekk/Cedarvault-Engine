@@ -12,6 +12,7 @@ public:
 
 	virtual void OnAttach() override;
 	virtual void OnDetach() override;
+	virtual void OnEvent(cedar::IEvent& event) override;
 
 	virtual void OnFixedUpdate(float fixedeltaTime) override;
 

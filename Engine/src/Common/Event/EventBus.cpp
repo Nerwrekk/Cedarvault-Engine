@@ -1,4 +1,5 @@
 #include "Common/Event/EventBus.h"
+#include "Application/Application.h"
 
 namespace cedar
 {
@@ -24,9 +25,14 @@ namespace cedar
 			auto registry = CastRegistry<uint8_t>(ptr);
 			while (!registry->EventQueue.empty())
 			{
-				for (auto& listener : registry->Listeners)
+				auto& event = reinterpret_cast<IEvent&>(*registry->EventQueue.front());
+				Application::Get().RaiseEvent(event);
+				if (!event.Handled)
 				{
-					listener->Exectue(reinterpret_cast<IEvent&>(*registry->EventQueue.front()));
+					for (auto& listener : registry->Listeners)
+					{
+						listener->Exectue(reinterpret_cast<IEvent&>(*registry->EventQueue.front()));
+					}
 				}
 
 				registry->EventQueue.pop();
