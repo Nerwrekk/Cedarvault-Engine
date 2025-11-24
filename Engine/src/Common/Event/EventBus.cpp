@@ -31,7 +31,7 @@ namespace cedar
 				{
 					for (auto& listener : registry->Listeners)
 					{
-						listener->Exectue(reinterpret_cast<IEvent&>(*registry->EventQueue.front()));
+						listener->Exectue(event);
 					}
 				}
 
