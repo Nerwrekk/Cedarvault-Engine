@@ -1,7 +1,10 @@
 #pragma once
 
 #include "Application/Layer.h"
+#include "Application/Overlay.h"
 #include "Registry/TypeRegistry.h"
+
+#include <stdint.h>
 
 namespace cedar
 {
@@ -62,7 +65,7 @@ namespace cedar
 
 	private:
 		std::vector<Layer*> m_layers;
-		// unsigned int m_LayerInsertIndex = 0;
+		uint32_t m_layerInsertIndex = 0;
 	};
 
 	//We are leveraging variable template here '...' to be able to attach new layers that have multiple
@@ -82,9 +85,17 @@ namespace cedar
 		}
 
 		//create layer and add to collection
-		auto layer = new TLayer(std::forward<Args>(args)...);
-		m_layers.push_back(layer);
+		auto layer       = new TLayer(std::forward<Args>(args)...);
 		layer->m_layerID = TypeIdOf<TLayer>();
+		if (std::is_base_of<Overlay, TLayer>::value)
+		{
+			m_layers.emplace_back(layer);
+		}
+		else
+		{
+			m_layers.emplace(m_layers.begin() + m_layerInsertIndex, layer);
+			m_layerInsertIndex++;
+		}
 		layer->OnAttach();
 
 		return layer;

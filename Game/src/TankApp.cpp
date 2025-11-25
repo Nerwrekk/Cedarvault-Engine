@@ -1,6 +1,7 @@
 #include "CedarVault.h"
 #include "Common/EntryPoint.h"
 #include "GameLayer.h"
+#include "TestOverlay.h"
 
 class TankApp : public cedar::Application
 {
@@ -18,6 +19,7 @@ public:
 
 		//TODO: temporary solution, will fix later when scenes are established
 		PushLayer<GameLayer>(m_renderer, m_renderSystem.get(), m_entityManager.get());
+		PushLayer<TestOverlay>();
 	}
 
 	~TankApp()

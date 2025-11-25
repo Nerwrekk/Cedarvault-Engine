@@ -67,6 +67,7 @@ void GameLayer::OnDetach()
 
 void GameLayer::OnEvent(cedar::IEvent& event)
 {
+	CEDAR_WARN("OnEvent for: {}", GetTypeName());
 	//TODO: REMOVE THIS WHEN DONE TESTING
 	event.Handled = true;
 }
