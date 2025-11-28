@@ -14,6 +14,7 @@
 #include "Common/CedarTime.h"
 #include "Common/AssetManager.h"
 #include "imgui/ImGuiLayer.h"
+#include "Scene/SceneManager.h"
 
 #include "imgui.h"
 #include <imgui/bindings/imgui_impl_sdl.h>
@@ -28,6 +29,7 @@ namespace cedar
 		m_entityManager = std::make_unique<EntityManager>();
 		m_eventBus      = std::make_unique<EventBus>();
 		m_imGuiLayer    = std::make_unique<ImGuiLayer>();
+		m_sceneManager  = std::make_unique<SceneManager>();
 		// m_luieScriptEngine = std::make_unique<Luie::ScriptEngine>();
 
 		s_Application = this;
@@ -153,7 +155,7 @@ namespace cedar
 			// process queued events (from input -> event bus)
 			m_eventBus->PollEvents();
 
-			//TODO: Dispatch events to layers
+			auto scene = m_sceneManager.get()->GetActiveScene();
 
 			// --- fixed update step ---
 			int updates = 0;
@@ -166,10 +168,18 @@ namespace cedar
 
 				m_entityManager->SnapshotPreviousState();
 
-				for (auto& layer : m_layerStack)
+				if (scene)
 				{
-					layer->OnFixedUpdate(static_cast<float>(FIXED_DT));
+					for (auto& layer : *scene->GetLayerStack())
+					{
+						layer->OnFixedUpdate(static_cast<float>(FIXED_DT));
+					}
 				}
+
+				// for (auto& layer : m_layerStack)
+				// {
+				// 	layer->OnFixedUpdate(static_cast<float>(FIXED_DT));
+				// }
 
 				m_entityManager->Update(); //treat it as FlushCommandBuffers
 
@@ -185,27 +195,49 @@ namespace cedar
 
 			// Variable (per-frame) updates. Pass the variable dt (frameTime).
 			Time::DeltaTime = static_cast<float>(frameTime);
-			for (auto& layer : m_layerStack)
+			if (scene)
 			{
-				layer->OnUpdate(Time::DeltaTime);
+				for (auto& layer : *scene->GetLayerStack())
+				{
+					layer->OnUpdate(Time::DeltaTime);
+				}
 			}
+
+			// for (auto& layer : m_layerStack)
+			// {
+			// 	layer->OnUpdate(Time::DeltaTime);
+			// }
 
 			// interpolation factor [0,1)
 			Time::AlphaTime = static_cast<float>(accumulator / FIXED_DT);
 			// Rendering with interpolation factor
-			for (auto& layer : m_layerStack)
+			if (scene)
 			{
-				layer->OnRender(Time::AlphaTime);
+				for (auto& layer : *scene->GetLayerStack())
+				{
+					layer->OnRender(Time::AlphaTime);
+				}
 			}
+			// for (auto& layer : m_layerStack)
+			// {
+			// 	layer->OnRender(Time::AlphaTime);
+			// }
 
 			// ImGui / GUI
 			m_imGuiLayer->OnBeginRender();
 			{
-				m_imGuiLayer->OnImGuiRender();
-				for (auto& layer : m_layerStack)
+				// m_imGuiLayer->OnImGuiRender();
+				if (scene)
 				{
-					layer->OnImGuiRender();
+					for (auto& layer : *scene->GetLayerStack())
+					{
+						layer->OnImGuiRender();
+					}
 				}
+				// for (auto& layer : m_layerStack)
+				// {
+				// 	layer->OnImGuiRender();
+				// }
 			}
 			m_imGuiLayer->OnEndRender();
 

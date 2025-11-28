@@ -24,6 +24,7 @@ namespace cedar
 	class RenderSystem;
 	class LayerStack;
 	class ImGuiLayer;
+	class SceneManager;
 
 	struct WindowInit
 	{
@@ -89,6 +90,7 @@ namespace cedar
 		std::unique_ptr<AssetManager> m_assetManager;
 		std::shared_ptr<RenderSystem> m_renderSystem;
 		SDL_Renderer* m_renderer;
+		std::unique_ptr<SceneManager> m_sceneManager;
 
 	private:
 		std::unique_ptr<Luie::ScriptEngine> m_luieScriptEngine;
