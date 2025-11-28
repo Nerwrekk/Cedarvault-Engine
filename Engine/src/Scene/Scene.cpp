@@ -16,6 +16,11 @@ namespace cedar
 		return &m_layerStack;
 	}
 
+	EntityManager* Scene::GetEntityRegister()
+	{
+		return &m_entityRegistry;
+	}
+
 	void Scene::SetSceneName(std::string& name)
 	{
 		m_sceneName = name;

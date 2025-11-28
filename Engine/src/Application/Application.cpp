@@ -26,10 +26,10 @@ namespace cedar
 	Application* Application::s_Application = nullptr;
 	Application::Application()
 	{
-		m_entityManager = std::make_unique<EntityManager>();
-		m_eventBus      = std::make_unique<EventBus>();
-		m_imGuiLayer    = std::make_unique<ImGuiLayer>();
-		m_sceneManager  = std::make_unique<SceneManager>();
+		// m_entityManager = std::make_unique<EntityManager>();
+		m_eventBus     = std::make_unique<EventBus>();
+		m_imGuiLayer   = std::make_unique<ImGuiLayer>();
+		m_sceneManager = std::make_unique<SceneManager>();
 		// m_luieScriptEngine = std::make_unique<Luie::ScriptEngine>();
 
 		s_Application = this;
@@ -116,18 +116,18 @@ namespace cedar
 
 		// m_luieScriptEngine->Initialize();
 
-		m_entityManager->AddSystem<MovementSystem>();
-		m_entityManager->AddSystem<AnimationSystem>();
-		m_entityManager->AddSystem<MeanScriptSystem>();
-		m_entityManager->AddSystem<CollisionSystem>();
-		m_entityManager->AddSystem<CameraFollowSystem>();
-		m_entityManager->AddSystem<RenderBoxColliderSystem>();
-		m_entityManager->AddSystem<RenderSystem>();
+		// m_entityManager->AddSystem<MovementSystem>();
+		// m_entityManager->AddSystem<AnimationSystem>();
+		// m_entityManager->AddSystem<MeanScriptSystem>();
+		// m_entityManager->AddSystem<CollisionSystem>();
+		// m_entityManager->AddSystem<CameraFollowSystem>();
+		// m_entityManager->AddSystem<RenderBoxColliderSystem>();
+		// m_entityManager->AddSystem<RenderSystem>();
 
 		//m_entityManager->AddSystem<ScriptSystem>(m_luieScriptEngine.get());
 
-		auto renderSystem = m_entityManager->GetSystem<RenderSystem>().get();
-		m_renderSystem.reset(renderSystem);
+		// auto renderSystem = m_entityManager->GetSystem<RenderSystem>().get();
+		// m_renderSystem.reset(renderSystem);
 
 		m_imGuiLayer->OnAttach();
 	}
@@ -166,7 +166,11 @@ namespace cedar
 				Input::ComputeFixedUpdateKeyEdges();
 				Input::ComputeFixedUpdateMouseEdges();
 
-				m_entityManager->SnapshotPreviousState();
+				// m_entityManager->SnapshotPreviousState();
+				if (scene)
+				{
+					scene->GetEntityRegister()->SnapshotPreviousState();
+				}
 
 				if (scene)
 				{
@@ -181,7 +185,11 @@ namespace cedar
 				// 	layer->OnFixedUpdate(static_cast<float>(FIXED_DT));
 				// }
 
-				m_entityManager->Update(); //treat it as FlushCommandBuffers
+				if (scene)
+				{
+					scene->GetEntityRegister()->Update();
+				}
+				// m_entityManager->Update(); //treat it as FlushCommandBuffers
 
 				accumulator -= FIXED_DT;
 				updates++;
@@ -263,12 +271,16 @@ namespace cedar
 
 	void Application::RaiseEvent(IEvent& event)
 	{
-		for (auto it = m_layerStack.rbegin(); it != m_layerStack.rend(); ++it)
+		auto scene = SceneManager::Get()->GetActiveScene();
+		if (scene)
 		{
-			(*it)->OnEvent(event);
-			if (event.Handled)
+			for (auto it = scene->GetLayerStack()->rbegin(); it != scene->GetLayerStack()->rend(); ++it)
 			{
-				break;
+				(*it)->OnEvent(event);
+				if (event.Handled)
+				{
+					break;
+				}
 			}
 		}
 	}
@@ -513,9 +525,9 @@ namespace cedar
 	{
 		Time::DeltaTime = dt;
 
-		m_entityManager->UpdateAllSystems(Time::DeltaTime);
+		// m_entityManager->UpdateAllSystems(Time::DeltaTime);
 
-		m_entityManager->LateUpdateAllSystems();
+		// m_entityManager->LateUpdateAllSystems();
 	}
 
 	void Application::RenderCurrentLevel(const std::string& tileLevelMapId, int levelIndex)
@@ -563,9 +575,9 @@ namespace cedar
 
 		RenderCurrentLevel(GameSetting.CurrentLevel, GameSetting.CurrentLevelIndex);
 
-		m_renderSystem->RenderEntites(m_renderer, alpha);
+		// m_renderSystem->RenderEntites(m_renderer, alpha);
 
-		m_entityManager->RenderUpdateAllSystems(m_renderer, alpha);
+		// m_entityManager->RenderUpdateAllSystems(m_renderer, alpha);
 
 		SDL_RenderPresent(m_renderer);
 		// ImGui::EndFrame();

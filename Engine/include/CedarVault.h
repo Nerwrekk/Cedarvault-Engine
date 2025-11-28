@@ -20,6 +20,8 @@
 #include "imgui/bindings/imgui_impl_sdlrenderer.h"
 #include "imgui/bindings/imgui_impl_sdl.h"
 #include "imgui/ImGuiLayer.h"
+#include "Scene/SceneManager.h"
+#include "Scene/Scene.h"
 
 #include <glm/glm.hpp>
 

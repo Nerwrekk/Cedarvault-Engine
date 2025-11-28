@@ -18,8 +18,12 @@ public:
 		m_assetManager->LoadLevel("JungleLevel", 0);
 
 		//TODO: temporary solution, will fix later when scenes are established
-		PushLayer<GameLayer>(m_renderer, m_renderSystem.get(), m_entityManager.get());
-		PushLayer<TestOverlay>();
+		auto scene = cedar::SceneManager::Get()->CreateScene("DefaultScene");
+		scene->PushLayer<GameLayer>(m_renderer, scene->GetEntityRegister()->GetSystem<cedar::RenderSystem>().get(), scene->GetEntityRegister());
+		// PushLayer<GameLayer>(m_renderer, m_renderSystem.get(), m_entityManager.get());
+		scene->PushLayer<TestOverlay>();
+		cedar::SceneManager::Get()->SetActiveScene(scene);
+		// PushLayer<TestOverlay>();
 	}
 
 	~TankApp()

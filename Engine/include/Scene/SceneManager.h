@@ -14,6 +14,7 @@ namespace cedar
 
 		static SceneManager* Get();
 
+		Scene* CreateScene(const char* name);
 		Scene* CreateScene(std::string& name);
 		void RemoveScene(std::string& name);
 

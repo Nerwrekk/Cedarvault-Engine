@@ -19,6 +19,17 @@ namespace cedar
 		m_activeScene = nullptr;
 	}
 
+	SceneManager* SceneManager::Get()
+	{
+		return s_sceneManager;
+	}
+
+	Scene* SceneManager::CreateScene(const char* name)
+	{
+		auto nameStr = std::string(name);
+		return CreateScene(nameStr);
+	}
+
 	Scene* SceneManager::CreateScene(std::string& name)
 	{
 		auto scene     = new Scene(name);

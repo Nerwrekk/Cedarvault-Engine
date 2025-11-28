@@ -14,6 +14,7 @@ namespace cedar
 		void KillEntity(Entity entity);
 
 		LayerStack* GetLayerStack();
+		EntityManager* GetEntityRegister();
 
 		void SetSceneName(std::string& name);
 		std::string& GetSceneName();
@@ -27,6 +28,9 @@ namespace cedar
 		template <typename TComponent>
 		bool HasComponent(Entity entity) const;
 
+		template <typename TLayer, typename... Args>
+		TLayer* PushLayer(Args&&... args);
+
 	private:
 		Scene();
 		Scene(std::string& name);
@@ -38,6 +42,12 @@ namespace cedar
 		LayerStack m_layerStack;
 		EntityManager m_entityRegistry;
 	};
+
+	template <typename TLayer, typename... Args>
+	TLayer* Scene::PushLayer(Args&&... args)
+	{
+		return m_layerStack.PushLayer<TLayer>(std::forward<Args>(args)...);
+	}
 
 	template <typename TComponent, typename... TArgs>
 	void Scene::AddComponent(Entity entity, TArgs&&... args)

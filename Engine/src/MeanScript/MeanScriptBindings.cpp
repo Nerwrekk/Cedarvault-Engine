@@ -1,12 +1,13 @@
 #include "MeanScript/MeanScriptBindings.h"
 
 #include "ECS/Components/Components.h"
+#include "Scene/SceneManager.h"
 
 namespace Mean
 {
 	void SetEntityPosition(cedar::Entity entity, float x, float y)
 	{
-		auto transform = entity.GetComponent<cedar::TransformComponent>();
+		auto transform        = entity.GetComponent<cedar::TransformComponent>();
 		transform->Position.x = x;
 		transform->Position.y = y;
 	}
@@ -20,32 +21,56 @@ namespace Mean
 	{
 		if (std::strcmp(typeName, constants::RigidBodyComponent) == 0)
 		{
-			return cedar::EntityManager::Instance()->HasComponent<cedar::RigidBodyComponent>(entity);
+			auto scene = cedar::SceneManager::Get()->GetActiveScene();
+			if (scene)
+			{
+				return scene->HasComponent<cedar::RigidBodyComponent>(entity);
+			}
 		}
 
 		if (std::strcmp(typeName, constants::AnimationComponent) == 0)
 		{
-			return cedar::EntityManager::Instance()->HasComponent<cedar::AnimationComponent>(entity);
+			auto scene = cedar::SceneManager::Get()->GetActiveScene();
+			if (scene)
+			{
+				return scene->HasComponent<cedar::AnimationComponent>(entity);
+			}
 		}
 
 		if (std::strcmp(typeName, constants::BoxColliderComponent) == 0)
 		{
-			return cedar::EntityManager::Instance()->HasComponent<cedar::BoxColliderComponent>(entity);
+			auto scene = cedar::SceneManager::Get()->GetActiveScene();
+			if (scene)
+			{
+				return scene->HasComponent<cedar::BoxColliderComponent>(entity);
+			}
 		}
 
 		if (std::strcmp(typeName, constants::SpriteComponent) == 0)
 		{
-			return cedar::EntityManager::Instance()->HasComponent<cedar::SpriteComponent>(entity);
+			auto scene = cedar::SceneManager::Get()->GetActiveScene();
+			if (scene)
+			{
+				return scene->HasComponent<cedar::SpriteComponent>(entity);
+			}
 		}
 
 		if (std::strcmp(typeName, constants::ScriptComponent) == 0)
 		{
-			return cedar::EntityManager::Instance()->HasComponent<cedar::ScriptComponent>(entity);
+			auto scene = cedar::SceneManager::Get()->GetActiveScene();
+			if (scene)
+			{
+				return scene->HasComponent<cedar::ScriptComponent>(entity);
+			}
 		}
 
 		if (std::strcmp(typeName, constants::CameraFollowComponent) == 0)
 		{
-			return cedar::EntityManager::Instance()->HasComponent<cedar::CameraFollowComponent>(entity);
+			auto scene = cedar::SceneManager::Get()->GetActiveScene();
+			if (scene)
+			{
+				return scene->HasComponent<cedar::CameraFollowComponent>(entity);
+			}
 		}
 
 		return false;
@@ -93,20 +118,25 @@ namespace Mean
 
 	void AddComponent(cedar::Entity entity, const char* typeName)
 	{
+		auto scene = cedar::SceneManager::Get()->GetActiveScene();
+		if (!scene)
+		{
+			CEDAR_FATAL("No scene is active yet we are trying to add a component to an entity");
+		}
 		//Check if we have already added this component
 		if (HasComponent(entity, typeName))
 		{
 			return;
 		}
 		std::string str(typeName);
-		auto it = cedar::EntityManager::Instance()->ComponentFactories.find(str);
-		if (it != cedar::EntityManager::Instance()->ComponentFactories.end())
+		auto it = scene->GetEntityRegister()->ComponentFactories.find(str);
+		if (it != scene->GetEntityRegister()->ComponentFactories.end())
 		{
 			it->second(entity);
 		}
 
 		//TODO: Trying to see if this solution works
-		cedar::EntityManager::Instance()->AddEntityToSystem(entity);
+		scene->GetEntityRegister()->AddEntityToSystem(entity);
 	}
 
 	void Log(const char* msg, cedar::LogLevel level)

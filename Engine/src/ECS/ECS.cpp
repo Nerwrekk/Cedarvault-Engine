@@ -1,4 +1,12 @@
 #include "ECS/ECS.h"
+#include "ECS/Systems/MovementSystem.h"
+#include "ECS/Systems/AnimationSystem.h"
+#include "ECS/Systems/CollisionSystem.h"
+#include "ECS/Systems/ScriptSystem.h"
+#include "ECS/Systems/MeanScriptSystem.h"
+#include "ECS/Systems/RenderBoxColliderSystem.h"
+#include "ECS/Systems/CameraFollowSystem.h"
+#include "ECS/Systems/RenderSystem.h"
 
 #include "Common/Logger.h"
 #include "Application/Application.h"
@@ -22,7 +30,6 @@ namespace cedar
 		}
 	}
 
-	EntityManager* EntityManager::s_EntityManager = nullptr;
 	EntityManager::EntityManager()
 	{
 		m_ComponentPools.reserve(32);
@@ -35,8 +42,14 @@ namespace cedar
 		RegisterComponentType<ScriptComponent>(ScriptComponent::GetTypeName());
 		RegisterComponentType<SpriteComponent>(SpriteComponent::GetTypeName());
 
-		//TODO: add assert here!
-		s_EntityManager = this;
+		//TODO: Might be a temporary solution
+		AddSystem<MovementSystem>();
+		AddSystem<AnimationSystem>();
+		AddSystem<MeanScriptSystem>();
+		AddSystem<CollisionSystem>();
+		AddSystem<CameraFollowSystem>();
+		AddSystem<RenderBoxColliderSystem>();
+		AddSystem<RenderSystem>();
 	}
 
 	EntityManager::~EntityManager()
@@ -154,13 +167,6 @@ namespace cedar
 		auto cam   = Application::Get().GetMainCamera();
 		cam->PrevX = cam->X;
 		cam->PrevY = cam->Y;
-	}
-
-	EntityManager* EntityManager::Instance()
-	{
-		//TODO: Add assert here
-
-		return s_EntityManager;
 	}
 
 } // namespace cedar

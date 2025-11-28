@@ -111,8 +111,6 @@ namespace cedar
 	class CEDAR_API EntityManager
 	{
 	public:
-		static EntityManager* Instance();
-
 		EntityManager();
 		~EntityManager();
 		void Update();
@@ -261,8 +259,6 @@ namespace cedar
 		std::vector<Signature> m_entityComponentSignatures;
 
 		std::map<uint32_t, std::shared_ptr<BaseSystem>> m_systems;
-
-		static EntityManager* s_EntityManager;
 	};
 
 	template <typename TComponent, typename... TArgs>
