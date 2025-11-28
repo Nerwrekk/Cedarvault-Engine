@@ -53,11 +53,6 @@ namespace cedar
 
 		static Application& Get();
 
-		// EntityManager* Manager()
-		// {
-		// 	return m_entityManager.get();
-		// }
-
 		SDL_Renderer* GetRenderer() const;
 
 		SDL_Window* GetWindow() const;
@@ -66,9 +61,6 @@ namespace cedar
 		{
 			return m_luieScriptEngine.get();
 		}
-
-		template <typename TLayer, typename... Args>
-		TLayer* PushLayer(Args&&... args);
 
 		void RaiseEvent(IEvent& event);
 
@@ -81,11 +73,8 @@ namespace cedar
 
 	private:
 		void ProccessInputAndPollOsEvents();
-		void Update(float dt);
-		void Render(float interpolation);
 
 	protected:
-		// std::unique_ptr<EntityManager> m_entityManager;
 		std::unique_ptr<EventBus> m_eventBus;
 		std::unique_ptr<AssetManager> m_assetManager;
 		SDL_Renderer* m_renderer;
@@ -93,7 +82,6 @@ namespace cedar
 
 	private:
 		std::unique_ptr<Luie::ScriptEngine> m_luieScriptEngine;
-		// LayerStack m_layerStack;
 		std::unique_ptr<ImGuiLayer> m_imGuiLayer;
 		SDL_Window* m_window;
 		WindowInit windowInit;
@@ -104,12 +92,6 @@ namespace cedar
 
 		static Application* s_Application;
 	};
-
-	// template <typename TLayer, typename... Args>
-	// TLayer* Application::PushLayer(Args&&... args)
-	// {
-	// 	return m_layerStack.PushLayer<TLayer>(std::forward<Args>(args)...);
-	// }
 
 	// To be defined in CLIENT
 	Application* CreateApplication(); //TODO Add args later

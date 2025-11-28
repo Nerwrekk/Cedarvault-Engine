@@ -26,11 +26,9 @@ namespace cedar
 	Application* Application::s_Application = nullptr;
 	Application::Application()
 	{
-		// m_entityManager = std::make_unique<EntityManager>();
 		m_eventBus     = std::make_unique<EventBus>();
 		m_imGuiLayer   = std::make_unique<ImGuiLayer>();
 		m_sceneManager = std::make_unique<SceneManager>();
-		// m_luieScriptEngine = std::make_unique<Luie::ScriptEngine>();
 
 		s_Application = this;
 		Initialize();
@@ -116,19 +114,6 @@ namespace cedar
 
 		// m_luieScriptEngine->Initialize();
 
-		// m_entityManager->AddSystem<MovementSystem>();
-		// m_entityManager->AddSystem<AnimationSystem>();
-		// m_entityManager->AddSystem<MeanScriptSystem>();
-		// m_entityManager->AddSystem<CollisionSystem>();
-		// m_entityManager->AddSystem<CameraFollowSystem>();
-		// m_entityManager->AddSystem<RenderBoxColliderSystem>();
-		// m_entityManager->AddSystem<RenderSystem>();
-
-		//m_entityManager->AddSystem<ScriptSystem>(m_luieScriptEngine.get());
-
-		// auto renderSystem = m_entityManager->GetSystem<RenderSystem>().get();
-		// m_renderSystem.reset(renderSystem);
-
 		m_imGuiLayer->OnAttach();
 	}
 
@@ -166,30 +151,20 @@ namespace cedar
 				Input::ComputeFixedUpdateKeyEdges();
 				Input::ComputeFixedUpdateMouseEdges();
 
-				// m_entityManager->SnapshotPreviousState();
 				if (scene)
 				{
 					scene->GetEntityRegister()->SnapshotPreviousState();
-				}
 
-				if (scene)
-				{
 					for (auto& layer : *scene->GetLayerStack())
 					{
 						layer->OnFixedUpdate(static_cast<float>(FIXED_DT));
 					}
 				}
 
-				// for (auto& layer : m_layerStack)
-				// {
-				// 	layer->OnFixedUpdate(static_cast<float>(FIXED_DT));
-				// }
-
 				if (scene)
 				{
 					scene->GetEntityRegister()->Update();
 				}
-				// m_entityManager->Update(); //treat it as FlushCommandBuffers
 
 				accumulator -= FIXED_DT;
 				updates++;
@@ -211,11 +186,6 @@ namespace cedar
 				}
 			}
 
-			// for (auto& layer : m_layerStack)
-			// {
-			// 	layer->OnUpdate(Time::DeltaTime);
-			// }
-
 			// interpolation factor [0,1)
 			Time::AlphaTime = static_cast<float>(accumulator / FIXED_DT);
 			// Rendering with interpolation factor
@@ -226,10 +196,6 @@ namespace cedar
 					layer->OnRender(Time::AlphaTime);
 				}
 			}
-			// for (auto& layer : m_layerStack)
-			// {
-			// 	layer->OnRender(Time::AlphaTime);
-			// }
 
 			// ImGui / GUI
 			m_imGuiLayer->OnBeginRender();
@@ -242,10 +208,6 @@ namespace cedar
 						layer->OnImGuiRender();
 					}
 				}
-				// for (auto& layer : m_layerStack)
-				// {
-				// 	layer->OnImGuiRender();
-				// }
 			}
 			m_imGuiLayer->OnEndRender();
 
@@ -354,31 +316,6 @@ namespace cedar
 	{
 		Input::UpdateKeyStates();
 		Input::UpdateMouseState();
-
-		// SDL_Event sdlEvent;
-		// while (SDL_PollEvent(&sdlEvent))
-		// {
-		// 	ImGui_ImplSDL2_ProcessEvent(&sdlEvent);
-		// 	switch (sdlEvent.type)
-		// 	{
-		// 	case SDL_QUIT:
-		// 		m_isRunning = false;
-		// 		break;
-		// 	//===== KEYBOARD EVENTS =====
-		// 	case SDL_KEYDOWN: // A key was pressed.
-		// 		sdlEvent.key.repeat ? m_eventBus->PostEvent<KeyRepeatEvent>(KeyRepeatEvent(sdlEvent.key.keysym.sym)) :
-		// 		                      m_eventBus->PostEvent<KeyPressEvent>(KeyPressEvent(sdlEvent.key.keysym.sym));
-
-		// 		if (sdlEvent.key.keysym.sym == SDLK_ESCAPE)
-		// 		{
-		// 			m_isRunning = false;
-		// 		}
-		// 		break;
-		// 	case SDL_KEYUP: // A key was released.
-		// 		m_eventBus->PostEvent<KeyReleaseEvent>(KeyReleaseEvent(sdlEvent.key.keysym.sym));
-		// 		break;
-		// 	}
-		// }
 
 		SDL_Event event;
 		while (SDL_PollEvent(&event))
@@ -520,16 +457,6 @@ namespace cedar
 		}
 	}
 
-	//Update game objects
-	void Application::Update(float dt)
-	{
-		Time::DeltaTime = dt;
-
-		// m_entityManager->UpdateAllSystems(Time::DeltaTime);
-
-		// m_entityManager->LateUpdateAllSystems();
-	}
-
 	void Application::RenderCurrentLevel(const std::string& tileLevelMapId, int levelIndex)
 	{
 		TileLevelMap* tileLevelMap = AssetManager::Inst()->GetTileLevelMap(tileLevelMapId);
@@ -564,23 +491,6 @@ namespace cedar
 				SDL_RenderCopy(m_renderer, tileLevelMap->tilemap, &srcRect, &dstRect);
 			}
 		}
-	}
-
-	void Application::Render(float alpha)
-	{
-		Time::AlphaTime = alpha;
-
-		SDL_SetRenderDrawColor(m_renderer, 21, 21, 21, 255);
-		SDL_RenderClear(m_renderer);
-
-		RenderCurrentLevel(GameSetting.CurrentLevel, GameSetting.CurrentLevelIndex);
-
-		// m_renderSystem->RenderEntites(m_renderer, alpha);
-
-		// m_entityManager->RenderUpdateAllSystems(m_renderer, alpha);
-
-		SDL_RenderPresent(m_renderer);
-		// ImGui::EndFrame();
 	}
 
 } // namespace cedar
