@@ -11,6 +11,11 @@ namespace cedar
 		m_sceneName = name;
 	}
 
+	Entity Scene::CreateEntity()
+	{
+		return m_entityRegistry.CreateEntity();
+	}
+
 	LayerStack* Scene::GetLayerStack()
 	{
 		return &m_layerStack;

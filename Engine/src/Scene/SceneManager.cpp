@@ -45,7 +45,14 @@ namespace cedar
 
 	void SceneManager::SetActiveScene(Scene* scene)
 	{
-		m_activeScene = scene;
+		//set current scene to no not active
+		if (m_activeScene)
+		{
+			m_activeScene->m_isActiveScene = false;
+		}
+
+		m_activeScene          = scene;
+		scene->m_isActiveScene = true;
 	}
 
 	void SceneManager::SetActiveScene(std::string& name)

@@ -147,23 +147,20 @@ namespace cedar
 			while (accumulator >= FIXED_DT && updates < MAX_UPDATES_PER_FRAME)
 			{
 				// Let layers know there's a fixed update tick.
-				// Important: snapshot before fixed updates so systems can interpolate later.
 				Input::ComputeFixedUpdateKeyEdges();
 				Input::ComputeFixedUpdateMouseEdges();
 
 				if (scene)
 				{
-					scene->GetEntityRegister()->SnapshotPreviousState();
-
 					for (auto& layer : *scene->GetLayerStack())
 					{
 						layer->OnFixedUpdate(static_cast<float>(FIXED_DT));
 					}
-				}
 
-				if (scene)
-				{
-					scene->GetEntityRegister()->Update();
+					// Important: snapshot before fixed updates so systems can interpolate later.
+					scene->GetEntityRegister()->SnapshotPreviousState();
+
+					scene->GetEntityRegister()->FixedUpdateAllSystems(static_cast<float>(FIXED_DT));
 				}
 
 				accumulator -= FIXED_DT;
@@ -184,6 +181,15 @@ namespace cedar
 				{
 					layer->OnUpdate(Time::DeltaTime);
 				}
+
+				scene->GetEntityRegister()->UpdateAllSystems(Time::DeltaTime);
+
+				scene->GetEntityRegister()->LateUpdateAllSystems();
+			}
+
+			if (scene)
+			{
+				scene->GetEntityRegister()->Update();
 			}
 
 			// interpolation factor [0,1)
@@ -195,6 +201,8 @@ namespace cedar
 				{
 					layer->OnRender(Time::AlphaTime);
 				}
+
+				scene->GetEntityRegister()->RenderUpdateAllSystems(m_renderer, Time::AlphaTime);
 			}
 
 			// ImGui / GUI

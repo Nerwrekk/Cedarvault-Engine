@@ -38,6 +38,7 @@ namespace cedar
 	private:
 		friend class SceneManager;
 
+		bool m_isActiveScene = false;
 		std::string m_sceneName;
 		LayerStack m_layerStack;
 		EntityManager m_entityRegistry;

@@ -45,7 +45,7 @@ namespace cedar
 		}
 
 	public:
-		void RenderEntites(SDL_Renderer* renderer, float alpha)
+		virtual void RenderUpdate(SDL_Renderer* renderer, float alpha) override
 		{
 			SortEntities(GetSystemEntities());
 
