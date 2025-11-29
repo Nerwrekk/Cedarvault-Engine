@@ -65,12 +65,14 @@ void GameLayer::OnRender(float alpha)
 void GameLayer::OnImGuiRender()
 {
 	ImGui::Begin("MyWindow");
-	ImGui::Checkbox("Boolean property", &this->someBool);
-	if (ImGui::Button("Reset Speed"))
+	auto isPaused = cedar::SceneManager::Get()->GetActiveScene()->IsPaused();
+	ImGui::Checkbox("Scene paused", &isPaused);
+	if (ImGui::Button("Pause scene"))
 	{
 		// This code is executed when the user clicks the button
-		this->speed = 0;
+		pausedState = !pausedState;
+		cedar::SceneManager::Get()->GetActiveScene()->SetPaused(pausedState);
 	}
-	ImGui::SliderFloat("Speed", &this->speed, 0.0f, 10.0f);
+	// ImGui::SliderFloat("Speed", &this->speed, 0.0f, 10.0f);
 	ImGui::End();
 }

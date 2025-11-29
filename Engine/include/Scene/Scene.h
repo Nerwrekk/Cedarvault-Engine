@@ -31,6 +31,15 @@ namespace cedar
 		template <typename TLayer, typename... Args>
 		TLayer* PushLayer(Args&&... args);
 
+		void FixedUpdateAllSystems(float fixedDeltaTime);
+		void UpdateAllSystems(float deltaTime);
+		void LateUpdateAllSystems();
+		void RenderUpdateAllSystems(SDL_Renderer* renderer, float alpha);
+		void Update();
+
+		void SetPaused(bool paused);
+		bool IsPaused() const;
+
 	private:
 		Scene();
 		Scene(std::string& name);
@@ -39,6 +48,7 @@ namespace cedar
 		friend class SceneManager;
 
 		bool m_isActiveScene = false;
+		bool m_isPaused      = false;
 		std::string m_sceneName;
 		LayerStack m_layerStack;
 		EntityManager m_entityRegistry;

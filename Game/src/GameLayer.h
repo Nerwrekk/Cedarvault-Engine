@@ -20,6 +20,6 @@ public:
 	virtual void OnImGuiRender() override;
 
 private:
-	float speed   = 0;
-	bool someBool = false;
+	float speed      = 0;
+	bool pausedState = false;
 };

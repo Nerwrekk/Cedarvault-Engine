@@ -160,7 +160,7 @@ namespace cedar
 					// Important: snapshot before fixed updates so systems can interpolate later.
 					scene->GetEntityRegister()->SnapshotPreviousState();
 
-					scene->GetEntityRegister()->FixedUpdateAllSystems(static_cast<float>(FIXED_DT));
+					scene->FixedUpdateAllSystems(static_cast<float>(FIXED_DT));
 				}
 
 				accumulator -= FIXED_DT;
@@ -182,14 +182,14 @@ namespace cedar
 					layer->OnUpdate(Time::DeltaTime);
 				}
 
-				scene->GetEntityRegister()->UpdateAllSystems(Time::DeltaTime);
+				scene->UpdateAllSystems(Time::DeltaTime);
 
-				scene->GetEntityRegister()->LateUpdateAllSystems();
+				scene->LateUpdateAllSystems();
 			}
 
 			if (scene)
 			{
-				scene->GetEntityRegister()->Update();
+				scene->Update();
 			}
 
 			// interpolation factor [0,1)
@@ -208,7 +208,6 @@ namespace cedar
 			// ImGui / GUI
 			m_imGuiLayer->OnBeginRender();
 			{
-				// m_imGuiLayer->OnImGuiRender();
 				if (scene)
 				{
 					for (auto& layer : *scene->GetLayerStack())
