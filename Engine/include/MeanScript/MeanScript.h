@@ -17,6 +17,7 @@ namespace Mean
 		static void InitManagedScriptEngine(const std::string& scriptDllPath);
 		static void LoadScriptAssembly(const std::string& scriptDllPath);
 		static void AttachScriptToEntity(cedar::Entity entity, char* scriptName);
+		static void RemoveScriptEntity(cedar::Entity entity);
 		static void OnUpdateAllScripts(float deltaTime);
 
 		// void* LoadMeanManagedFunctionPtr(const std::filesystem::path& InAssemblyPath, const CharType* InTypeName, const CharType* InMethodName) const

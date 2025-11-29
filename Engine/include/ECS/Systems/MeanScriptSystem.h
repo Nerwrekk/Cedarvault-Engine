@@ -39,5 +39,13 @@ namespace cedar
 				Mean::MeanScript::AttachScriptToEntity(entity, (char*)script.c_str());
 			}
 		}
+
+		virtual void RemoveEntityFromSystem(Entity entity) override
+		{
+			Mean::MeanScript::RemoveScriptEntity(entity);
+
+			//Parent function
+			BaseSystem::RemoveEntityFromSystem(entity);
+		}
 	};
 } // namespace cedar

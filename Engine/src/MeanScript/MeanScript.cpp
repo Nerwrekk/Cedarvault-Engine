@@ -98,6 +98,7 @@ namespace
 using initialize_fn         = void (*)(const char* scriptDllPath);
 using loadScriptAssembly_fn = void (*)(const char* scriptDllPath);
 using instantiate_fn        = void (*)(const char* typeName, cedar::Entity entity);
+using removeScriptEntity_fn = void (*)(cedar::Entity entity);
 using update_fn             = void (*)(float);
 namespace Mean
 {
@@ -158,10 +159,11 @@ namespace Mean
 	void* runtimeContext;
 
 	//Unmanaged MeanScript functions that only the Engine can call
-	initialize_fn initialize                   = nullptr;
-	loadScriptAssembly_fn load_script_assembly = nullptr;
-	instantiate_fn instantiate_script          = nullptr;
-	update_fn update_scripts                   = nullptr;
+	initialize_fn initialize                        = nullptr;
+	loadScriptAssembly_fn load_script_assembly      = nullptr;
+	instantiate_fn instantiate_script               = nullptr;
+	removeScriptEntity_fn removeScriptEntity_script = nullptr;
+	update_fn update_scripts                        = nullptr;
 
 	bool MeanScript::Init()
 	{
@@ -220,6 +222,14 @@ namespace Mean
 		    UNMANAGEDCALLERSONLY_METHOD,
 		    nullptr,
 		    (void**)&instantiate_script);
+
+		status = load_assembly_fn(
+		    MEAN_STR("./MeanScripting.dll"),
+		    MEAN_STR("MeanScriptEngine.MeanScriptEngine, MeanScripting"),
+		    MEAN_STR("RemoveScriptEntity"),
+		    UNMANAGEDCALLERSONLY_METHOD,
+		    nullptr,
+		    (void**)&removeScriptEntity_script);
 
 		status = load_assembly_fn(
 		    MEAN_STR("./MeanScripting.dll"),
@@ -300,6 +310,11 @@ namespace Mean
 	void MeanScript::AttachScriptToEntity(cedar::Entity entity, char* scriptName)
 	{
 		instantiate_script(scriptName, entity);
+	}
+
+	void MeanScript::RemoveScriptEntity(cedar::Entity entity)
+	{
+		removeScriptEntity_script(entity);
 	}
 
 	void MeanScript::OnUpdateAllScripts(float deltaTime)

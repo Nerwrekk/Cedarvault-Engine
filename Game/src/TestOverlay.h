@@ -11,4 +11,5 @@ public:
 	virtual ~TestOverlay() = default;
 
 	virtual void OnEvent(cedar::IEvent& event) override;
+	virtual void OnImGuiRender() override;
 };

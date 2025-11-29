@@ -34,6 +34,7 @@ namespace cedar
 	{
 		m_ComponentPools.reserve(32);
 		m_entityComponentSignatures.reserve(32);
+		m_allEntities.reserve(100);
 
 		RegisterComponentType<RigidBodyComponent>(RigidBodyComponent::GetTypeName());
 		RegisterComponentType<AnimationComponent>(AnimationComponent::GetTypeName());
@@ -68,6 +69,7 @@ namespace cedar
 		for (auto& entity : m_entitiesToBeAdded)
 		{
 			AddEntityToSystem(entity);
+			m_allEntities.push_back(entity);
 		}
 
 		m_entitiesToBeAdded.clear();
@@ -87,6 +89,12 @@ namespace cedar
 
 			//add entity id to m_freeIds
 			m_freeIds.push_back(entity.GetId());
+
+			m_allEntities.erase(std::remove_if(m_allEntities.begin(), m_allEntities.end(), [&entity](Entity otherEntity)
+			{
+				return entity.GetId() == otherEntity.GetId();
+			}),
+			    m_allEntities.end());
 		}
 
 		m_entitiesToBeRemoved.clear();
@@ -97,7 +105,7 @@ namespace cedar
 		int entityId {};
 		if (m_freeIds.empty())
 		{
-			entityId = m_totalNumOfEntities++;
+			entityId = m_totalNumOfEntityIds++;
 			if (entityId >= m_entityComponentSignatures.size())
 			{
 				m_entityComponentSignatures.resize(entityId + 10);
@@ -117,12 +125,18 @@ namespace cedar
 		entity.AddComponent<IDComponent>();
 
 		m_entitiesToBeAdded.insert(entity);
+
 		return entity;
 	}
 
 	void EntityManager::KillEntity(Entity entity)
 	{
 		m_entitiesToBeRemoved.emplace(entity);
+	}
+
+	std::vector<Entity>& EntityManager::GetAllEntities()
+	{
+		return m_allEntities;
 	}
 
 	void EntityManager::AddEntityToSystem(Entity entity)

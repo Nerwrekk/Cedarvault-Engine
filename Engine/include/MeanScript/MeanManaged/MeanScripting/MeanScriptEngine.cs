@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Loader;
+using System.Linq;
 
 
 namespace MeanScriptEngine
@@ -88,6 +89,16 @@ namespace MeanScriptEngine
             script.OnStart(); //Maybe call OnStart here?
 
             _scripts.Add(script);
+        }
+
+        [UnmanagedCallersOnly]
+        public static void RemoveScriptEntity(Entity entity)
+        {
+            var meanScript = _scripts.FirstOrDefault(s => s.Entity.Id == entity.Id);
+            if (meanScript != null)
+            {
+                _scripts.Remove(meanScript);
+            }
         }
 
         [UnmanagedCallersOnly]

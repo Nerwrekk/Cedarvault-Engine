@@ -77,7 +77,7 @@ namespace cedar
 		virtual ~BaseSystem() = default;
 
 		virtual void AddEntityToSystem(Entity entity);
-		void RemoveEntityFromSystem(Entity entity);
+		virtual void RemoveEntityFromSystem(Entity entity);
 		std::vector<Entity>& GetSystemEntities();
 		const Signature& GetComponentSignature();
 
@@ -118,6 +118,8 @@ namespace cedar
 		Entity CreateEntity();
 		void KillEntity(Entity entity);
 		void AddEntityToSystem(Entity entity);
+
+		std::vector<Entity>& GetAllEntities();
 
 		template <typename TComponent, typename... TArgs>
 		void AddComponent(Entity entity, TArgs&&... args);
@@ -247,7 +249,8 @@ namespace cedar
 		std::set<Entity> m_entitiesToBeRemoved;
 		std::deque<int> m_freeIds;
 
-		uint32_t m_totalNumOfEntities = 0;
+		uint32_t m_totalNumOfEntityIds = 0;
+		std::vector<Entity> m_allEntities;
 
 		//Vector of component pools
 		//Vector index == component type id
@@ -281,9 +284,9 @@ namespace cedar
 		}
 
 		auto componentPool = static_cast<Pool<TComponent>*>(m_ComponentPools[componentId]);
-		if (m_totalNumOfEntities >= componentPool->Size())
+		if (m_totalNumOfEntityIds >= componentPool->Size())
 		{
-			componentPool->Resize(m_totalNumOfEntities);
+			componentPool->Resize(m_totalNumOfEntityIds);
 		}
 
 		TComponent component = TComponent(std::forward<TArgs>(args)...);
