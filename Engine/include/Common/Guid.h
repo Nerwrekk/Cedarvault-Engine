@@ -6,8 +6,6 @@
 
 namespace cedar
 {
-	class GuidGenerator;
-
 	class Guid
 	{
 	public:
@@ -23,9 +21,9 @@ namespace cedar
 		std::string ToString();
 
 	private:
-		friend class GuidGenerator;
 		uint64_t m_high;
 		uint64_t m_low;
+		friend class GuidGenerator;
 	};
 
 	class GuidGenerator
@@ -33,5 +31,12 @@ namespace cedar
 	public:
 		static std::pair<uint64_t, uint64_t> GenerateGuid();
 		static std::pair<uint64_t, uint64_t> GenerateGuidFromString(const std::string& guidString);
+
+	private:
+#if defined(_WIN32)
+		static inline std::pair<uint64_t, uint64_t> WindowsGenerateGuid();
+#else
+		static inline std::pair<uint64_t, uint64_t> LinuxGenerateGuid();
+#endif
 	};
 } // namespace cedar

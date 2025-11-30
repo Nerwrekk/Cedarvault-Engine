@@ -95,3 +95,11 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     glm::glm
     imgui::imgui
 )
+
+if(WIN32)
+
+else()
+    target_link_libraries(${PROJECT_NAME} PUBLIC 
+        uuid
+    )
+endif()

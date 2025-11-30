@@ -4,6 +4,7 @@
 
 #include <array>
 #include <string>
+#include <cstring>
 #include <sstream>
 #include <iomanip>
 #include <cstdint>
@@ -13,12 +14,7 @@
 	#pragma comment(lib, "ole32.lib")
 #else
 	#include <unistd.h>
-	#ifdef __has_include
-		#if __has_include(<uuid/uuid.h>)
-			#include <uuid/uuid.h>
-			#include "Guid.h"
-		#endif
-	#endif
+	#include <uuid/uuid.h>
 #endif
 
 namespace cedar
@@ -51,7 +47,7 @@ namespace cedar
 	}
 
 #if defined(_WIN32)
-	static inline std::pair<uint64_t, uint64_t> WindowsGenerateGuid()
+	inline std::pair<uint64_t, uint64_t> GuidGenerator::WindowsGenerateGuid()
 	{
 		GUID sysGuid;
 		CoCreateGuid(&sysGuid);
@@ -68,14 +64,14 @@ namespace cedar
 		return std::make_pair(high, low);
 	}
 #else
-	static inline std::pair<uint64_t, uint64_t> LinuxGenerateGuid()
+	inline std::pair<uint64_t, uint64_t> GuidGenerator::LinuxGenerateGuid()
 	{
 		uuid_t sysUuid;
 		uuid_generate(sysUuid);
 
 		uint32_t data1 = (sysUuid[0] << 24) | (sysUuid[1] << 16) | (sysUuid[2] << 8) | sysUuid[3];
-		uint16_t data2 = (sysUuid[4] << 8) | sysUuid[5];
-		uint16_t data3 = (sysUuid[6] << 8) | sysUuid[7];
+		uint16_t data2 = static_cast<uint16_t>((sysUuid[4] << 8) | sysUuid[5]);
+		uint16_t data3 = static_cast<uint16_t>((sysUuid[6] << 8) | sysUuid[7]);
 		std::array<uint8_t, 8> data4;
 		std::memcpy(data4.data(), sysUuid + 8, 8);
 
@@ -87,7 +83,8 @@ namespace cedar
 		{
 			cedarGuid.m_low |= static_cast<uint64_t>(data4[i]) << (8 * (7 - i));
 		}
-		return cedarGuid;
+
+		return std::make_pair(cedarGuid.m_high, cedarGuid.m_low);
 	}
 #endif
 

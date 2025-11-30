@@ -8,5 +8,7 @@ namespace cedar
 	struct IEvent
 	{
 		bool Handled = false;
+
+		virtual ~IEvent() = default;
 	};
 } // namespace cedar

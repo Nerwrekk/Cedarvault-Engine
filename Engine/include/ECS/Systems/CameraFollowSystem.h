@@ -3,6 +3,7 @@
 #include "ECS/Components/Components.h"
 #include "Common/Logger.h"
 
+#include <cmath>
 #include <SDL.h>
 
 namespace cedar
@@ -26,7 +27,7 @@ namespace cedar
 			auto gameSetting = &Application::Get().GameSetting;
 
 			// compute exponential smoothing factor from dt (recommended)
-			float k = 1.0f - std::expf(-followSpeed * Time::DeltaTime); // in (0,1)
+			// float k = 1.0f - std::expf(-followSpeed * Time::DeltaTime); // in (0,1)
 
 			for (auto entity : GetSystemEntities())
 			{

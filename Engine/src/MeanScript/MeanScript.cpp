@@ -30,7 +30,8 @@
 #else
 	#include <dlfcn.h>
 	#include <limits.h>
-	#include "MeanScript.h"
+	#include <sys/ptrace.h>
+	#include <unistd.h>
 
 	#define STR(s) s
 	#define CH(c) c

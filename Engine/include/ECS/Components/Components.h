@@ -8,7 +8,7 @@
 #include "BoxColliderComponent.h"
 #include "ScriptComponent.h"
 #include "CameraFollowComponent.h"
-#include "IdComponent.h"
+#include "IDComponent.h"
 
 namespace constants
 {

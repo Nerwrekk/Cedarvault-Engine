@@ -22,7 +22,7 @@ namespace cedar
 	{
 		for (auto& [_, ptr] : m_eventRegistries)
 		{
-			auto registry = CastRegistry<uint8_t>(ptr);
+			auto registry = CastRegistry<IEvent>(ptr);
 			while (!registry->EventQueue.empty())
 			{
 				auto& event = reinterpret_cast<IEvent&>(*registry->EventQueue.front());

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "common/Core.h"
+#include "Common/Core.h"
 #include "EventCallback.h"
 
 #include <queue>

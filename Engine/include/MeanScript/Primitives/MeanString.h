@@ -1,6 +1,6 @@
 #pragma once
 
-#include "common/Core.h"
+#include "Common/Core.h"
 
 #include <string>
 #include <cstring>
@@ -15,7 +15,7 @@ namespace Mean
 		{
 			m_data = new char[1];
 			// m_data = (char*)std::malloc(sizeof(char));
-			m_size = 1;
+			m_size     = 1;
 			m_capacity = 1;
 		}
 
@@ -30,7 +30,7 @@ namespace Mean
 		{
 			m_data = new char[string.length()];
 			std::memcpy(m_data, string.c_str(), string.length());
-			m_size = string.length();
+			m_size     = string.length();
 			m_capacity = string.length();
 		}
 
@@ -38,7 +38,7 @@ namespace Mean
 		{
 			m_data = new char[meanString.m_size];
 			std::memcpy(m_data, meanString.m_data, meanString.m_size);
-			m_size = meanString.m_size;
+			m_size     = meanString.m_size;
 			m_capacity = meanString.m_capacity;
 		}
 
@@ -46,7 +46,7 @@ namespace Mean
 		{
 			m_data = new char[meanString.m_size];
 			std::memcpy(m_data, meanString.m_data, meanString.m_size);
-			m_size = meanString.m_size;
+			m_size     = meanString.m_size;
 			m_capacity = meanString.m_capacity;
 
 			return *this;
@@ -118,7 +118,7 @@ namespace Mean
 				// std::free(m_data);
 			}
 
-			m_data = newBuffer;
+			m_data     = newBuffer;
 			m_capacity = newCapacity;
 		}
 
@@ -131,7 +131,7 @@ namespace Mean
 	//Bindings for Csharp to hande MeanStrings
 	using MeanString_GetString_fn = const char* (*)(MeanString*);
 	using MeanString_SetString_fn = void (*)(MeanString*, const char*);
-	using MeanString_GetSize_fn = uint64_t (*)(MeanString*);
+	using MeanString_GetSize_fn   = uint64_t (*)(MeanString*);
 
 	extern "C"
 	{

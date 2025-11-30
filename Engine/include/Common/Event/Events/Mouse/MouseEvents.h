@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IEvent.h"
+#include "Common/Event/Events/IEvent.h"
 
 namespace cedar
 {
