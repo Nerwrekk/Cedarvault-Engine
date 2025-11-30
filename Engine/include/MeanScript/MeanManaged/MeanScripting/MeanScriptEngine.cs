@@ -1,14 +1,13 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Loader;
-using System.Linq;
 
 
 namespace MeanScriptEngine
 {
     internal static class MeanScriptEngine
     {
-        private static List<MeanScriptBehaviour> _scripts = new();
+        private static List<MeanScriptBehaviour> _meanScripts = new();
         private static Assembly? _scriptDllAssembly;
 
         private static Type? meanScriptBehaviourBaseType;
@@ -83,30 +82,30 @@ namespace MeanScriptEngine
                 return;
             }
 
-            var script = (MeanScriptBehaviour)Activator.CreateInstance(type)!;
-            script.Entity = entity;
-            script.Transform = MeanNativeApi.GetTransformComponent(entity);
-            script.OnStart(); //Maybe call OnStart here?
+            var meanScript = (MeanScriptBehaviour)Activator.CreateInstance(type)!;
+            meanScript.Entity = entity;
+            meanScript.Transform = MeanNativeApi.GetTransformComponent(entity);
+            meanScript.OnStart(); //Maybe call OnStart here?
 
-            _scripts.Add(script);
+            _meanScripts.Add(meanScript);
         }
 
         [UnmanagedCallersOnly]
         public static void RemoveScriptEntity(Entity entity)
         {
-            var meanScript = _scripts.FirstOrDefault(s => s.Entity.Id == entity.Id);
+            var meanScript = _meanScripts.FirstOrDefault(s => s.Entity.Id == entity.Id);
             if (meanScript != null)
             {
-                _scripts.Remove(meanScript);
+                _meanScripts.Remove(meanScript);
             }
         }
 
         [UnmanagedCallersOnly]
         public static void OnUpdateAll(float deltaTime)
         {
-            foreach (var s in _scripts)
+            foreach (var meanScript in _meanScripts)
             {
-                s.OnUpdate(deltaTime);
+                meanScript.OnUpdate(deltaTime);
             }
         }
     }
