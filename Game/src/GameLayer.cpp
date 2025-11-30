@@ -58,8 +58,8 @@ void GameLayer::OnFixedUpdate(float fixedeltaTime)
 void GameLayer::OnRender(float alpha)
 {
 	//TODO: TEMPORARY, remember to fix!
-	cedar::Application::Get().RenderCurrentLevel(cedar::Application::Get().GameSetting.CurrentLevel,
-	    cedar::Application::Get().GameSetting.CurrentLevelIndex);
+	// cedar::Application::Get().RenderCurrentLevel(cedar::Application::Get().GameSetting.CurrentLevel,
+	//     cedar::Application::Get().GameSetting.CurrentLevelIndex);
 }
 
 void GameLayer::OnImGuiRender()

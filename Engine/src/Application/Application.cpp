@@ -192,6 +192,9 @@ namespace cedar
 				scene->Update();
 			}
 
+			//TODO: TEMPORARY, remember to fix!
+			RenderCurrentLevel(cedar::Application::Get().GameSetting.CurrentLevel, GameSetting.CurrentLevelIndex);
+
 			// interpolation factor [0,1)
 			Time::AlphaTime = static_cast<float>(accumulator / FIXED_DT);
 			// Rendering with interpolation factor
