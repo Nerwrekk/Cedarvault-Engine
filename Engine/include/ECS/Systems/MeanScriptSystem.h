@@ -42,6 +42,12 @@ namespace cedar
 
 		virtual void RemoveEntityFromSystem(Entity entity) override
 		{
+			if (std::find(m_entities.begin(), m_entities.end(), entity) == m_entities.end())
+			{
+				//entity does not exist in this system
+				return;
+			}
+
 			Mean::MeanScript::RemoveScriptEntity(entity);
 
 			//Parent function
