@@ -19,6 +19,7 @@ set(EXECUTABLE_OUTPUT_PATH $<0:>${CMAKE_BINARY_DIR}/bin)
 
 # project subdirectories 
 add_subdirectory(Engine) 
+add_subdirectory(Editor) 
 add_subdirectory(Game)
 
 target_compile_definitions(Engine PUBLIC
