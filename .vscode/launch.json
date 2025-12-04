@@ -6,10 +6,9 @@
       "type": "cppvsdbg",
       "request": "launch",
       "name": "Editor Win32",
-      "program": "CedarVaultEngine.exe",
+      "program": "Editor.exe",
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}/Targets/Debug/bin",
-      "preLaunchTask": "CMake: build"
     },
     {
       "type": "cppvsdbg",
@@ -26,7 +25,7 @@
       "name": "Editor Linux",
       "miDebuggerPath": "/usr/bin/gdb",
       "cwd": "${workspaceFolder}/Targets/Debug/bin",
-      "program": "${workspaceFolder}/Targets/Debug/bin/CedarVaultEngine"
+      "program": "${workspaceFolder}/Targets/Debug/bin/Editor"
     },
     {
       "type": "cppdbg",

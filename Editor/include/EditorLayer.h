@@ -1,9 +1,11 @@
 #pragma once
 
 #include "CedarVault.h"
+#include "Panels/SceneHierarchy.h"
 
 namespace cedar
 {
+	class SceneHierarchyPanel;
 	class EditorLayer : public Layer
 	{
 	public:
@@ -11,5 +13,17 @@ namespace cedar
 
 		EditorLayer()  = default;
 		~EditorLayer() = default;
+
+		virtual void OnAttach() override;
+		virtual void OnDetach() override;
+		virtual void OnEvent(IEvent& event) override;
+
+		virtual void OnFixedUpdate(float fixedeltaTime) override;
+
+		virtual void OnRender(float alpha) override; // for interpolation
+		virtual void OnImGuiRender() override;
+
+	private:
+		SceneHierarchyPanel m_sceneHierarchyPanel {};
 	};
 } // namespace cedar
