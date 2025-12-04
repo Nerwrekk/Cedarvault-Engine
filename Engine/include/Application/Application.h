@@ -70,6 +70,7 @@ namespace cedar
 
 	public:
 		GameSettings GameSetting;
+		SDL_Texture* m_FrameBuffer;
 
 	private:
 		void ProccessInputAndPollOsEvents();

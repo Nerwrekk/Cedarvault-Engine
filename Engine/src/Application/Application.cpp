@@ -96,6 +96,13 @@ namespace cedar
 			return;
 		}
 
+		m_FrameBuffer = SDL_CreateTexture(
+		    m_renderer,
+		    SDL_PIXELFORMAT_RGBA8888,
+		    SDL_TEXTUREACCESS_TARGET,
+		    GameSetting.WindowWidth,
+		    GameSetting.WindowHeight);
+
 		m_assetManager = std::make_unique<AssetManager>(m_renderer);
 
 		//Init the camera
@@ -192,8 +199,12 @@ namespace cedar
 				scene->Update();
 			}
 
+			SDL_SetRenderTarget(m_renderer, m_FrameBuffer);
+
+			SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
+			SDL_RenderClear(m_renderer);
 			//TODO: TEMPORARY, remember to fix!
-			RenderCurrentLevel(cedar::Application::Get().GameSetting.CurrentLevel, GameSetting.CurrentLevelIndex);
+			// RenderCurrentLevel(cedar::Application::Get().GameSetting.CurrentLevel, GameSetting.CurrentLevelIndex);
 
 			// interpolation factor [0,1)
 			Time::AlphaTime = static_cast<float>(accumulator / FIXED_DT);
@@ -220,6 +231,13 @@ namespace cedar
 				}
 			}
 			m_imGuiLayer->OnEndRender();
+
+			SDL_SetRenderTarget(m_renderer, nullptr);
+
+			SDL_SetRenderDrawColor(m_renderer, 20, 20, 20, 255);
+			SDL_RenderClear(m_renderer);
+
+			SDL_RenderCopy(m_renderer, m_FrameBuffer, nullptr, nullptr);
 
 			SDL_RenderPresent(m_renderer);
 
