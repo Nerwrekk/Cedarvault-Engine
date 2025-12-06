@@ -16,6 +16,6 @@ namespace cedar
 		void DrawEntityNode(Entity entity);
 
 	private:
-		Entity m_selectedEntity { 0 };
+		Entity m_selectedEntity { UINT32_MAX }; //setting max value so no pre existing entity will already be selected
 	};
 } // namespace cedar

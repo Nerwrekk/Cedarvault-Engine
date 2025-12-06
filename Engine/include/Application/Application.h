@@ -42,6 +42,12 @@ namespace cedar
 		int CurrentLevelIndex;
 	};
 
+	enum class AppMode
+	{
+		Editor,
+		Game
+	};
+
 	class Application
 	{
 	public:
@@ -68,6 +74,8 @@ namespace cedar
 
 		void RenderCurrentLevel(const std::string& tileLevelMapId, int levelIndex);
 
+		void SetAppMode(AppMode mode);
+
 	public:
 		GameSettings GameSetting;
 		SDL_Texture* m_FrameBuffer;
@@ -90,6 +98,7 @@ namespace cedar
 		//Note to self to remember to always pre-initialize fields in a class!
 		int previousMilliFrame = 0;
 		Camera m_camera;
+		AppMode m_mode;
 
 		static Application* s_Application;
 	};

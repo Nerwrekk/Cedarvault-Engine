@@ -72,8 +72,8 @@ namespace cedar
 
 		SDL_DisplayMode displayMode;
 		SDL_GetCurrentDisplayMode(0, &displayMode);
-		windowInit.WindowWidth  = 800;
-		windowInit.WindowHeight = 600;
+		windowInit.WindowWidth  = 1920;
+		windowInit.WindowHeight = 1020;
 
 		m_window = SDL_CreateWindow(
 		    "Game",
@@ -199,10 +199,12 @@ namespace cedar
 				scene->Update();
 			}
 
+			//render start here
 			SDL_SetRenderTarget(m_renderer, m_FrameBuffer);
 
 			SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
 			SDL_RenderClear(m_renderer);
+
 			//TODO: TEMPORARY, remember to fix!
 			// RenderCurrentLevel(cedar::Application::Get().GameSetting.CurrentLevel, GameSetting.CurrentLevelIndex);
 
@@ -219,6 +221,18 @@ namespace cedar
 				scene->GetEntityRegister()->RenderUpdateAllSystems(m_renderer, Time::AlphaTime);
 			}
 
+			SDL_SetRenderTarget(m_renderer, nullptr);
+
+			if (m_mode == AppMode::Editor)
+			{
+				SDL_SetRenderDrawColor(m_renderer, 20, 20, 20, 255);
+				SDL_RenderClear(m_renderer);
+			}
+			else if (m_mode == AppMode::Game)
+			{
+				SDL_RenderCopy(m_renderer, m_FrameBuffer, nullptr, nullptr);
+			}
+
 			// ImGui / GUI
 			m_imGuiLayer->OnBeginRender();
 			{
@@ -231,13 +245,6 @@ namespace cedar
 				}
 			}
 			m_imGuiLayer->OnEndRender();
-
-			SDL_SetRenderTarget(m_renderer, nullptr);
-
-			SDL_SetRenderDrawColor(m_renderer, 20, 20, 20, 255);
-			SDL_RenderClear(m_renderer);
-
-			SDL_RenderCopy(m_renderer, m_FrameBuffer, nullptr, nullptr);
 
 			SDL_RenderPresent(m_renderer);
 
@@ -519,6 +526,11 @@ namespace cedar
 				SDL_RenderCopy(m_renderer, tileLevelMap->tilemap, &srcRect, &dstRect);
 			}
 		}
+	}
+
+	void Application::SetAppMode(AppMode mode)
+	{
+		m_mode = mode;
 	}
 
 } // namespace cedar

@@ -23,6 +23,8 @@ public:
 		scene->PushLayer<TestOverlay>();
 
 		SetupEntities(scene);
+
+		SetAppMode(cedar::AppMode::Game);
 	}
 
 	//TODO: Temporary until the editior is implemented

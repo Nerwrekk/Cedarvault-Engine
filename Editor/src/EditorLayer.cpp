@@ -4,6 +4,8 @@ namespace cedar
 {
 	void EditorLayer::OnAttach()
 	{
+		//TODO: move this to somewere better later
+		SDL_SetTextureScaleMode(Application::Get().m_FrameBuffer, SDL_ScaleModeNearest); //this is good for rendering pixel art
 	}
 
 	void EditorLayer::OnDetach()
@@ -22,30 +24,12 @@ namespace cedar
 	{
 	}
 
-	static void docking()
+	static void DrawGameViewport()
 	{
-		ImGuiWindowFlags window_flags =
-		    ImGuiWindowFlags_NoDocking |
-		    ImGuiWindowFlags_NoTitleBar |
-		    ImGuiWindowFlags_NoCollapse |
-		    ImGuiWindowFlags_NoResize |
-		    ImGuiWindowFlags_NoMove |
-		    ImGuiWindowFlags_NoBringToFrontOnFocus |
-		    ImGuiWindowFlags_NoNavFocus;
+		ImGui::Begin("Game");
 
-		const ImGuiViewport* viewport = ImGui::GetMainViewport();
-		ImGui::SetNextWindowPos(viewport->Pos);
-		ImGui::SetNextWindowSize(viewport->Size);
-		ImGui::SetNextWindowViewport(viewport->ID);
-
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-
-		ImGui::Begin("Dockspace", nullptr, window_flags);
-		ImGui::PopStyleVar(2);
-
-		ImGuiID dockspace_id = ImGui::GetID("DockspaceID");
-		ImGui::DockSpace(dockspace_id, ImVec2(0, 0));
+		ImVec2 size = ImGui::GetContentRegionAvail();
+		ImGui::Image((ImTextureID)Application::Get().m_FrameBuffer, size);
 
 		ImGui::End();
 	}
@@ -53,6 +37,11 @@ namespace cedar
 	void EditorLayer::OnImGuiRender()
 	{
 		auto scene = cedar::SceneManager::Get()->GetActiveScene();
+
+		ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
+
 		m_sceneHierarchyPanel.DrawSceneHierarchy(scene);
+
+		DrawGameViewport();
 	}
 }

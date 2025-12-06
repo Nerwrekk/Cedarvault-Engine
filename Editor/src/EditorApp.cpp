@@ -7,6 +7,8 @@ class EditorApp : public cedar::Application
 public:
 	EditorApp()
 	{
+		SetAppMode(cedar::AppMode::Editor);
+
 		Mean::MeanScript::InitManagedScriptEngine("");
 		Mean::MeanScript::LoadScriptAssembly("./TankGame.dll");
 		// GetScriptEngine()->LoadScripts("./assets/scripts");
