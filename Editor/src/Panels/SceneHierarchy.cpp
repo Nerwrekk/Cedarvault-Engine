@@ -11,6 +11,11 @@ namespace cedar
 			DrawEntityNode(entity, scene);
 		}
 
+		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
+		{
+			m_selectedEntity = Entity(UINT32_MAX);
+		}
+
 		//right-click on blank space
 		if (ImGui::BeginPopupContextWindow(0, ImGuiPopupFlags_NoOpenOverItems | ImGuiPopupFlags_MouseButtonRight))
 		{
@@ -20,6 +25,13 @@ namespace cedar
 			}
 
 			ImGui::EndPopup();
+		}
+
+		ImGui::End();
+
+		ImGui::Begin("Properties");
+		if (m_selectedEntity.GetId() != UINT32_MAX)
+		{
 		}
 
 		ImGui::End();
