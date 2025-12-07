@@ -88,7 +88,7 @@ namespace cedar
 	{
 		if (entity.HasComponent<TransformComponent>())
 		{
-			if (ImGui::TreeNodeEx((void*)TypeIdOf<TransformComponent>(), ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
+			if (ImGui::TreeNodeEx((void*)(uint64_t)TypeIdOf<TransformComponent>(), ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
 			{
 				auto transform = entity.GetComponent<TransformComponent>();
 
@@ -112,7 +112,7 @@ namespace cedar
 
 		if (entity.HasComponent<BoxColliderComponent>())
 		{
-			if (ImGui::TreeNodeEx((void*)TypeIdOf<BoxColliderComponent>(), ImGuiTreeNodeFlags_DefaultOpen, "BoxCollider"))
+			if (ImGui::TreeNodeEx((void*)(uint64_t)TypeIdOf<BoxColliderComponent>(), ImGuiTreeNodeFlags_DefaultOpen, "BoxCollider"))
 			{
 				auto boxCollider = entity.GetComponent<BoxColliderComponent>();
 

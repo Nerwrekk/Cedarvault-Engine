@@ -19,6 +19,16 @@ namespace Mean
 			m_capacity = 1;
 		}
 
+		~MeanString()
+		{
+			if (m_data)
+			{
+				delete[] m_data;
+				m_data = nullptr;
+			}
+			// m_data = nullptr;
+		}
+
 		MeanString(const char* string)
 		    : m_data(nullptr), m_size(0), m_capacity(0)
 		{
@@ -50,16 +60,6 @@ namespace Mean
 			m_capacity = meanString.m_capacity;
 
 			return *this;
-		}
-
-		~MeanString()
-		{
-			if (m_data)
-			{
-				delete[] m_data;
-				m_data = nullptr;
-			}
-			// m_data = nullptr;
 		}
 
 		void SetString(const char* string)
