@@ -13,7 +13,8 @@ namespace cedar
 		void DrawSceneHierarchy(Scene* scene);
 
 	private:
-		void DrawEntityNode(Entity entity, Scene* scene);
+		void DrawEntityNode(Entity entity);
+		void DrawEntityComponents(Entity entity);
 
 	private:
 		Entity m_selectedEntity { UINT32_MAX }; //setting max value so no pre existing entity will already be selected
