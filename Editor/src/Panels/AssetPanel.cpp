@@ -35,8 +35,11 @@ namespace cedar
 		}
 
 		static float padding       = 16.f;
-		static float thumbnailSize = 128.f;
+		static float thumbnailSize = 96.f;
 		float cellSize             = thumbnailSize + padding;
+
+		ImGui::SliderFloat("Thumbnail Size", &thumbnailSize, 16, 512);
+		ImGui::SliderFloat("Padding", &padding, 0, 32);
 
 		float panelWidth = ImGui::GetContentRegionAvail().x;
 		int columCount   = (int)(panelWidth / cellSize);
@@ -51,7 +54,7 @@ namespace cedar
 		{
 			const auto& path  = dirEntry.path();
 			auto relativePath = fs::relative(path, s_AssetPath);
-			auto filenameStr  = relativePath.filename().string();
+			auto filenameStr  = relativePath.filename().stem().string();
 
 			// SDL_Texture* icon = dirEntry.is_directory() ? m_dirIcon : m_fileIcon;
 			SDL_Texture* icon = nullptr;
@@ -61,7 +64,8 @@ namespace cedar
 			}
 			else if (dirEntry.path().extension() == ".png")
 			{
-				icon = AssetManager::Inst()->GetTexture(dirEntry.path().stem().string());
+				auto imageTexture = AssetManager::Inst()->GetTexture(dirEntry.path().stem().string());
+				icon              = imageTexture != nullptr ? imageTexture : m_fileIcon;
 			}
 			else
 			{
@@ -83,9 +87,6 @@ namespace cedar
 		}
 
 		ImGui::Columns(1);
-
-		ImGui::SliderFloat("Thumbnail Size", &thumbnailSize, 16, 512);
-		ImGui::SliderFloat("Padding", &padding, 0, 32);
 
 		ImGui::End();
 	}

@@ -210,7 +210,8 @@ namespace cedar
 		}
 		catch (const std::exception& e)
 		{
-			CEDAR_FATAL("Unable to find asset with assed id: {}", assetId);
+			CEDAR_ERROR("Unable to find asset with assed id: {}", assetId);
+			return nullptr;
 		}
 
 		return texture;
