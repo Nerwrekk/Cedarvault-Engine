@@ -2,6 +2,7 @@
 
 #include "CedarVault.h"
 #include "Panels/SceneHierarchy.h"
+#include "Panels/AssetPanel.h"
 
 namespace cedar
 {
@@ -25,5 +26,6 @@ namespace cedar
 
 	private:
 		SceneHierarchyPanel m_sceneHierarchyPanel {};
+		AssetPanel m_assetPanel {};
 	};
 } // namespace cedar

@@ -42,6 +42,8 @@ namespace cedar
 
 		m_sceneHierarchyPanel.DrawSceneHierarchy(scene);
 
+		m_assetPanel.DrawAssetPanel();
+
 		DrawGameViewport();
 	}
 }
