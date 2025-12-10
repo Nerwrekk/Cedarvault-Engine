@@ -10,12 +10,12 @@ public:
 		SetAppMode(cedar::AppMode::Editor);
 
 		Mean::MeanScript::InitManagedScriptEngine("");
-		Mean::MeanScript::LoadScriptAssembly("./TankGame.dll");
+		Mean::MeanScript::LoadScriptAssembly("../bin/TankGame.dll");
 		// GetScriptEngine()->LoadScripts("./assets/scripts");
 
-		m_assetManager->LoadAssets("./assets/images");
-		m_assetManager->LoadTilemaps("./assets/tilemaps");
-		m_assetManager->LoadConfigurations("./assets/configurations");
+		m_assetManager->LoadAssets("../assets/images");
+		m_assetManager->LoadTilemaps("../assets/tilemaps");
+		m_assetManager->LoadConfigurations("../assets/configurations");
 		m_assetManager->LoadLevel("JungleLevel", 0);
 
 		auto scene = cedar::SceneManager::Get()->CreateScene("DefaultScene");
