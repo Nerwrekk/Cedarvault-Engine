@@ -1,7 +1,5 @@
 #include "Panels/AssetPanel.h"
 
-#include "CedarVault.h"
-
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -15,6 +13,13 @@ namespace cedar
 	AssetPanel::AssetPanel()
 	    : m_currentDirectory(s_AssetPath)
 	{
+		SDL_Surface* surface = IMG_Load("../Resources/Icons/DirectoryIcon.png");
+		m_dirIcon            = SDL_CreateTextureFromSurface(Application::Get().GetRenderer(), surface);
+		SDL_FreeSurface(surface);
+
+		SDL_Surface* iconSurface = IMG_Load("../Resources/Icons/FileIcon.png");
+		m_fileIcon               = SDL_CreateTextureFromSurface(Application::Get().GetRenderer(), iconSurface);
+		SDL_FreeSurface(iconSurface);
 	}
 
 	void AssetPanel::DrawAssetPanel()
@@ -29,26 +34,43 @@ namespace cedar
 			}
 		}
 
+		static float padding       = 16.f;
+		static float thumbnailSize = 128.f;
+		float cellSize             = thumbnailSize + padding;
+
+		float panelWidth = ImGui::GetContentRegionAvail().x;
+		int columCount   = (int)(panelWidth / cellSize);
+		if (columCount < 1)
+		{
+			columCount = 1;
+		}
+
+		ImGui::Columns(columCount, 0, false);
+
 		for (auto dirEntry : fs::directory_iterator(m_currentDirectory))
 		{
-			const auto& path    = dirEntry.path();
-			std::string pathStr = dirEntry.path().string();
-			auto relativePath   = fs::relative(path, s_AssetPath);
-			auto filenameStr    = relativePath.filename().string();
-			if (dirEntry.is_directory())
+			const auto& path  = dirEntry.path();
+			auto relativePath = fs::relative(path, s_AssetPath);
+			auto filenameStr  = relativePath.filename().string();
+
+			SDL_Texture* icon = dirEntry.is_directory() ? m_dirIcon : m_fileIcon;
+			ImGui::ImageButton((ImTextureID)icon, { thumbnailSize, thumbnailSize });
+			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 			{
-				if (ImGui::Button(filenameStr.c_str()))
+				if (dirEntry.is_directory())
 				{
 					m_currentDirectory /= dirEntry.path().filename();
 				}
 			}
-			else
-			{
-				if (ImGui::Button(filenameStr.c_str()))
-				{
-				}
-			}
+			ImGui::TextWrapped(filenameStr.c_str());
+
+			ImGui::NextColumn();
 		}
+
+		ImGui::Columns(1);
+
+		ImGui::SliderFloat("Thumbnail Size", &thumbnailSize, 16, 512);
+		ImGui::SliderFloat("Padding", &padding, 0, 32);
 
 		ImGui::End();
 	}

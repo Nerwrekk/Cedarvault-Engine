@@ -1,5 +1,7 @@
 #pragma once
 
+#include "CedarVault.h"
+
 #include <filesystem>
 
 namespace cedar
@@ -14,5 +16,8 @@ namespace cedar
 
 	private:
 		std::filesystem::path m_currentDirectory;
+
+		SDL_Texture* m_dirIcon;
+		SDL_Texture* m_fileIcon;
 	};
 } // namespace cedar
