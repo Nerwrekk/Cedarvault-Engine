@@ -54,7 +54,9 @@ namespace cedar
 			auto filenameStr  = relativePath.filename().string();
 
 			SDL_Texture* icon = dirEntry.is_directory() ? m_dirIcon : m_fileIcon;
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 			ImGui::ImageButton((ImTextureID)icon, { thumbnailSize, thumbnailSize });
+			ImGui::PopStyleColor();
 			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 			{
 				if (dirEntry.is_directory())
