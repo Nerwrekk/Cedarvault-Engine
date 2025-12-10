@@ -53,7 +53,20 @@ namespace cedar
 			auto relativePath = fs::relative(path, s_AssetPath);
 			auto filenameStr  = relativePath.filename().string();
 
-			SDL_Texture* icon = dirEntry.is_directory() ? m_dirIcon : m_fileIcon;
+			// SDL_Texture* icon = dirEntry.is_directory() ? m_dirIcon : m_fileIcon;
+			SDL_Texture* icon = nullptr;
+			if (dirEntry.is_directory())
+			{
+				icon = m_dirIcon;
+			}
+			else if (dirEntry.path().extension() == ".png")
+			{
+				icon = AssetManager::Inst()->GetTexture(dirEntry.path().stem().string());
+			}
+			else
+			{
+				icon = m_fileIcon;
+			}
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 			ImGui::ImageButton((ImTextureID)icon, { thumbnailSize, thumbnailSize });
 			ImGui::PopStyleColor();
