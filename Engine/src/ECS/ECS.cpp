@@ -44,11 +44,11 @@ namespace cedar
 		RegisterComponentType<SpriteComponent>(SpriteComponent::GetTypeName());
 
 		//TODO: Might be a temporary solution
-		AddSystem<MovementSystem>();
-		AddSystem<AnimationSystem>();
 		AddSystem<MeanScriptSystem>();
+		AddSystem<MovementSystem>();
 		AddSystem<CollisionSystem>();
 		AddSystem<CameraFollowSystem>();
+		AddSystem<AnimationSystem>();
 		AddSystem<RenderBoxColliderSystem>();
 		AddSystem<RenderSystem>();
 	}

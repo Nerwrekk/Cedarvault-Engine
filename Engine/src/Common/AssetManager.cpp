@@ -3,6 +3,7 @@
 #include "Common/Utils.h"
 #include "Common/Mindi/Mindi.h"
 #include "Application/Application.h"
+#include "Common/Gameplay.h"
 
 #include <iostream>
 #include <fstream>
@@ -38,6 +39,12 @@ namespace cedar
 			SDL_DestroyTexture(texture);
 		}
 
+		for (auto& [key, sprite] : m_sprites)
+		{
+			CEDAR_DELETE(sprite);
+		}
+
+		m_sprites.clear();
 		m_textures.clear();
 	}
 
@@ -60,11 +67,18 @@ namespace cedar
 					const auto fileName = dirEntry.path().stem().string();
 					CEDAR_WARN("File: {}", fileName);
 
+					Sprite* sprite       = new Sprite();
 					SDL_Surface* surface = IMG_Load(dirEntry.path().string().c_str());
+					sprite->Width        = surface->w;
+					sprite->Height       = surface->h;
+					sprite->SrcRect.w    = sprite->Width;
+					sprite->SrcRect.h    = sprite->Height;
 					SDL_Texture* texture = SDL_CreateTextureFromSurface(m_renderer, surface);
+					sprite->Texture      = texture;
 					SDL_FreeSurface(surface);
 
 					m_textures.emplace(fileName, texture);
+					m_sprites.emplace(fileName, sprite);
 				}
 			}
 		}
@@ -215,6 +229,22 @@ namespace cedar
 		}
 
 		return texture;
+	}
+
+	Sprite* AssetManager::GetSprite(const std::string& spriteId) const
+	{
+		Sprite* sprite = nullptr;
+		try
+		{
+			sprite = m_sprites.at(spriteId);
+		}
+		catch (const std::exception& e)
+		{
+			CEDAR_ERROR("Unable to find sprite with sprite id: {}", spriteId);
+			return nullptr;
+		}
+
+		return sprite;
 	}
 
 	SDL_Texture* AssetManager::GetTileMap(const std::string& tilemapId) const

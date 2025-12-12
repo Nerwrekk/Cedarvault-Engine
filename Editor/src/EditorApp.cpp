@@ -29,24 +29,28 @@ public:
 	void SetupEntities(cedar::Scene* scene)
 	{
 		auto tank = scene->CreateEntity();
-		tank.AddComponent<cedar::RigidBodyComponent>(glm::vec2(0.f, -5.f));
-		tank.AddComponent<cedar::SpriteComponent>("tank-panther-right", 32, 32, 0);
+		// tank.AddComponent<cedar::RigidBodyComponent>(glm::vec2(0.f, -5.f));
+		tank.AddComponent<cedar::SpriteComponent>("eye_strip");
 		tank.AddComponent<cedar::BoxColliderComponent>(20, 18, glm::vec2(4, 8));
-		tank.GetComponent<cedar::TransformComponent>()->Position = { 100, 400 };
+		tank.AddComponent<cedar::AnimationComponent>(34, 4, true);
+		tank.GetComponent<cedar::TransformComponent>()->Position = { 400, 400 };
+		tank.GetComponent<cedar::TransformComponent>()->Scale    = { 3, 3 };
 
 		auto truck = scene->CreateEntity();
 		// truck.AddComponent<cedar::RigidBodyComponent>(glm::vec2(0.f, 0.f));
-		truck.AddComponent<cedar::SpriteComponent>("tank-panther-right", 32, 32, 0);
+		truck.AddComponent<cedar::SpriteComponent>("tank-panther-right");
 		truck.GetComponent<cedar::TransformComponent>()->Position = { 0, 10 };
 		truck.AddComponent<cedar::BoxColliderComponent>(32, 32, glm::vec2(0, 0));
 		truck.AddComponent<cedar::ScriptComponent>(std::vector<std::string> { "Tank" });
 		truck.AddComponent<cedar::CameraFollowComponent>();
 
 		auto chopper = scene->CreateEntity();
-		chopper.AddComponent<cedar::SpriteComponent>("chopper-spritesheet", 32, 32, 1);
-		chopper.AddComponent<cedar::AnimationComponent>(2, 10, true);
+		chopper.AddComponent<cedar::SpriteComponent>("player_walk_left_strip", 1);
+		chopper.AddComponent<cedar::AnimationComponent>(4, 4, true);
 		chopper.AddComponent<cedar::BoxColliderComponent>(20, 18, glm::vec2(4, 8));
 		chopper.AddComponent<cedar::ScriptComponent>(std::vector<std::string> { "Chopper" });
+		chopper.GetComponent<cedar::TransformComponent>()->Position = { 300, 500 };
+		chopper.GetComponent<cedar::TransformComponent>()->Scale    = { 3, 3 };
 	}
 
 	~EditorApp()

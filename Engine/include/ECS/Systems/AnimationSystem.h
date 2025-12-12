@@ -2,6 +2,7 @@
 
 #include "Common/SDL_Wrapper.h"
 #include "ECS/Components/Components.h"
+#include "Common/AssetManager.h"
 
 namespace cedar
 {
@@ -24,10 +25,13 @@ namespace cedar
 			{
 				auto spriteComp = entity.GetComponent<SpriteComponent>();
 				auto animComp   = entity.GetComponent<AnimationComponent>();
+				auto sprite     = AssetManager::Inst()->GetSprite(spriteComp->TextureId.GetString());
 				// CEDAR_DEBUG("CurrentFrameCalculation: {}", ((SDL_GetTicks() - animComp->StartTime) * animComp->FrameRateSpeed / 1000));
 				// CEDAR_DEBUG("CurrentFrameCalculation with module: {}", ((SDL_GetTicks() - animComp->StartTime) * animComp->FrameRateSpeed / 1000) % animComp->NumOfFrames);
 				animComp->CurrentFrame = ((SDL_GetTicks() - animComp->StartTime) * animComp->FrameRateSpeed / 1000) % animComp->NumOfFrames;
-				spriteComp->SrcRect.x  = animComp->CurrentFrame * spriteComp->Width;
+				auto srcWidth          = (sprite->Width / animComp->NumOfFrames);
+				sprite->SrcRect.x      = animComp->CurrentFrame * srcWidth;
+				sprite->SrcRect.w      = srcWidth;
 			}
 		}
 	};

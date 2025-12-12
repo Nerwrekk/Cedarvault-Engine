@@ -55,7 +55,6 @@ namespace cedar
 		if (ImGui::IsItemClicked())
 		{
 			m_selectedEntity = entity;
-			CEDAR_INFO("selected entity: {}", m_selectedEntity.GetId());
 		}
 
 		bool isEntityDeleted = false;
@@ -126,6 +125,30 @@ namespace cedar
 
 				if (ImGui::DragFloat2("Offset", glm::value_ptr(boxCollider->Offset), .1f))
 				{
+				}
+
+				ImGui::TreePop();
+			}
+		}
+
+		if (entity.HasComponent<SpriteComponent>())
+		{
+			if (ImGui::TreeNodeEx((void*)(uint64_t)TypeIdOf<SpriteComponent>(), ImGuiTreeNodeFlags_DefaultOpen, "Sprite"))
+			{
+				auto sprite = entity.GetComponent<SpriteComponent>();
+
+				auto zIndex = static_cast<int>(sprite->ZIndex);
+				if (ImGui::DragInt("Z-Index", &zIndex, .1f))
+				{
+					sprite->ZIndex = zIndex;
+				}
+
+				auto imageTexture = AssetManager::Inst()->GetTexture(sprite->TextureId.GetString());
+				if (imageTexture)
+				{
+					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+					ImGui::ImageButton((ImTextureID)imageTexture, { 64, 64 });
+					ImGui::PopStyleColor();
 				}
 
 				ImGui::TreePop();

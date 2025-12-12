@@ -64,8 +64,9 @@ namespace cedar
 				auto transform       = entity.GetComponent<TransformComponent>();
 				auto spriteComponent = entity.GetComponent<SpriteComponent>();
 
-				SDL_Texture* texture = AssetManager::Inst()->GetTexture(spriteComponent->TextureId.GetString());
-				SDL_Rect srcRect     = spriteComponent->SrcRect;
+				// SDL_Texture* texture = AssetManager::Inst()->GetTexture(spriteComponent->TextureId.GetString());
+				Sprite* sprite   = AssetManager::Inst()->GetSprite(spriteComponent->TextureId.GetString());
+				SDL_Rect srcRect = sprite->SrcRect;
 
 				// Interpolate transform position and rotation
 				glm::vec2 renderPos   = glm::mix(transform->PrevPosition, transform->Position, alpha);
@@ -76,13 +77,16 @@ namespace cedar
 				// Use float -> int conversion consistently (round or floor as you prefer)
 				int dstX = static_cast<int>(std::round(renderPos.x - camX));
 				int dstY = static_cast<int>(std::round(renderPos.y - camY));
-				int dstW = static_cast<int>(std::round(spriteComponent->Width * renderScale.x));
-				int dstH = static_cast<int>(std::round(spriteComponent->Height * renderScale.y));
+				int dstW = static_cast<int>(std::round(srcRect.w * renderScale.x));
+				int dstH = static_cast<int>(std::round(srcRect.h * renderScale.y));
 
 				SDL_Rect dstRect { dstX, dstY, dstW, dstH };
 
 				// Render (rotation in degrees). Do NOT mutate transform here.
-				SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRect, renderRot, nullptr, SDL_FLIP_NONE);
+				if (sprite)
+				{
+					SDL_RenderCopyEx(renderer, sprite->Texture, &srcRect, &dstRect, renderRot, nullptr, SDL_FLIP_NONE);
+				}
 			}
 		}
 	};

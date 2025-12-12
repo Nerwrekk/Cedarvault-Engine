@@ -17,11 +17,17 @@ namespace MeanScriptEngine.Components
 
         public AnimationComponent(nint nativePtr)
         {
+            // _numOfFrames = (int*)nativePtr;
+            // _currentFrame = _numOfFrames + 1;
+            // _frameRateSpeed = _numOfFrames + 2;
+            // _startTime = _numOfFrames + 3;
+            // _shouldLoop = (bool*)_numOfFrames + 4;
+
             _numOfFrames = (int*)nativePtr;
-            _currentFrame = _numOfFrames + 1;
-            _frameRateSpeed = _numOfFrames + 2;
-            _startTime = _numOfFrames + 3;
-            _shouldLoop = (bool*)_numOfFrames + 4;
+            _currentFrame = (int*)(nativePtr + 4);
+            _frameRateSpeed = (int*)(nativePtr + 8);
+            _startTime = (int*)(nativePtr + 12);
+            _shouldLoop = (bool*)(nativePtr + 16);
         }
     }
 }

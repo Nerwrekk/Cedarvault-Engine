@@ -8,6 +8,8 @@
 
 namespace cedar
 {
+	struct Sprite;
+
 	struct TileLevelMap
 	{
 		int TileSize;
@@ -35,6 +37,7 @@ namespace cedar
 		void LoadLevel(const std::string& levelMapId, int level);
 
 		SDL_Texture* GetTexture(const std::string& assetId) const;
+		Sprite* GetSprite(const std::string& spriteId) const;
 		SDL_Texture* GetTileMap(const std::string& tilemapId) const;
 		const MapLayout& GetLevelMap(const std::string& levelMapId) const;
 		TileLevelMap* GetTileLevelMap(const std::string& tileLevelMapId) const;
@@ -44,6 +47,7 @@ namespace cedar
 
 		SDL_Renderer* m_renderer;
 		std::map<std::string, SDL_Texture*> m_textures;
+		std::map<std::string, Sprite*> m_sprites;
 		std::map<std::string, TileLevelMap*> m_allLevels;
 		std::map<std::string, SDL_Texture*> m_tileMaps;
 		std::map<std::string, MapLayout> m_levelMaps;

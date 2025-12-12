@@ -13,7 +13,7 @@ namespace cedar
 {
 	void SetEntityPosition(Entity entity, double x, double y)
 	{
-		auto transform = entity.GetComponent<TransformComponent>();
+		auto transform        = entity.GetComponent<TransformComponent>();
 		transform->Position.x = x;
 		transform->Position.y = y;
 	}
@@ -27,7 +27,7 @@ namespace cedar
 
 	void SetEntityVelocity(Entity entity, double x, double y)
 	{
-		auto ridigbody = entity.GetComponent<RigidBodyComponent>();
+		auto ridigbody        = entity.GetComponent<RigidBodyComponent>();
 		ridigbody->Velocity.x = x;
 		ridigbody->Velocity.y = y;
 	}
@@ -67,12 +67,12 @@ namespace cedar
 		    "scale", &TransformComponent::Scale,
 		    "rotation", &TransformComponent::Rotation);
 
-		lua.new_usertype<SpriteComponent>("SpriteComponent",
-		    "Sprite", &SpriteComponent::TextureId,
-		    "Width", &SpriteComponent::Width,
-		    "Height", &SpriteComponent::Height,
-		    "ZIndex", &SpriteComponent::ZIndex,
-		    "SrcRect", &SpriteComponent::SrcRect);
+		// lua.new_usertype<SpriteComponent>("SpriteComponent",
+		//     "Sprite", &SpriteComponent::TextureId,
+		//     "Width", &SpriteComponent::Width,
+		//     "Height", &SpriteComponent::Height,
+		//     "ZIndex", &SpriteComponent::ZIndex,
+		//     "SrcRect", &SpriteComponent::SrcRect);
 
 		lua.set_function("GetSpriteComponent", &GetSpriteComponent);
 		lua.set_function("GetTransformComponent", &GetTransformComponent);
@@ -90,11 +90,11 @@ namespace cedar
 
 		// Bind KeyCodes
 		sol::table keys = lua.create_table();
-		keys["A"] = Key::A;
-		keys["D"] = Key::D;
-		keys["W"] = Key::W;
-		keys["S"] = Key::S;
-		keys["Space"] = Key::Space;
+		keys["A"]       = Key::A;
+		keys["D"]       = Key::D;
+		keys["W"]       = Key::W;
+		keys["S"]       = Key::S;
+		keys["Space"]   = Key::Space;
 
 		lua["Keys"] = keys;
 	}
