@@ -47,7 +47,7 @@ namespace cedar
 		AddSystem<MeanScriptSystem>();
 		AddSystem<MovementSystem>();
 		AddSystem<CollisionSystem>();
-		AddSystem<CameraFollowSystem>();
+		// AddSystem<CameraFollowSystem>();
 		AddSystem<AnimationSystem>();
 		AddSystem<RenderBoxColliderSystem>();
 		AddSystem<RenderSystem>();
