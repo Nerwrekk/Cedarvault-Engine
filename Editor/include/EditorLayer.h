@@ -20,6 +20,7 @@ namespace cedar
 		virtual void OnEvent(IEvent& event) override;
 
 		virtual void OnFixedUpdate(float fixedeltaTime) override;
+		virtual void OnUpdate(float deltaTime) override;
 
 		virtual void OnRender(float alpha) override; // for interpolation
 		virtual void OnImGuiRender() override;

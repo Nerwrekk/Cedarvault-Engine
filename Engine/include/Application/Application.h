@@ -76,6 +76,9 @@ namespace cedar
 
 		void SetAppMode(AppMode mode);
 
+		template <typename TLayer, typename... Args>
+		TLayer* PushLayer(Args&&... args);
+
 	public:
 		GameSettings GameSetting;
 		SDL_Texture* m_FrameBuffer;
@@ -92,6 +95,7 @@ namespace cedar
 	private:
 		std::unique_ptr<Luie::ScriptEngine> m_luieScriptEngine;
 		std::unique_ptr<ImGuiLayer> m_imGuiLayer;
+		LayerStack m_layerStack;
 		SDL_Window* m_window;
 		WindowInit windowInit;
 		bool m_isRunning = false;
@@ -105,5 +109,11 @@ namespace cedar
 
 	// To be defined in CLIENT
 	Application* CreateApplication(); //TODO Add args later
+
+	template <typename TLayer, typename... Args>
+	TLayer* Application::PushLayer(Args&&... args)
+	{
+		return m_layerStack.PushLayer<TLayer>(std::forward<Args>(args)...);
+	}
 
 } // namespace cedar

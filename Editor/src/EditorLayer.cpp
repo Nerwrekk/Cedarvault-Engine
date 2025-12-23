@@ -19,10 +19,30 @@ namespace cedar
 
 	void EditorLayer::OnFixedUpdate(float fixedeltaTime)
 	{
+		auto scene = SceneManager::Get()->GetActiveScene();
+
+		// Important: snapshot before fixed updates so systems can interpolate later.
+		scene->GetEntityRegister()->SnapshotPreviousState();
+
+		scene->FixedUpdateAllSystems(static_cast<float>(FIXED_DT));
+	}
+
+	void EditorLayer::OnUpdate(float deltaTime)
+	{
+		auto scene = SceneManager::Get()->GetActiveScene();
+
+		scene->UpdateAllSystems(Time::DeltaTime);
+
+		scene->LateUpdateAllSystems();
+
+		scene->Update();
 	}
 
 	void EditorLayer::OnRender(float alpha)
 	{
+		auto scene = SceneManager::Get()->GetActiveScene();
+
+		scene->RenderUpdateAllSystems(Application::Get().GetRenderer(), Time::AlphaTime);
 	}
 
 	static void DrawGameViewport()

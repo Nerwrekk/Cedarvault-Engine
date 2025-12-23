@@ -18,9 +18,10 @@ public:
 		m_assetManager->LoadConfigurations("../assets/configurations");
 		m_assetManager->LoadLevel("JungleLevel", 0);
 
+		PushLayer<cedar::EditorLayer>();
+
 		auto scene = cedar::SceneManager::Get()->CreateScene("DefaultScene");
 		cedar::SceneManager::Get()->SetActiveScene(scene);
-		scene->PushLayer<cedar::EditorLayer>();
 
 		SetupEntities(scene);
 	}

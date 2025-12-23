@@ -16,11 +16,6 @@ namespace cedar
 		return m_entityRegistry.CreateEntity();
 	}
 
-	LayerStack* Scene::GetLayerStack()
-	{
-		return &m_layerStack;
-	}
-
 	EntityManager* Scene::GetEntityRegister()
 	{
 		return &m_entityRegistry;

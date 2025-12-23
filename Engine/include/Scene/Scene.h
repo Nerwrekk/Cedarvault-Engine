@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Common/LayerStack.h"
 #include "ECS/ECS.h"
 
 namespace cedar
@@ -13,7 +12,6 @@ namespace cedar
 		Entity CreateEntity();
 		void KillEntity(Entity entity);
 
-		LayerStack* GetLayerStack();
 		EntityManager* GetEntityRegister();
 
 		void SetSceneName(std::string& name);
@@ -27,9 +25,6 @@ namespace cedar
 
 		template <typename TComponent>
 		bool HasComponent(Entity entity) const;
-
-		template <typename TLayer, typename... Args>
-		TLayer* PushLayer(Args&&... args);
 
 		void FixedUpdateAllSystems(float fixedDeltaTime);
 		void UpdateAllSystems(float deltaTime);
@@ -50,15 +45,8 @@ namespace cedar
 		bool m_isActiveScene = false;
 		bool m_isPaused      = false;
 		std::string m_sceneName;
-		LayerStack m_layerStack;
 		EntityManager m_entityRegistry;
 	};
-
-	template <typename TLayer, typename... Args>
-	TLayer* Scene::PushLayer(Args&&... args)
-	{
-		return m_layerStack.PushLayer<TLayer>(std::forward<Args>(args)...);
-	}
 
 	template <typename TComponent, typename... TArgs>
 	void Scene::AddComponent(Entity entity, TArgs&&... args)

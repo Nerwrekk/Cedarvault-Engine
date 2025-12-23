@@ -147,8 +147,6 @@ namespace cedar
 			// process queued events (from input -> event bus)
 			m_eventBus->PollEvents();
 
-			auto scene = m_sceneManager.get()->GetActiveScene();
-
 			// --- fixed update step ---
 			int updates = 0;
 			while (accumulator >= FIXED_DT && updates < MAX_UPDATES_PER_FRAME)
@@ -157,17 +155,9 @@ namespace cedar
 				Input::ComputeFixedUpdateKeyEdges();
 				Input::ComputeFixedUpdateMouseEdges();
 
-				if (scene)
+				for (auto& layer : m_layerStack)
 				{
-					for (auto& layer : *scene->GetLayerStack())
-					{
-						layer->OnFixedUpdate(static_cast<float>(FIXED_DT));
-					}
-
-					// Important: snapshot before fixed updates so systems can interpolate later.
-					scene->GetEntityRegister()->SnapshotPreviousState();
-
-					scene->FixedUpdateAllSystems(static_cast<float>(FIXED_DT));
+					layer->OnFixedUpdate(static_cast<float>(FIXED_DT));
 				}
 
 				accumulator -= FIXED_DT;
@@ -182,21 +172,9 @@ namespace cedar
 
 			// Variable (per-frame) updates. Pass the variable dt (frameTime).
 			Time::DeltaTime = static_cast<float>(frameTime);
-			if (scene)
+			for (auto layer : m_layerStack)
 			{
-				for (auto& layer : *scene->GetLayerStack())
-				{
-					layer->OnUpdate(Time::DeltaTime);
-				}
-
-				scene->UpdateAllSystems(Time::DeltaTime);
-
-				scene->LateUpdateAllSystems();
-			}
-
-			if (scene)
-			{
-				scene->Update();
+				layer->OnUpdate(Time::DeltaTime);
 			}
 
 			//render start here
@@ -211,14 +189,9 @@ namespace cedar
 			// interpolation factor [0,1)
 			Time::AlphaTime = static_cast<float>(accumulator / FIXED_DT);
 			// Rendering with interpolation factor
-			if (scene)
+			for (auto layer : m_layerStack)
 			{
-				for (auto& layer : *scene->GetLayerStack())
-				{
-					layer->OnRender(Time::AlphaTime);
-				}
-
-				scene->GetEntityRegister()->RenderUpdateAllSystems(m_renderer, Time::AlphaTime);
+				layer->OnRender(Time::AlphaTime);
 			}
 
 			SDL_SetRenderTarget(m_renderer, nullptr);
@@ -236,12 +209,9 @@ namespace cedar
 			// ImGui / GUI
 			m_imGuiLayer->OnBeginRender();
 			{
-				if (scene)
+				for (auto layer : m_layerStack)
 				{
-					for (auto& layer : *scene->GetLayerStack())
-					{
-						layer->OnImGuiRender();
-					}
+					layer->OnImGuiRender();
 				}
 			}
 			m_imGuiLayer->OnEndRender();
@@ -268,16 +238,12 @@ namespace cedar
 
 	void Application::RaiseEvent(IEvent& event)
 	{
-		auto scene = SceneManager::Get()->GetActiveScene();
-		if (scene)
+		for (auto it = m_layerStack.rbegin(); it != m_layerStack.rend(); ++it)
 		{
-			for (auto it = scene->GetLayerStack()->rbegin(); it != scene->GetLayerStack()->rend(); ++it)
+			(*it)->OnEvent(event);
+			if (event.Handled)
 			{
-				(*it)->OnEvent(event);
-				if (event.Handled)
-				{
-					break;
-				}
+				break;
 			}
 		}
 	}
