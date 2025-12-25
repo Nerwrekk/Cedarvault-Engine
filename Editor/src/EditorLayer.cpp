@@ -73,7 +73,7 @@ namespace cedar
 		ImGui::SetCursorPosX((avail.x - imageSize.x) * 0.5f);
 		ImGui::SetCursorPosY((avail.y - imageSize.y) * 0.5f);
 
-		ImGui::Image((ImTextureID)Application::Get().m_FrameBuffer, imageSize);
+		// ImGui::Image((ImTextureID)Application::Get().m_FrameBuffer, imageSize);
 
 		ImGui::End();
 	}

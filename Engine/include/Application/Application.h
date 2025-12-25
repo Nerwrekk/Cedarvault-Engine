@@ -85,6 +85,7 @@ namespace cedar
 
 	private:
 		void ProccessInputAndPollOsEvents();
+		void OnCloseWindow(WindowCloseEvent& event);
 
 	protected:
 		std::unique_ptr<EventBus> m_eventBus;

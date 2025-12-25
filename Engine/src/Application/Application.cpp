@@ -34,6 +34,8 @@ namespace cedar
 
 		s_Application = this;
 		Initialize();
+
+		m_eventBus->Subscribe<WindowCloseEvent>(this, &Application::OnCloseWindow);
 	}
 
 	Application::~Application()
@@ -238,6 +240,8 @@ namespace cedar
 
 			// SDL_RenderPresent(m_renderer);
 			SDL_GL_SwapWindow(m_window);
+			glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT);
 
 			// Render using interpolation
 			// Render(Time::AlphaTime);
@@ -320,6 +324,7 @@ namespace cedar
 			// std::cout << "Window lost focus\n";
 			break;
 		case SDL_WINDOWEVENT_CLOSE:
+			EventBus::Inst()->PostEvent<WindowCloseEvent>();
 			// m_dispatcher->PostEvent<WindowCloseEvent>();
 			break;
 		case SDL_WINDOWEVENT_TAKE_FOCUS:
@@ -477,6 +482,12 @@ namespace cedar
 				break;
 			}
 		}
+	}
+
+	void Application::OnCloseWindow(WindowCloseEvent& event)
+	{
+		m_isRunning = false;
+		CEDAR_INFO("window close event fired");
 	}
 
 	void Application::RenderCurrentLevel(const std::string& tileLevelMapId, int levelIndex)
