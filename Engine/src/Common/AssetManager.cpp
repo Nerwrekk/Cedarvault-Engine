@@ -14,10 +14,8 @@ namespace cedar
 {
 	AssetManager* AssetManager::s_assetManager = nullptr;
 
-	AssetManager::AssetManager(SDL_Renderer* renderer)
+	AssetManager::AssetManager()
 	{
-		m_renderer = renderer;
-
 		//TODO: Assert this so we make sure we only create one asset manager
 		s_assetManager = this;
 	}
@@ -67,17 +65,18 @@ namespace cedar
 					const auto fileName = dirEntry.path().stem().string();
 					CEDAR_WARN("File: {}", fileName);
 
+					//TODO: come back to this after implementing opengl renderer
 					Sprite* sprite       = new Sprite();
 					SDL_Surface* surface = IMG_Load(dirEntry.path().string().c_str());
 					sprite->Width        = surface->w;
 					sprite->Height       = surface->h;
 					sprite->SrcRect.w    = sprite->Width;
 					sprite->SrcRect.h    = sprite->Height;
-					SDL_Texture* texture = SDL_CreateTextureFromSurface(m_renderer, surface);
-					sprite->Texture      = texture;
+					// SDL_Texture* texture = SDL_CreateTextureFromSurface(m_renderer, surface);
+					// sprite->Texture = texture;
 					SDL_FreeSurface(surface);
 
-					m_textures.emplace(fileName, texture);
+					// m_textures.emplace(fileName, texture);
 					m_sprites.emplace(fileName, sprite);
 				}
 			}
@@ -137,11 +136,12 @@ namespace cedar
 					{
 						CEDAR_WARN("is png");
 
-						SDL_Surface* surface = IMG_Load(dirEntry.path().string().c_str());
-						SDL_Texture* texture = SDL_CreateTextureFromSurface(m_renderer, surface);
-						SDL_FreeSurface(surface);
+						//TODO: come back to this after implementing opengl renderer
+						// SDL_Surface* surface = IMG_Load(dirEntry.path().string().c_str());
+						// SDL_Texture* texture = SDL_CreateTextureFromSurface(m_renderer, surface);
+						// SDL_FreeSurface(surface);
 
-						m_tileMaps.emplace(fileName, texture);
+						// m_tileMaps.emplace(fileName, texture);
 					}
 				}
 			}
@@ -176,20 +176,21 @@ namespace cedar
 					{
 						CEDAR_FATAL("Failed to load in config file: {}", fileName);
 					}
+					//TODO: come back to this after implementing opengl renderer
 					//Config section
-					auto tileLevelMap       = new TileLevelMap();
-					tileLevelMap->TileSize  = currentConfigNode["tileSize"].get_as<int32_t>();
-					tileLevelMap->TileScale = currentConfigNode["tileScale"].get_as<double>();
-					tileLevelMap->tilemap   = GetTileMap(currentConfigNode["textureId"].get_as<std::string>());
+					// auto tileLevelMap       = new TileLevelMap();
+					// tileLevelMap->TileSize  = currentConfigNode["tileSize"].get_as<int32_t>();
+					// tileLevelMap->TileScale = currentConfigNode["tileScale"].get_as<double>();
+					// tileLevelMap->tilemap   = GetTileMap(currentConfigNode["textureId"].get_as<std::string>());
 					//load in width and height of the tilemap
-					SDL_QueryTexture(tileLevelMap->tilemap, nullptr, nullptr, &tileLevelMap->Width, &tileLevelMap->Height);
-					auto& levels = currentConfigNode["levelMaps"].get_array();
-					for (Mindi::json_node* levelId : levels)
-					{
-						tileLevelMap->levelMapIds.push_back(levelId->get_as<std::string>());
-					}
-					//Add new TileLevelMap
-					m_allLevels.emplace(currentConfigNode["name"].get_as<std::string>(), tileLevelMap);
+					// SDL_QueryTexture(tileLevelMap->tilemap, nullptr, nullptr, &tileLevelMap->Width, &tileLevelMap->Height);
+					// auto& levels = currentConfigNode["levelMaps"].get_array();
+					// for (Mindi::json_node* levelId : levels)
+					// {
+					// 	tileLevelMap->levelMapIds.push_back(levelId->get_as<std::string>());
+					// }
+					// //Add new TileLevelMap
+					// m_allLevels.emplace(currentConfigNode["name"].get_as<std::string>(), tileLevelMap);
 				}
 			}
 		}

@@ -5,8 +5,8 @@ namespace cedar
 	void EditorLayer::OnAttach()
 	{
 		//TODO: move this to somewere better later
-		SDL_SetTextureScaleMode(Application::Get().m_FrameBuffer, SDL_ScaleModeNearest); //this is good for rendering pixel art
-		SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
+		// SDL_SetTextureScaleMode(Application::Get().m_FrameBuffer, SDL_ScaleModeNearest); //this is good for rendering pixel art
+		// SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
 	}
 
 	void EditorLayer::OnDetach()
@@ -42,7 +42,7 @@ namespace cedar
 	{
 		auto scene = SceneManager::Get()->GetActiveScene();
 
-		scene->RenderUpdateAllSystems(Application::Get().GetRenderer(), Time::AlphaTime);
+		scene->RenderUpdateAllSystems(Time::AlphaTime);
 	}
 
 	static void DrawGameViewport()

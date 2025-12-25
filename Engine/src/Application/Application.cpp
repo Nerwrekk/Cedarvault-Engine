@@ -17,7 +17,9 @@
 #include "Scene/SceneManager.h"
 
 #include "imgui.h"
-#include <imgui/bindings/imgui_impl_sdl.h>
+#include "GL/glew.h"
+// #include <imgui/bindings/imgui_impl_sdl.h>
+#include <imgui/bindings/imgui_impl_opengl3.h>
 #include <glm/glm.hpp>
 #include <iostream>
 
@@ -46,7 +48,8 @@ namespace cedar
 
 	SDL_Renderer* Application::GetRenderer() const
 	{
-		return m_renderer;
+		// return m_renderer;
+		return nullptr;
 	}
 
 	SDL_Window* Application::GetWindow() const
@@ -70,6 +73,14 @@ namespace cedar
 			return;
 		}
 
+		//TODO: Move this later
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+
 		SDL_DisplayMode displayMode;
 		SDL_GetCurrentDisplayMode(0, &displayMode);
 		windowInit.WindowWidth  = 1920;
@@ -81,29 +92,38 @@ namespace cedar
 		    SDL_WINDOWPOS_CENTERED,
 		    windowInit.WindowWidth,
 		    windowInit.WindowHeight,
-		    0);
+		    SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
 
 		GameSetting.WindowWidth  = windowInit.WindowWidth;
 		GameSetting.WindowHeight = windowInit.WindowHeight;
 
-		//SDL will be smart enough to go and take advantage of accelerated graphics by whatever is avaiable on the current maching
-		//its thanks to the flag SDL_RENDERER_ACCELERATED, but it will be activated by default
-		m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-		if (!m_renderer)
-		{
-			CEDAR_FATAL("Error creating SDL renderer");
+		SDL_GL_CreateContext(m_window);
 
-			return;
+		glewExperimental = true;
+		auto status      = glewInit();
+		if (status != GLEW_OK)
+		{
+			CEDAR_FATAL("glewInit failed!");
 		}
 
-		m_FrameBuffer = SDL_CreateTexture(
-		    m_renderer,
-		    SDL_PIXELFORMAT_RGBA8888,
-		    SDL_TEXTUREACCESS_TARGET,
-		    GameSetting.WindowWidth,
-		    GameSetting.WindowHeight);
+		//SDL will be smart enough to go and take advantage of accelerated graphics by whatever is avaiable on the current maching
+		//its thanks to the flag SDL_RENDERER_ACCELERATED, but it will be activated by default
+		// m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+		// if (!m_renderer)
+		// {
+		// 	CEDAR_FATAL("Error creating SDL renderer");
 
-		m_assetManager = std::make_unique<AssetManager>(m_renderer);
+		// 	return;
+		// }
+
+		// m_FrameBuffer = SDL_CreateTexture(
+		//     m_renderer,
+		//     SDL_PIXELFORMAT_RGBA8888,
+		//     SDL_TEXTUREACCESS_TARGET,
+		//     GameSetting.WindowWidth,
+		//     GameSetting.WindowHeight);
+
+		m_assetManager = std::make_unique<AssetManager>();
 
 		//Init the camera
 		m_camera.PrevX  = 0;
@@ -178,10 +198,10 @@ namespace cedar
 			}
 
 			//render start here
-			SDL_SetRenderTarget(m_renderer, m_FrameBuffer);
+			// SDL_SetRenderTarget(m_renderer, m_FrameBuffer);
 
-			SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
-			SDL_RenderClear(m_renderer);
+			// SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
+			// SDL_RenderClear(m_renderer);
 
 			//TODO: TEMPORARY, remember to fix!
 			// RenderCurrentLevel(cedar::Application::Get().GameSetting.CurrentLevel, GameSetting.CurrentLevelIndex);
@@ -194,16 +214,16 @@ namespace cedar
 				layer->OnRender(Time::AlphaTime);
 			}
 
-			SDL_SetRenderTarget(m_renderer, nullptr);
+			// SDL_SetRenderTarget(m_renderer, nullptr);
 
 			if (m_mode == AppMode::Editor)
 			{
-				SDL_SetRenderDrawColor(m_renderer, 20, 20, 20, 255);
-				SDL_RenderClear(m_renderer);
+				// SDL_SetRenderDrawColor(m_renderer, 20, 20, 20, 255);
+				// SDL_RenderClear(m_renderer);
 			}
 			else if (m_mode == AppMode::Game)
 			{
-				SDL_RenderCopy(m_renderer, m_FrameBuffer, nullptr, nullptr);
+				// SDL_RenderCopy(m_renderer, m_FrameBuffer, nullptr, nullptr);
 			}
 
 			// ImGui / GUI
@@ -216,7 +236,8 @@ namespace cedar
 			}
 			m_imGuiLayer->OnEndRender();
 
-			SDL_RenderPresent(m_renderer);
+			// SDL_RenderPresent(m_renderer);
+			SDL_GL_SwapWindow(m_window);
 
 			// Render using interpolation
 			// Render(Time::AlphaTime);
@@ -231,7 +252,7 @@ namespace cedar
 	void Application::Destroy()
 	{
 		SDL_DestroyWindow(m_window);
-		SDL_DestroyRenderer(m_renderer);
+		// SDL_DestroyRenderer(m_renderer);
 
 		SDL_Quit();
 	}
@@ -489,7 +510,7 @@ namespace cedar
 
 				};
 
-				SDL_RenderCopy(m_renderer, tileLevelMap->tilemap, &srcRect, &dstRect);
+				// SDL_RenderCopy(m_renderer, tileLevelMap->tilemap, &srcRect, &dstRect);
 			}
 		}
 	}

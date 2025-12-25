@@ -61,14 +61,14 @@ namespace cedar
 		m_entityRegistry.LateUpdateAllSystems();
 	}
 
-	void Scene::RenderUpdateAllSystems(SDL_Renderer* renderer, float alpha)
+	void Scene::RenderUpdateAllSystems(float alpha)
 	{
 		if (m_isPaused)
 		{
 			return;
 		}
 
-		m_entityRegistry.RenderUpdateAllSystems(renderer, alpha);
+		m_entityRegistry.RenderUpdateAllSystems(alpha);
 	}
 
 	void Scene::Update()

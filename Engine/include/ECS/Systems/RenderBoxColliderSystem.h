@@ -35,7 +35,7 @@ namespace cedar
 			EventBus::Inst()->Subscribe<CollisionExitEvent>(this, &RenderBoxColliderSystem::OnCollidingExit);
 		}
 
-		virtual void RenderUpdate(SDL_Renderer* renderer, float alpha) override
+		virtual void RenderUpdate(float alpha) override
 		{
 			for (auto& entity : GetSystemEntities())
 			{
@@ -60,15 +60,16 @@ namespace cedar
 					static_cast<int>(std::round(boxCollider->Height))
 				};
 
+				//TODO: come back to this after implementing opengl renderer
 				if (m_hasCollidedMap[entity.GetId()])
 				{
-					SDL_SetRenderDrawColor(renderer, RedColour.r, RedColour.g, RedColour.b, RedColour.a);
-					SDL_RenderDrawRect(renderer, &colliderRect);
+					// SDL_SetRenderDrawColor(renderer, RedColour.r, RedColour.g, RedColour.b, RedColour.a);
+					// SDL_RenderDrawRect(renderer, &colliderRect);
 				}
 				else
 				{
-					SDL_SetRenderDrawColor(renderer, GreenColour.r, GreenColour.g, GreenColour.b, GreenColour.a);
-					SDL_RenderDrawRect(renderer, &colliderRect);
+					// SDL_SetRenderDrawColor(renderer, GreenColour.r, GreenColour.g, GreenColour.b, GreenColour.a);
+					// SDL_RenderDrawRect(renderer, &colliderRect);
 				}
 			}
 		}

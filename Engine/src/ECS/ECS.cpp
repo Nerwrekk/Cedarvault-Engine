@@ -49,8 +49,8 @@ namespace cedar
 		// AddSystem<CollisionSystem>();
 		// AddSystem<CameraFollowSystem>();
 		// AddSystem<AnimationSystem>();
-		AddSystem<RenderBoxColliderSystem>();
-		AddSystem<RenderSystem>();
+		// AddSystem<RenderBoxColliderSystem>();
+		// AddSystem<RenderSystem>();
 	}
 
 	EntityManager::~EntityManager()

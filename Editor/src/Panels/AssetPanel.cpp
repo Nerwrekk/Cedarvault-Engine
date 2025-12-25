@@ -13,13 +13,13 @@ namespace cedar
 	AssetPanel::AssetPanel()
 	    : m_currentDirectory(s_AssetPath)
 	{
-		SDL_Surface* surface = IMG_Load("../Resources/Icons/DirectoryIcon.png");
-		m_dirIcon            = SDL_CreateTextureFromSurface(Application::Get().GetRenderer(), surface);
-		SDL_FreeSurface(surface);
+		// SDL_Surface* surface = IMG_Load("../Resources/Icons/DirectoryIcon.png");
+		// m_dirIcon            = SDL_CreateTextureFromSurface(Application::Get().GetRenderer(), surface);
+		// SDL_FreeSurface(surface);
 
-		SDL_Surface* iconSurface = IMG_Load("../Resources/Icons/FileIcon.png");
-		m_fileIcon               = SDL_CreateTextureFromSurface(Application::Get().GetRenderer(), iconSurface);
-		SDL_FreeSurface(iconSurface);
+		// SDL_Surface* iconSurface = IMG_Load("../Resources/Icons/FileIcon.png");
+		// m_fileIcon               = SDL_CreateTextureFromSurface(Application::Get().GetRenderer(), iconSurface);
+		// SDL_FreeSurface(iconSurface);
 	}
 
 	void AssetPanel::DrawAssetPanel()
@@ -64,8 +64,9 @@ namespace cedar
 			}
 			else if (dirEntry.path().extension() == ".png")
 			{
-				auto imageTexture = AssetManager::Inst()->GetTexture(dirEntry.path().stem().string());
-				icon              = imageTexture != nullptr ? imageTexture : m_fileIcon;
+				// auto imageTexture = AssetManager::Inst()->GetTexture(dirEntry.path().stem().string());
+				SDL_Texture* imageTexture = nullptr;
+				icon                      = imageTexture != nullptr ? imageTexture : m_fileIcon;
 			}
 			else
 			{

@@ -97,9 +97,8 @@ namespace cedar
 			UNREFERENCED_PARAMETER(deltatime);
 		};
 		virtual void LateUpdate() {};
-		virtual void RenderUpdate(SDL_Renderer* renderer, float alpha)
+		virtual void RenderUpdate(float alpha)
 		{
-			UNREFERENCED_PARAMETER(renderer);
 			UNREFERENCED_PARAMETER(alpha);
 		};
 
@@ -232,11 +231,11 @@ namespace cedar
 			}
 		}
 
-		void RenderUpdateAllSystems(SDL_Renderer* renderer, float alpha)
+		void RenderUpdateAllSystems(float alpha)
 		{
 			for (auto& [key, system] : m_systems)
 			{
-				system->RenderUpdate(renderer, alpha);
+				system->RenderUpdate(alpha);
 			}
 		}
 

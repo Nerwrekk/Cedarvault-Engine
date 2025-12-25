@@ -89,7 +89,7 @@ namespace cedar
 	protected:
 		std::unique_ptr<EventBus> m_eventBus;
 		std::unique_ptr<AssetManager> m_assetManager;
-		SDL_Renderer* m_renderer;
+		// SDL_Renderer* m_renderer;
 		std::unique_ptr<SceneManager> m_sceneManager;
 
 	private:

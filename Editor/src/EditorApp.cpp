@@ -13,10 +13,10 @@ public:
 		Mean::MeanScript::LoadScriptAssembly("../bin/TankGame.dll");
 		// GetScriptEngine()->LoadScripts("./assets/scripts");
 
-		m_assetManager->LoadAssets("../assets/images");
-		m_assetManager->LoadTilemaps("../assets/tilemaps");
-		m_assetManager->LoadConfigurations("../assets/configurations");
-		m_assetManager->LoadLevel("JungleLevel", 0);
+		// m_assetManager->LoadAssets("../assets/images");
+		// m_assetManager->LoadTilemaps("../assets/tilemaps");
+		// m_assetManager->LoadConfigurations("../assets/configurations");
+		// m_assetManager->LoadLevel("JungleLevel", 0);
 
 		PushLayer<cedar::EditorLayer>();
 

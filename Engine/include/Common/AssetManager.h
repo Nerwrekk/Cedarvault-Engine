@@ -24,7 +24,7 @@ namespace cedar
 	class AssetManager
 	{
 	public:
-		AssetManager(SDL_Renderer* renderer);
+		AssetManager();
 		~AssetManager();
 
 		static AssetManager* Inst();
@@ -45,7 +45,7 @@ namespace cedar
 	private:
 		static AssetManager* s_assetManager;
 
-		SDL_Renderer* m_renderer;
+		// SDL_Renderer* m_renderer;
 		std::map<std::string, SDL_Texture*> m_textures;
 		std::map<std::string, Sprite*> m_sprites;
 		std::map<std::string, TileLevelMap*> m_allLevels;

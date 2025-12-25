@@ -19,8 +19,8 @@ public:
 
 		auto scene = cedar::SceneManager::Get()->CreateScene("DefaultScene");
 		cedar::SceneManager::Get()->SetActiveScene(scene);
-		scene->PushLayer<GameLayer>();
-		scene->PushLayer<TestOverlay>();
+		PushLayer<GameLayer>();
+		PushLayer<TestOverlay>();
 
 		SetupEntities(scene);
 

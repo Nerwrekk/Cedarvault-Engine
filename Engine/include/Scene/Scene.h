@@ -29,7 +29,7 @@ namespace cedar
 		void FixedUpdateAllSystems(float fixedDeltaTime);
 		void UpdateAllSystems(float deltaTime);
 		void LateUpdateAllSystems();
-		void RenderUpdateAllSystems(SDL_Renderer* renderer, float alpha);
+		void RenderUpdateAllSystems(float alpha);
 		void Update();
 
 		void SetPaused(bool paused);

@@ -45,7 +45,7 @@ namespace cedar
 		}
 
 	public:
-		virtual void RenderUpdate(SDL_Renderer* renderer, float alpha) override
+		virtual void RenderUpdate(float alpha) override
 		{
 			SortEntities(GetSystemEntities());
 
@@ -85,7 +85,8 @@ namespace cedar
 				// Render (rotation in degrees). Do NOT mutate transform here.
 				if (sprite)
 				{
-					SDL_RenderCopyEx(renderer, sprite->Texture, &srcRect, &dstRect, renderRot, nullptr, SDL_FLIP_NONE);
+					//TODO: come back to this after implementing opengl renderer
+					// SDL_RenderCopyEx(renderer, sprite->Texture, &srcRect, &dstRect, renderRot, nullptr, SDL_FLIP_NONE);
 				}
 			}
 		}
