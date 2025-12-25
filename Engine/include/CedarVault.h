@@ -22,6 +22,7 @@
 #include "imgui/ImGuiLayer.h"
 #include "Scene/SceneManager.h"
 #include "Scene/Scene.h"
+#include "Renderer/Camera2D.h"
 
 #include <glm/glm.hpp>
 

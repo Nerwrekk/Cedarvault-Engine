@@ -15,6 +15,8 @@ class CederVaultRecipe(ConanFile):
         self.requires("sol2/3.3.1")
         self.requires("glm/cci.20230113")
         self.requires("imgui/cci.20230105+1.89.2.docking")
+        self.requires("glew/2.2.0")
+        self.requires("stb/cci.20240531")
 
     def generate(self):
         copy(self, "*sdl*", os.path.join(self.dependencies["imgui"].package_folder,

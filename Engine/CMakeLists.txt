@@ -42,6 +42,8 @@ find_package(sol2 REQUIRED)
 find_package(glm REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(imgui REQUIRED)
+find_package(GLEW REQUIRED)
+find_package(stb REQUIRED)
 
 # Find nethost.lib (used to locate .NET runtime)
 if(WIN32)
@@ -94,6 +96,8 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     sol2::sol2
     glm::glm
     imgui::imgui
+    GLEW::GLEW
+    stb::stb
 )
 
 if(WIN32)
