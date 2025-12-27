@@ -1,6 +1,7 @@
 #include "CedarVault.h"
 #include "Common/EntryPoint.h"
 #include "EditorLayer.h"
+#include "OpenGlLayer.h"
 
 class EditorApp : public cedar::Application
 {
@@ -19,6 +20,7 @@ public:
 		// m_assetManager->LoadLevel("JungleLevel", 0);
 
 		PushLayer<cedar::EditorLayer>();
+		PushLayer<cedar::OpenGlLayer>();
 
 		auto scene = cedar::SceneManager::Get()->CreateScene("DefaultScene");
 		cedar::SceneManager::Get()->SetActiveScene(scene);
