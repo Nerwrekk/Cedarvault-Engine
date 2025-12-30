@@ -10,42 +10,32 @@ namespace cedar
 
 	OpenGlLayer::~OpenGlLayer()
 	{
+		glDeleteProgram(shaderProgram);
 	}
 
 	void OpenGlLayer::OnAttach()
 	{
-	}
-
-	void OpenGlLayer::OnDetach()
-	{
-	}
-
-	void OpenGlLayer::OnEvent(IEvent& event)
-	{
-	}
-
-	void OpenGlLayer::OnRender(float alpha)
-	{
 		float vertices[] = {
-			//First triangle
-			-0.5f, -0.5f, 0.0f, //bottom left
-			0.5f, -0.5f, 0.0f,  // bottom right
-			0.0f, 0.5f, 0.0f
+			// first triangle
+			-0.9f, -0.5f, 0.0f, // left
+			-0.0f, -0.5f, 0.0f, // right
+			-0.45f, 0.5f, 0.0f, // top
+			// second triangle
+			0.0f, -0.5f, 0.0f, // left
+			0.9f, -0.5f, 0.0f, // right
+			0.45f, 0.5f, 0.0f  // top
 		};
 
-		uint32_t VBO {};
-		glGenBuffers(1, &VBO);
-
-		uint32_t VAO {};
 		glGenVertexArrays(1, &VAO);
 		glBindVertexArray(VAO);
 
+		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 		//vertex shader
-		std::string vertexSquareSrc = R"(
+		vertexSquareSrc = R"(
 			#version 330 core
 
 			layout(location = 0) in vec3 a_position;
@@ -57,7 +47,6 @@ namespace cedar
 
 		)";
 
-		uint32_t vertexShader {};
 		vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
 		const GLchar* vertexSource = vertexSquareSrc.c_str();
@@ -74,20 +63,18 @@ namespace cedar
 		}
 
 		//fragment shader
-		std::string fragmentSquareSrc = R"(
+		fragmentSquareSrc = R"(
 			#version 330 core
             
-            out vec4 FragColor;
+            layout(location = 0) out vec4 FragColor;
 
             void main()
             {
-                FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+                FragColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
             }
 		)";
 
-		uint32_t fragmentShader {};
-		fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-
+		fragmentShader               = glCreateShader(GL_FRAGMENT_SHADER);
 		const GLchar* fragmentSource = fragmentSquareSrc.c_str();
 		glShaderSource(fragmentShader, 1, &fragmentSource, nullptr);
 		glCompileShader(fragmentShader);
@@ -100,7 +87,6 @@ namespace cedar
 		}
 
 		//shader program
-		uint32_t shaderProgram;
 		shaderProgram = glCreateProgram();
 		glAttachShader(shaderProgram, vertexShader);
 		glAttachShader(shaderProgram, fragmentShader);
@@ -121,9 +107,20 @@ namespace cedar
 
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
+	}
 
+	void OpenGlLayer::OnDetach()
+	{
+	}
+
+	void OpenGlLayer::OnEvent(IEvent& event)
+	{
+	}
+
+	void OpenGlLayer::OnRender(float alpha)
+	{
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 
 	void OpenGlLayer::OnImGuiRender()

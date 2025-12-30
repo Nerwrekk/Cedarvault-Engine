@@ -6,7 +6,6 @@
 
 namespace cedar
 {
-	class SceneHierarchyPanel;
 	class OpenGlLayer : public Layer
 	{
 	public:
@@ -21,5 +20,17 @@ namespace cedar
 
 		virtual void OnRender(float alpha) override; // for interpolation
 		virtual void OnImGuiRender() override;
+
+	private:
+		uint32_t VBO {};
+		uint32_t VAO {};
+
+		std::string vertexSquareSrc;
+		uint32_t vertexShader {};
+
+		std::string fragmentSquareSrc;
+		uint32_t fragmentShader {};
+
+		uint32_t shaderProgram;
 	};
 } // namespace cedar
